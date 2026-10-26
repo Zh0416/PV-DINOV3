@@ -1,0 +1,9 @@
+{
+  "seed": 42,
+  "provenance": "PV-896 pixel audit, Kaggle pv896-data-audit-20261026 version 2",
+  "sample_ids": [
+    "pv000055", "pv000252", "pv000593", "pv000693",
+    "pv001487", "pv001563", "pv001735", "pv003434",
+    "pv000581", "pv002737", "pv002861", "pv003313"
+  ]
+}

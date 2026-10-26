@@ -1,0 +1,8 @@
+# Use Kaggle's installed CUDA PyTorch; do not replace it with a CPU build.
+torch>=2.5
+torchvision>=0.20
+timm==1.0.29
+huggingface-hub>=0.34
+safetensors>=0.5
+numpy>=2.0
+Pillow>=11
