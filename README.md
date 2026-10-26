@@ -65,6 +65,11 @@ and generated artifacts.
 
 ## SegDINO SAT supervised baseline
 
+The 2026-10-27 Kaggle GPU smoke test **passed** on the audited 12 pairs, with
+one optimizer step only. See [the verified run record](docs/SMOKE_TEST_20261027.md)
+for the tested commit, hardware, real tensor shapes, timings and limitations.
+No pilot or full-dataset training has run.
+
 This is a fully supervised **engineering baseline**, not an exact reproduction
 of the paper or a weakly supervised method. Real pixel masks supervise training.
 The upstream source is `script-Yang/SegDINO` commit
