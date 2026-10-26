@@ -60,7 +60,7 @@ class Precision:
         self.dtype = None
         if self.device.type == 'cuda':
             capability = torch.cuda.get_device_capability(self.device)
-            if torch.cuda.is_bf16_supported():
+            if capability[0] >= 8 and torch.cuda.is_bf16_supported():
                 self.dtype = torch.bfloat16
             elif capability[0] >= 7:
                 self.dtype = torch.float16
