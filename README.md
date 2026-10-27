@@ -63,6 +63,21 @@ resource in the next run. Do not download weights into this repository or
 commit them to GitHub. `.gitignore` excludes common secrets, datasets, weights,
 and generated artifacts.
 
+## SSPNet with DINOv3-SAT
+
+The separate SSPNet PV adaptation is implemented in `pvseg/sspnet/` with
+two-stage PSPNet pretraining and episodic training/evaluation in
+`scripts/sspnet.py`. It retains GeoRSCLIP, hierarchical CNN priors, DMSF,
+DCMA, and the paper's four loss components, while replacing DINOv2 with
+the existing verified SAT weights. Read the
+[implementation and run guide](docs/SSPNET_REPRODUCTION.md) for commands,
+paper ambiguities, and explicit single-class adaptation differences.
+
+`scripts/kaggle_sspnet.py` runs a bounded real-weight GPU engineering check.
+Full 25-epoch training and an independent accuracy evaluation are separate
+experiments. The task is supervised known-class PV segmentation; it does
+not reproduce the paper's disjoint base/novel class benchmark.
+
 ## SegDINO SAT supervised baseline
 
 The 2026-10-27 Kaggle GPU smoke test **passed** on the audited 12 pairs, with
