@@ -2,6 +2,8 @@
 
 本实现根据 Zhong 与 Zhao 的 SSPNet 论文（DOI: 10.1109/JSTARS.2026.3745987）重建方法，使用用户已保存在 Kaggle 的 DINOv3-SAT 替换 DINOv2。没有找到可核验的作者官方代码，因此这是**论文方法重建与单类别光伏适配**，不能称为官方逐行复现，也不能声称复现了论文的指标。
 
+**2026-10-28 验证状态：Kaggle 第 3 版真实权重工程检查通过。** 21 项行为测试通过，两阶段各完成 2 次参数更新，正／困难正／负查询的 5-shot 推理正常。验证源码包含 GeoRSCLIP QuickGELU 修正。输入为 512²；尚未充分训练，也未验证 896²，见 [实际运行记录](SSPNET_SMOKE_20261028.md)。
+
 ## 已实现的完整路径
 
 1. ImageNet 初始化的 ResNet-50 / output stride 8 / PSPNet，在训练空间分组内进行二类有监督分割预训练。
@@ -54,7 +56,7 @@
 
 代码与配置保存在 GitHub。原始图像、预训练／训练权重、运行产物仅留 Kaggle；不下载到本地仓库。
 
-- SAT：`/kaggle/input/notebook5f7aef8a4f/verified_sat/model.safetensors` 及相邻 `config.json`，挂载原 notebook v4。
+- SAT：原计划从 notebook v4 的 `verified_sat/model.safetensors` 与相邻 `config.json` 挂载。API 实际解析到缺少该文件的归档后，本次在 Kaggle 内恢复了相同权重；后续可挂载 SSPNet 第 3 版输出中的 `sspnet_assets/verified_sat/`，传入实际挂载路径。
 - SAT SHA256：`8d18337f766102f951ac0ca543a22536f58caeb6b6c33cfef73326f866791286`。
 - GeoRSCLIP：`Zilun/GeoRSCLIP` revision `4920188e6eba4e711ef9848cfd7cb77e874ee33f`，仅 `ckpt/RS5M_ViT-B-32.pt`。
 - Geo SHA256：`129bafaa6a097b8be52e2babf27d24f0a934dae919201e538dc698611bd1ea01`。
@@ -67,6 +69,8 @@
 先运行 `python scripts/kaggle_sspnet.py` 完成下载／缓存、真实权重工程检查。该入口只做第一、二阶段各 2 次更新和 5-shot 推理，不能作为准确率实验。
 
 正式训练使用新输出目录，首次从冻结文本缓存与已挂载 SAT 权重开始：
+
+下例的 SAT 路径仅在原 v4 确实挂载时成立；也可使用已恢复的 `/kaggle/working/sspnet_assets/verified_sat/model.safetensors`。在新 session 中应挂载第 3 版资产，替换成实际 `/kaggle/input/.../sspnet_assets/...` 路径。文本缓存同理，不要引用已经结束的 session 的 working 目录。
 
 ```bash
 python scripts/sspnet.py base --data-root /kaggle/input --output /kaggle/working/sspnet_base --epochs 25 --size 512 --batch-size 1 --accumulation 4

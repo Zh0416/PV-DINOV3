@@ -73,10 +73,15 @@ the existing verified SAT weights. Read the
 [implementation and run guide](docs/SSPNET_REPRODUCTION.md) for commands,
 paper ambiguities, and explicit single-class adaptation differences.
 
-`scripts/kaggle_sspnet.py` runs a bounded real-weight GPU engineering check.
+The real-weight GPU engineering check **passed** in Kaggle version 3 on
+2026-10-28: 21 behavioral tests, two updates per training stage, checkpoint
+tensor checks, and 5-shot inference on positive, hard-positive and negative
+queries. See the [verified SSPNet run record](docs/SSPNET_SMOKE_20261028.md).
+The tested source uses the corrected GeoRSCLIP QuickGELU activation.
 Full 25-epoch training and an independent accuracy evaluation are separate
-experiments. The task is supervised known-class PV segmentation; it does
-not reproduce the paper's disjoint base/novel class benchmark.
+experiments; the two-step check has not produced useful segmentation accuracy.
+The task is supervised known-class PV segmentation; it does not reproduce
+the paper's disjoint base/novel class benchmark.
 
 ## SegDINO SAT supervised baseline
 
