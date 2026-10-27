@@ -108,6 +108,7 @@ class PV896Dataset(Dataset):
             'image': (image_tensor - self.mean) / self.std,
             'mask': torch.from_numpy(target.copy()).unsqueeze(0),
             'sample_id': row['sample_id'], 'category': category,
+            'source_scene': row.get('source_scene', ''),
             'uncertain_source': row.get('source_label_uncertain_filename', '').lower() == 'true',
         }
 

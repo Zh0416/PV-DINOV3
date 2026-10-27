@@ -183,10 +183,12 @@ python train_pv896.py --allow_pilot --input_root /kaggle/input \
 ```
 
 The guarded pilot caps the combined train/validation set at 60 pairs, at most
-20/category, and 3 epochs. Scene groups are separated before sampling to
-avoid the overlapping-window leakage identified by the metadata audit.
-Geographic overlap across different scenes remains possible. Missing scene
-IDs require an explicit new policy; there is no silent random fallback.
+20/category, and 3 epochs. Entire scenes are joined when their tile geographic
+bounds overlap, their source-image basenames match, or their manifest image
+hashes match. Groups are separated before sampling. This uses supplied CRS
+and affine metadata, with no additional geographic buffer; it is not an
+independent verification of geolocation. Missing spatial provenance stops
+the pilot; there is no silent random fallback.
 Logs include split IDs, category coverage, epoch losses and overall/category
 metrics. Threshold is sigmoid>=0.5; foreground IoU/F1/precision/recall come
 from cumulative TP/FP/FN, not an average of per-image scores. Undefined zero
@@ -195,6 +197,21 @@ foreground score; false positives contribute to the pooled FP count, with
 empty-target false-positive images and pixel ratios reported separately.
 `best_decoder.pt` is selected by pooled validation foreground IoU. No command
 in this implementation launches full-dataset training.
+
+For the specifically approved pilot, `python scripts/kaggle_pilot.py` first
+inventories actual mounts/cache, runs synthetic checks, and records the
+source-filename uncertainty flag evidence. It restores matching cached SAT
+bytes or fetches the same pinned official revision inside Kaggle, verifies
+the Smoke Test SHA256, then runs exactly 3 epochs at batch size 1. It refuses
+to retrain in an output directory that already contains epoch history.
+Train/validation CSV manifests and configuration are saved before training.
+Every epoch records per-sample/category TP/FP/FN and losses, timing, memory,
+negative FP rates and positive images with no true-positive pixels. It saves
+all validation masks/overlays, reloads the best checkpoint and verifies its
+metrics. `completion.json` confirms the bounded stop. Weights remain in
+Kaggle; `verified_sat/` uses real files so output export need not preserve
+Hugging Face cache symlinks. Download only selected reports/visualizations
+locally, never an unfiltered Notebook output bundle containing weights.
 
 Synthetic checks (no real samples or weights):
 

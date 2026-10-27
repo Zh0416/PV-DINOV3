@@ -45,6 +45,20 @@ class CoreChecks(unittest.TestCase):
         counts.update(torch.full((1, 1, 4, 4), 20.), torch.zeros(1, 1, 4, 4))
         self.assertEqual(counts.report()['iou'], 0)
         self.assertEqual(counts.report()['negative_false_positive_images'], 1)
+        self.assertEqual(counts.report()['negative_false_positive_pixels'], 16)
+        self.assertEqual(counts.report()['negative_false_positive_pixel_ratio'], .5)
+
+    def test_missed_positive_images_and_false_negative_pixels(self):
+        counts = BinaryCounts()
+        truth = torch.zeros(2, 1, 4, 4)
+        truth[0, 0, 1:3, 1:3] = 1
+        counts.update(torch.full_like(truth, -20.), truth)
+        report = counts.report()
+        self.assertEqual(report['fn'], 4)
+        self.assertEqual(report['positive_images_without_true_positive_pixels'], 1)
+        self.assertEqual(report['foreground_false_negative_ratio'], 1)
+        self.assertEqual(report['empty_targets'], 1)
+        self.assertEqual(report['negative_false_positive_pixels'], 0)
 
     def test_group_split_is_disjoint_and_capped(self):
         rows = [{'sample_id': f'{c}-{scene}-{i}', 'category': category, 'source_scene': f'scene{scene}'}
