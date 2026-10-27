@@ -80,7 +80,9 @@ def cache_georsclip_text(checkpoint, output, prompt=PV_PROMPT, device='cpu'):
     digest = sha256(checkpoint)
     if digest != GEO_SHA:
         raise ValueError('Expected the pinned RS5M ViT-B/32 base checkpoint, not a retrieval fine-tune')
-    clip = open_clip.create_model('ViT-B-32', pretrained=None)
+    # RS5M starts from OpenAI CLIP. That checkpoint uses QuickGELU;
+    # architecture-only OpenCLIP construction otherwise defaults to GELU.
+    clip = open_clip.create_model('ViT-B-32', pretrained=None, force_quick_gelu=True)
     state = torch.load(checkpoint, map_location='cpu', weights_only=True)
     if 'state_dict' in state:
         state = state['state_dict']
@@ -98,7 +100,8 @@ def cache_georsclip_text(checkpoint, output, prompt=PV_PROMPT, device='cpu'):
         raise ValueError('Invalid GeoRSCLIP text embedding')
     meta = {'architecture': 'ViT-B-32', 'repository': 'Zilun/GeoRSCLIP',
             'filename': 'ckpt/RS5M_ViT-B-32.pt', 'sha256': digest, 'revision': GEO_REVISION,
-            'prompt': prompt, 'missing_visual_keys': [k for k in missing if k.startswith('visual.')]}
+            'prompt': prompt, 'activation': 'QuickGELU',
+            'missing_visual_keys': [k for k in missing if k.startswith('visual.')]}
     torch.save({'format': 'sspnet_georsclip_raw_text_v1', 'embedding': text, 'metadata': meta}, output)
     del clip
     if torch.cuda.is_available():
@@ -109,7 +112,8 @@ def cache_georsclip_text(checkpoint, output, prompt=PV_PROMPT, device='cpu'):
 def load_text_cache(path):
     state = torch.load(path, map_location='cpu', weights_only=True)
     if (state['format'] != 'sspnet_georsclip_raw_text_v1' or state['embedding'].shape != (1, 512)
-            or state['metadata']['sha256'] != GEO_SHA or not torch.isfinite(state['embedding']).all()):
+            or state['metadata']['sha256'] != GEO_SHA or state['metadata'].get('activation') != 'QuickGELU'
+            or not torch.isfinite(state['embedding']).all()):
         raise ValueError('Not a validated GeoRSCLIP raw text cache')
     return state['embedding'], state['metadata']
 

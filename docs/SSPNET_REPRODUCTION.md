@@ -59,6 +59,7 @@
 - GeoRSCLIP：`Zilun/GeoRSCLIP` revision `4920188e6eba4e711ef9848cfd7cb77e874ee33f`，仅 `ckpt/RS5M_ViT-B-32.pt`。
 - Geo SHA256：`129bafaa6a097b8be52e2babf27d24f0a934dae919201e538dc698611bd1ea01`。
 - 只缓存冻结文本编码器的原始 512 维向量，学习投影每步重新计算。完整 CLIP 可在缓存后释放；缓存保存 prompt 和源权重 hash。
+- GeoRSCLIP 使用其 OpenAI CLIP 初始化对应的 QuickGELU；只核对权重键名不足以发现 GELU／QuickGELU 激活不一致，因此显式指定并记录。
 - PSPNet 第一阶段 checkpoint 包括全模型；第二阶段 checkpoint 包括冻结 CNN、原始文本向量、全部可训练模块、优化器、AMP scaler、随机状态与配置，省略已有 hash 校验的 SAT 权重。
 
 ## Kaggle 中的命令
@@ -80,6 +81,8 @@ python scripts/sspnet.py evaluate --data-root /kaggle/input --output /kaggle/wor
 ```
 
 输出包含逐 epoch 四项训练损失、整体验证与分组 IoU/F1/误报/漏检指标、支持 ID、路由统计、依赖版本、划分与检查点。`--resume` 支持 epoch 边界恢复，正式训练要求保持 size／shots／划分／batch／累积／总 epoch 不变；不支持将半个 epoch 当成完整 epoch 恢复。首版保存 `last.pt`，不自动挑选最优模型或进行超参数搜索。
+
+梯度范数截断为 10，也是首版工程设置。Kaggle API 可能把带 `/4` 的 notebook 输入解析为较新归档版本；若归档没有 SAT 文件，检查入口会只在 Kaggle 内从固定 HF revision 恢复相同 SHA256 的权重，并保存恢复记录与实际文件供后续挂载。
 
 `--max-steps` 和 `--allow-untrained-base` 明确标记工程检查。仅运行两步的 PSPNet 会被标记 engineering_only，不能在未显式允许工程模式时冒充合格的第一阶段模型。
 
