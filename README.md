@@ -68,7 +68,11 @@ and generated artifacts.
 The 2026-10-27 Kaggle GPU smoke test **passed** on the audited 12 pairs, with
 one optimizer step only. See [the verified run record](docs/SMOKE_TEST_20261027.md)
 for the tested commit, hardware, real tensor shapes, timings and limitations.
-No pilot or full-dataset training has run.
+The subsequently authorized 60-pair pilot also **completed**: 48 training pairs,
+12 validation pairs, batch size 1, seed 42, exactly 3 epochs. Best validation
+IoU was 0.7973 at epoch 2. See [the pilot report](docs/PILOT_20261027.md)
+for spatial grouping, category metrics, saved outputs and limitations.
+The run stopped after the pilot; full-dataset training has not run.
 
 This is a fully supervised **engineering baseline**, not an exact reproduction
 of the paper or a weakly supervised method. Real pixel masks supervise training.
