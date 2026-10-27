@@ -1,0 +1,22 @@
+{
+  "task": "supervised_single_known_class_PV_adaptation",
+  "raw_source_size": 896,
+  "model_input_size": 512,
+  "cnn": "torchvision ResNet50 ImageNet V1 / output stride 8 / PSPNet",
+  "dino": "timm/vit_large_patch16_dinov3.sat493m",
+  "dino_block_zero_based": 23,
+  "text_encoder": "GeoRSCLIP RS5M_ViT-B-32.pt",
+  "hidden": 256,
+  "heads": 8,
+  "shots": [1, 5],
+  "routing": "literal",
+  "optimizer": {"name": "SGD", "lr": 0.005, "momentum": 0.9, "weight_decay": 0.0001},
+  "epochs_per_stage": 25,
+  "batch_size": 1,
+  "gradient_accumulation": 4,
+  "loss": {"final_CE": 1, "meta_Dice": 1, "pseudo_BCE": 0.2, "spatial_CAM_Dice": 0.04},
+  "query_attention_chunk": 256,
+  "base_batch_norm": "running statistics frozen for batch size 1",
+  "validation": "spatial development split; training supports only; not independent test",
+  "note": "Reference specification, CLI flags are authoritative. 1-shot and 5-shot use separate trained checkpoints."
+}
