@@ -74,6 +74,17 @@ IoU was 0.7973 at epoch 2. See [the pilot report](docs/PILOT_20261027.md)
 for spatial grouping, category metrics, saved outputs and limitations.
 The run stopped after the pilot; full-dataset training has not run.
 
+The subsequent **inference-only review and archive completed** in Notebook v6:
+all 12 validation predictions reproduced exactly, with zero training steps.
+The original mixed training checkpoint and a separate inference decoder export
+are verified in the saved v6 outputs under
+`PV-DINOV3/outputs/archive/pilot_baseline/`. See the
+[review/archive report](docs/REVIEW_ARCHIVE_20261027.md) for actual file hashes,
+error cases, saved-output checks and spatial limitations, and the
+[independent evaluation plan](docs/INDEPENDENT_EVALUATION_PLAN.md) for proposed
+next steps. The two existing validation scenes are development data, not an
+untouched test set. No new training or independent evaluation has been started.
+
 This is a fully supervised **engineering baseline**, not an exact reproduction
 of the paper or a weakly supervised method. Real pixel masks supervise training.
 The upstream source is `script-Yang/SegDINO` commit
