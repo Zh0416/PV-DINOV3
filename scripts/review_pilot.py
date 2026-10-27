@@ -248,7 +248,12 @@ independent cross-scene generalization measurements.
     model_meta = state['model']
     if model_meta['weight_source']['sha256'] != WEIGHT_SHA or state['software']['git_commit'] != PILOT_COMMIT:
         raise ValueError('Checkpoint provenance mismatch')
-    if model_meta != read(source/'best_checkpoint_metadata.json')['model']:
+    # torch preserves tuples in timm pretrained_cfg; JSON serializes them as arrays.
+    normalized_model_meta = json.loads(json.dumps(model_meta, default=str))
+    sidecar_model_meta = read(source/'best_checkpoint_metadata.json')['model']
+    write(output/'metadata_comparison.json', {'json_normalized_equal': normalized_model_meta == sidecar_model_meta,
+        'policy': 'Normalize JSON-compatible tuples to arrays before comparing saved sidecar to torch metadata; no model values changed.'})
+    if normalized_model_meta != sidecar_model_meta:
         raise ValueError('Actual checkpoint metadata disagrees with sidecar')
     if json.loads(json.dumps(state['config'], default=str)) != read(source/'config.json') or state['validation'] != read(source/'best_checkpoint_metadata.json')['validation']:
         raise ValueError('Actual checkpoint configuration/metrics differ from sidecars')
