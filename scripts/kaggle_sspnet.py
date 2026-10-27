@@ -51,17 +51,30 @@ def main():
                                 cwd=REPO, stdout=stream, stderr=subprocess.STDOUT)
     print((output/'tests.txt').read_text(), flush=True)
     result.check_returncode()
+    assets = Path('/kaggle/working/sspnet_assets')
+    assets.mkdir(exist_ok=True)
     weights = Path(args.weights)
     if not weights.is_file():
         # Kaggle may nest notebook sources under a different mount name.
         matches = [p for p in Path('/kaggle/input').rglob('model.safetensors') if p.parent.name == 'verified_sat']
-        if len(matches) != 1:
-            raise ValueError(f'Expected exactly one mounted verified SAT checkpoint, got {matches}')
-        weights = matches[0]
+        if len(matches) > 1:
+            raise ValueError(f'Ambiguous mounted SAT checkpoints: {matches}')
+        if matches:
+            weights = matches[0]
+        else:
+            # Some Kaggle API source attachments resolve to the latest saved
+            # output (the inference archive omits SAT), even with /4 supplied.
+            # Recover the identical pinned bytes INSIDE Kaggle, never locally.
+            from pvseg.model import resolve_weights
+            source, _, origin = resolve_weights(download=True, cache_dir=str(assets/'hf_sat'))
+            stable = assets/'verified_sat'
+            stable.mkdir(exist_ok=True)
+            shutil.copy2(source, stable/'model.safetensors')
+            shutil.copy2(origin['config_path'], stable/'config.json')
+            weights = stable/'model.safetensors'
+            write_json(output/'sat_recovery.json', origin)
     if sha256(weights) != SAT_SHA:
         raise ValueError('Mounted SAT hash mismatch')
-    assets = Path('/kaggle/working/sspnet_assets')
-    assets.mkdir(exist_ok=True)
     geo = hf_hub_download('Zilun/GeoRSCLIP', 'ckpt/RS5M_ViT-B-32.pt',
                          revision=GEO_REVISION, cache_dir=str(assets/'hf_cache'))
     text_cache = assets/'georsclip_pv_text.pt'
