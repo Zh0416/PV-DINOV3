@@ -8,6 +8,7 @@ import argparse
 import gc
 import json
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import time
@@ -21,7 +22,13 @@ def main():
     p.add_argument('--output', default='/kaggle/working/sspnet_convergence')
     p.add_argument('--base-steps', type=int, default=320)
     p.add_argument('--episode-steps', type=int, default=480)
+    p.add_argument('--base-checkpoint', help='Reuse a prior Kaggle diagnostic base checkpoint')
+    p.add_argument('--accumulation', type=int, default=1,
+                   help='Episodes per SGD update; 4 matches the paper episode count')
+    p.add_argument('--episode-lr', type=float, default=.005)
     args = p.parse_args()
+    if args.accumulation < 1 or args.episode_lr <= 0:
+        raise ValueError('accumulation and episode-lr must be positive')
     if not Path('/kaggle/working').is_dir():
         raise RuntimeError('Run on Kaggle; do not download data or weights locally')
     output = Path(args.output)
@@ -149,8 +156,18 @@ def main():
             one = BinaryCounts()
             one.update(difference, target)
             counts.update(difference, target)
-            per_query.append({'id': row['sample_id'], 'metrics': one.report(),
-                              'terms': {k: float(v) for k, v in terms.items()}})
+            detail = {'id': row['sample_id'], 'metrics': one.report(),
+                      'terms': {k: float(v) for k, v in terms.items()}}
+            if episodic:
+                meta_one = BinaryCounts()
+                meta_one.update(result['meta_logits'][:, 1:2].float() - result['meta_logits'][:, :1].float(), target)
+                probability = result['meta_logits'].float().softmax(1)[:, 1:2]
+                detail['meta_metrics'] = meta_one.report()
+                detail['meta_probability'] = {'min': float(probability.min()), 'max': float(probability.max()),
+                    'on_foreground': float(probability[target > .5].mean()) if (target > .5).any() else None,
+                    'on_background': float(probability[target < .5].mean())}
+                detail['meta_logit_abs_max'] = float(result['meta_logits'].abs().max())
+            per_query.append(detail)
             losses.append(float(loss))
             predictions.append(logits.detach().float())
         report = {'label': label, 'loss': sum(losses) / len(losses), 'metrics': counts.report(),
@@ -180,21 +197,25 @@ def main():
         if not episodic:
             freeze_bn(model)
         optimizer.zero_grad(set_to_none=True)
-        with precision.context():
-            if episodic:
-                result = model(batch['query'], batch['supports'], batch['support_masks'])
-                loss, terms = objective(result, batch['target'])
-            else:
-                loss = F.cross_entropy(model(batch['image']).float(), batch['mask'][:, 0].long())
-        if not torch.isfinite(loss):
-            raise FloatingPointError('Nonfinite loss')
-        precision.scaler.scale(loss).backward()
+        microbatches = batch if isinstance(batch, list) else [batch]
+        total_loss = 0.
+        for microbatch in microbatches:
+            with precision.context():
+                if episodic:
+                    result = model(microbatch['query'], microbatch['supports'], microbatch['support_masks'])
+                    loss, terms = objective(result, microbatch['target'])
+                else:
+                    loss = F.cross_entropy(model(microbatch['image']).float(), microbatch['mask'][:, 0].long())
+            if not torch.isfinite(loss):
+                raise FloatingPointError('Nonfinite loss')
+            precision.scaler.scale(loss / len(microbatches)).backward()
+            total_loss += float(loss.detach()) / len(microbatches)
         precision.scaler.unscale_(optimizer)
         audit = gradients(model, episodic)
         torch.nn.utils.clip_grad_norm_([x for x in model.parameters() if x.requires_grad], 10., error_if_nonfinite=True)
         precision.scaler.step(optimizer)
         precision.scaler.update()
-        return float(loss.detach()), audit
+        return total_loss, audit
 
     def resume_probe(model, optimizer, batch, episodic, step, history):
         path = output / ('episodic_resume_probe.pt' if episodic else 'base_resume_probe.pt')
@@ -227,20 +248,23 @@ def main():
 
     def run_stage(model, batches, episodic, maximum):
         stage = 'episodic' if episodic else 'base'
+        accumulation = args.accumulation if episodic else 1
+        learning_rate = args.episode_lr if episodic else .005
         optimizer = torch.optim.SGD([x for x in model.parameters() if x.requires_grad],
-                                    lr=.005, momentum=.9, weight_decay=1e-4)
+                                    lr=learning_rate, momentum=.9, weight_decay=1e-4)
         reports = [measure(model, batches, episodic, 'before')]
         history, gradient_audits = [], []
         started = time.perf_counter()
         probe = None
         for step in range(1, maximum + 1):
-            batch = batches[(step - 1) % len(batches)]
+            batch = [batches[((step - 1) * accumulation + j) % len(batches)] for j in range(accumulation)]
             if step == 21:
                 probe, loss = resume_probe(model, optimizer, batch, episodic, step - 1, history)
                 audit = {}
             else:
                 loss, audit = update(model, batch, optimizer, episodic)
-            history.append({'update': step, 'query': selected[(step - 1) % len(batches)]['sample_id'], 'loss': loss})
+            history.append({'update': step, 'queries': [selected[((step - 1) * accumulation + j) % len(batches)]['sample_id']
+                            for j in range(accumulation)], 'loss': loss})
             if step in (1, 2, 40) or step == maximum:
                 gradient_audits.append({'update': step, 'norms': audit})
             if step % 40 == 0 or step == maximum:
@@ -263,8 +287,10 @@ def main():
         if episodic:
             learned = learned and (after['meta_metrics']['iou'] or 0.) >= .60
         report = {'stage': stage, 'scope': 'fixed training-set overfit diagnostic only',
-            'updates': step, 'maximum_updates': maximum, 'optimizer': 'SGD lr=.005 momentum=.9 wd=1e-4 constant LR',
-            'batch_size': 1, 'augmentation': False, 'passed': learned, 'seconds': time.perf_counter() - started,
+            'updates': step, 'maximum_updates': maximum,
+            'optimizer': f'SGD lr={learning_rate} momentum=.9 wd=1e-4 constant LR',
+            'batch_size': 1, 'accumulation': accumulation, 'episodes_seen': step * accumulation,
+            'augmentation': False, 'passed': learned, 'seconds': time.perf_counter() - started,
             'resume_probe': probe, 'reports': reports, 'training_history': history,
             'gradient_audits': gradient_audits, 'memory': memory()}
         if not episodic:
@@ -275,10 +301,25 @@ def main():
         write_json(output / f'{stage}_report.json', report)
         return report
 
-    cnn = PSPNet(True).cuda()
-    base_report = run_stage(cnn, base_batches, False, args.base_steps)
-    # Never label this diagnostic checkpoint as a fully trained stage-one model.
-    del cnn
+    if args.base_checkpoint:
+        source = Path(args.base_checkpoint)
+        base_report = json.loads(source.with_name('base_report.json').read_text())
+        if not base_report['passed']:
+            raise ValueError('The reused diagnostic base did not pass its training-set check')
+        old_audit = json.loads(source.with_name('data_audit.json').read_text())
+        if old_audit['queries'] != audit or old_audit['fixed_support_assignments'] != assignments:
+            raise ValueError('The reused diagnostic data selection differs')
+        shutil.copyfile(source, output / 'base_diagnostic.pt')
+        write_json(output / 'base_report.json', dict(base_report, reused_from=str(source)))
+        base_state = torch.load(source, map_location='cpu', weights_only=True)
+        checkpoint.restore_rng(base_state['rng'])
+        del base_state
+        print('Reusing the verified diagnostic base; NOT a formal pretrained model', flush=True)
+    else:
+        cnn = PSPNet(True).cuda()
+        base_report = run_stage(cnn, base_batches, False, args.base_steps)
+        # Never label this diagnostic checkpoint as a fully trained stage-one model.
+        del cnn
     gc.collect()
     torch.cuda.empty_cache()
     cnn = PSPNet(False)
