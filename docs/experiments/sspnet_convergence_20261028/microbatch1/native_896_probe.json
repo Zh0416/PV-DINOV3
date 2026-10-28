@@ -1,0 +1,48 @@
+{
+  "passed": true,
+  "size": 896,
+  "query": "pv000015",
+  "supports": [
+    "pv003499"
+  ],
+  "loss": 0.6821013689041138,
+  "gradient_norms": {
+    "dmsf.beta": 8.986157828981177e-05,
+    "dmsf.visual": 0.2114089885316677,
+    "dmsf.text_to_dino": 0.01476900484501579,
+    "dmsf.text_hidden": 0.010166716609581676,
+    "dmsf.spatial_refine": 0.014550704947154729,
+    "dmsf.semantic_refine": 0.0008504571076552366,
+    "down_q.0": 0.05821855743681451,
+    "down_s.0": 0.04714459142033935,
+    "query_merge.0": 0.04614470744392007,
+    "support_merge.0": 0.010302028035746659,
+    "dcma.modulate": 0.0001716214412056087,
+    "dcma.q": 1.4557995494512056e-07,
+    "dcma.k": 1.3468872896105326e-07,
+    "dcma.v": 0.0072255932453528186,
+    "dcma.out": 0.025811837919684662,
+    "dcma.norm1": 0.0021157234618307623,
+    "dcma.norm2": 0.0004056300286709797,
+    "dcma.ffn": 0.012829490068585867,
+    "dcma.pseudo": 0.0419019416282262,
+    "decoder.branches": 6.489234563318694e-09,
+    "decoder.global_branch": 2.008190251603395e-09,
+    "decoder.reduce": 5.950564518503244e-09,
+    "decoder.residual": 5.18438968962212e-09,
+    "meta_head.0": 7.889098226445363e-09,
+    "meta_head.3": 5.653165789097739e-09,
+    "gram_merge.weight": 0.016597020530679893,
+    "class_merges.0": 0.017091206087580385,
+    "class_merges.1": 0.016067516656565178
+  },
+  "memory": {
+    "allocated_bytes": 1622814720,
+    "reserved_bytes": 2617245696,
+    "peak_allocated_bytes": 2385631744,
+    "peak_reserved_bytes": 2617245696,
+    "free_device_bytes": 12810256384,
+    "total_device_bytes": 15636037632
+  },
+  "scope": "single real-weight native-size forward/backward with lr=0; NOT accuracy validation"
+}

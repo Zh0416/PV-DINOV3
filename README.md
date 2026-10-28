@@ -73,13 +73,15 @@ the existing verified SAT weights. Read the
 [implementation and run guide](docs/SSPNET_REPRODUCTION.md) for commands,
 paper ambiguities, and explicit single-class adaptation differences.
 
-The real-weight GPU engineering check **passed** in Kaggle version 3 on
-2026-10-28: 21 behavioral tests, two updates per training stage, checkpoint
-tensor checks, and 5-shot inference on positive, hard-positive and negative
-queries. See the [verified SSPNet run record](docs/SSPNET_SMOKE_20261028.md).
-The tested source uses the corrected GeoRSCLIP QuickGELU activation.
-Full 25-epoch training and an independent accuracy evaluation are separate
-experiments; the two-step check has not produced useful segmentation accuracy.
+The 2026-10-28 follow-up passed 24 tests and real-GPU resume checks. On a fixed
+four-query training diagnostic, the base network reached 70.13% foreground
+micro-IoU, but the SSPNet stage collapsed to background (final/meta IoU 0).
+A single 896px 1-shot forward/backward passed at about 2.22 GiB peak allocated
+memory. See the [convergence and resume report](docs/SSPNET_CONVERGENCE_20261028.md)
+for evidence and limitations. The earlier two-update and 5-shot engineering
+check is preserved in the [smoke record](docs/SSPNET_SMOKE_20261028.md).
+Full 25-epoch training and an independent accuracy evaluation have not run;
+stage-two convergence needs to be resolved first.
 The task is supervised known-class PV segmentation; it does not reproduce
 the paper's disjoint base/novel class benchmark.
 

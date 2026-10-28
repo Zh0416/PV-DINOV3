@@ -1,0 +1,10 @@
+{
+  "loss_a": 0.8407138586044312,
+  "loss_b": 0.8407138586044312,
+  "max_abs_parameter_difference": 9.313225746154785e-09,
+  "exact_parameters": false,
+  "same_scaler": true,
+  "same_torch_rng": true,
+  "history_preserved": true,
+  "passed": true
+}

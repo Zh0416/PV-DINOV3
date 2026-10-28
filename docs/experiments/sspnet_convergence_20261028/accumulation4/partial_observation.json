@@ -1,0 +1,41 @@
+{
+  "status": "partial_observation_only; final output retrieval unavailable",
+  "source": "Kaggle SSE log before network disconnect",
+  "source_commit": "2bd203fa465e7f7c0db3ec512b56c884efac93f7",
+  "run": "https://www.kaggle.com/code/zh0416/sspnet-pv-accumulated-check",
+  "version": 1,
+  "accumulation": 4,
+  "maximum_updates_planned": 320,
+  "same_diagnostic_base_checkpoint": true,
+  "observations": [
+    {
+      "stage": "episodic",
+      "update": 40,
+      "train_loss": 0.6296296939253807,
+      "train_iou": 0.0,
+      "meta_iou": 0.0
+    },
+    {
+      "stage": "episodic",
+      "update": 80,
+      "train_loss": 0.5765339769423008,
+      "train_iou": 0.0,
+      "meta_iou": 0.0
+    },
+    {
+      "stage": "episodic",
+      "update": 120,
+      "train_loss": 0.5627003218978643,
+      "train_iou": 0.0,
+      "meta_iou": 0.0
+    },
+    {
+      "stage": "episodic",
+      "update": 160,
+      "train_loss": 0.5544435773044825,
+      "train_iou": 0.0,
+      "meta_iou": 0.0
+    }
+  ],
+  "limitation": "These are not final metrics and do not confirm completion or final failure. Repeated API and report reads timed out."
+}

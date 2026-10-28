@@ -1,0 +1,29 @@
+test_all_discrete_augmentations_preserve_alignment (test_core.CoreChecks.test_all_discrete_augmentations_preserve_alignment) ... ok
+test_empty_negative_does_not_get_perfect_foreground_iou (test_core.CoreChecks.test_empty_negative_does_not_get_perfect_foreground_iou) ... ok
+test_group_split_is_disjoint_and_capped (test_core.CoreChecks.test_group_split_is_disjoint_and_capped) ... ok
+test_loss_is_finite_for_empty_and_nonempty_targets (test_core.CoreChecks.test_loss_is_finite_for_empty_and_nonempty_targets) ... ok
+test_missed_positive_images_and_false_negative_pixels (test_core.CoreChecks.test_missed_positive_images_and_false_negative_pixels) ... ok
+test_safe_checkpoint_loader_restores_decoder (test_core.CoreChecks.test_safe_checkpoint_loader_restores_decoder) ... ok
+test_unknown_label_values_are_rejected (test_core.CoreChecks.test_unknown_label_values_are_rejected) ... ok
+test_cross_scene_overlap_chain_is_one_group (test_spatial.SpatialChecks.test_cross_scene_overlap_chain_is_one_group) ... ok
+test_source_and_duplicate_image_provenance_unite_scenes (test_spatial.SpatialChecks.test_source_and_duplicate_image_provenance_unite_scenes) ... ok
+test_split_precedes_sampling_and_is_capped (test_spatial.SpatialChecks.test_split_precedes_sampling_and_is_capped) ... ok
+test_unusable_geography_stops_instead_of_fallback (test_spatial.SpatialChecks.test_unusable_geography_stops_instead_of_fallback) ... ok
+test_attention_background_invariance_empty_fallback_and_chunking (test_sspnet.SSPNetChecks.test_attention_background_invariance_empty_fallback_and_chunking) ... ok
+test_checkpoint_restores_cnn_and_trainable_parts_but_omits_dino (test_sspnet.SSPNetChecks.test_checkpoint_restores_cnn_and_trainable_parts_but_omits_dino) ... ok
+test_dmsf_bounds_and_both_learnable_projection_paths (test_sspnet.SSPNetChecks.test_dmsf_bounds_and_both_learnable_projection_paths) ... ok
+test_empty_query_full_backward_and_frozen_encoders (test_sspnet.SSPNetChecks.test_empty_query_full_backward_and_frozen_encoders) ... ok
+test_episode_support_rejects_same_scene_id_overlap_or_hash (test_sspnet.SSPNetChecks.test_episode_support_rejects_same_scene_id_overlap_or_hash) ... ok
+test_five_shot_forward_and_empty_support_rejection (test_sspnet.SSPNetChecks.test_five_shot_forward_and_empty_support_rejection) ... ok
+test_hierarchy_reports_normalized_max_near_ties (test_sspnet.SSPNetChecks.test_hierarchy_reports_normalized_max_near_ties) ... ok
+test_pseudo_gradient_reaches_semantic_projection_after_zero_init_step (test_sspnet.SSPNetChecks.test_pseudo_gradient_reaches_semantic_projection_after_zero_init_step) ... ok
+test_rgb_has_separate_reversible_normalizations (test_sspnet.SSPNetChecks.test_rgb_has_separate_reversible_normalizations) ... ok
+test_shot_weighting_is_permutation_equivariant_and_normalized (test_sspnet.SSPNetChecks.test_shot_weighting_is_permutation_equivariant_and_normalized) ... ok
+test_epoch_interrupt_matches_uninterrupted_training_and_keeps_records (test_sspnet_resume.ResumeChecks.test_epoch_interrupt_matches_uninterrupted_training_and_keeps_records) ... ok
+test_existing_output_cannot_be_restarted_without_resume (test_sspnet_resume.ResumeChecks.test_existing_output_cannot_be_restarted_without_resume) ... ok
+test_legacy_history_is_preserved_and_missing_history_is_rejected (test_sspnet_resume.ResumeChecks.test_legacy_history_is_preserved_and_missing_history_is_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 5.724s
+
+OK

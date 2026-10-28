@@ -1,0 +1,48 @@
+{
+  "python": "3.13.15",
+  "torch": "2.11.0+cu128",
+  "cuda_version": "12.8",
+  "cuda_available": true,
+  "versions": {
+    "torchvision": "0.26.0+cu128",
+    "timm": "1.0.29",
+    "numpy": "2.1.3",
+    "Pillow": "13.0.0",
+    "safetensors": "0.8.0",
+    "huggingface-hub": "1.29.0"
+  },
+  "gpus": [
+    {
+      "index": 0,
+      "name": "Tesla T4",
+      "total_memory_bytes": 15636037632,
+      "capability": [
+        7,
+        5
+      ]
+    },
+    {
+      "index": 1,
+      "name": "Tesla T4",
+      "total_memory_bytes": 15636037632,
+      "capability": [
+        7,
+        5
+      ]
+    }
+  ],
+  "ram": {
+    "total": 33658159104,
+    "available": 32188526592,
+    "percent": 4.4,
+    "used": 990892032,
+    "free": 27415203840,
+    "active": 1245339648,
+    "inactive": 4298686464,
+    "buffers": 824774656,
+    "cached": 4427288576,
+    "shared": 1331200,
+    "slab": 344129536
+  },
+  "git_commit": "3b7d9fb85b699007863c10e11343aae7634be771"
+}

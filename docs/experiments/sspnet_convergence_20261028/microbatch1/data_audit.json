@@ -1,0 +1,246 @@
+{
+  "scope": "training-set diagnostic; NOT validation/test accuracy",
+  "source_size": 896,
+  "model_size": 512,
+  "augment": false,
+  "queries": [
+    {
+      "id": "pv000015",
+      "category": "positive",
+      "source_scene": "0807_Q_934ae716b5714f",
+      "raw_pixels_896": 29764,
+      "pixels_512": 9739,
+      "positive_patches_32": 46,
+      "raw_foreground_fraction": 0.0370744988322258,
+      "resized_foreground_fraction": 0.037151336669921875
+    },
+    {
+      "id": "pv000059",
+      "category": "positive",
+      "source_scene": "0807_Q_934ae716b5714f",
+      "raw_pixels_896": 49864,
+      "pixels_512": 16315,
+      "positive_patches_32": 61,
+      "raw_foreground_fraction": 0.06211136654019356,
+      "resized_foreground_fraction": 0.062236785888671875
+    },
+    {
+      "id": "pv000305",
+      "category": "hard_positive",
+      "source_scene": "0817_Q_c6cd6e69bfce41",
+      "raw_pixels_896": 15303,
+      "pixels_512": 4971,
+      "positive_patches_32": 22,
+      "raw_foreground_fraction": 0.019061652943491936,
+      "resized_foreground_fraction": 0.018962860107421875
+    },
+    {
+      "id": "pv001366",
+      "category": "negative",
+      "source_scene": "0812_Q_0a5aa4566e4f48",
+      "raw_pixels_896": 0,
+      "pixels_512": 0,
+      "positive_patches_32": 0,
+      "raw_foreground_fraction": 0.0,
+      "resized_foreground_fraction": 0.0
+    }
+  ],
+  "fixed_support_assignments": [
+    {
+      "query": "pv000015",
+      "supports": [
+        "pv003499"
+      ]
+    },
+    {
+      "query": "pv000059",
+      "supports": [
+        "pv000886"
+      ]
+    },
+    {
+      "query": "pv000305",
+      "supports": [
+        "pv000059"
+      ]
+    },
+    {
+      "query": "pv001366",
+      "supports": [
+        "pv000566"
+      ]
+    }
+  ],
+  "original_split": {
+    "seed": 42,
+    "spatial_groups": {
+      "0807_Q_934ae716b5714f": [
+        "0807_Q_934ae716b5714f"
+      ],
+      "0812_Q_0a5aa4566e4f48": [
+        "0812_Q_0a5aa4566e4f48"
+      ],
+      "0812_Q_5746fe6e20e244": [
+        "0812_Q_5746fe6e20e244",
+        "0817_Q_c6cd6e69bfce41",
+        "0820_Q_32f2300fdd3147",
+        "0820_Q_3c16aaef706f45",
+        "0820_Q_8a2f89c3a6d04f",
+        "0820_Q_921ef0a25d7045",
+        "0820_Q_f598280265d142"
+      ],
+      "0825_Q_733feba5ac7648": [
+        "0825_Q_733feba5ac7648"
+      ],
+      "0825_Q_89716191c11a4d": [
+        "0825_Q_89716191c11a4d"
+      ],
+      "0825_Q_d92146f808cb47": [
+        "0825_Q_d92146f808cb47"
+      ],
+      "0910_Q_f31b2f78ddfe4a": [
+        "0910_Q_f31b2f78ddfe4a"
+      ],
+      "0918_Q_4a6bb66935b24c": [
+        "0918_Q_4a6bb66935b24c"
+      ],
+      "0918_Q_d858345d662a44": [
+        "0918_Q_d858345d662a44"
+      ],
+      "0922_Q_039af681c3cb48": [
+        "0922_Q_039af681c3cb48"
+      ]
+    },
+    "scene_assignment_before_sampling": {
+      "0807_Q_934ae716b5714f": "train",
+      "0812_Q_0a5aa4566e4f48": "train",
+      "0812_Q_5746fe6e20e244": "train",
+      "0817_Q_c6cd6e69bfce41": "train",
+      "0820_Q_32f2300fdd3147": "train",
+      "0820_Q_3c16aaef706f45": "train",
+      "0820_Q_8a2f89c3a6d04f": "train",
+      "0820_Q_921ef0a25d7045": "train",
+      "0820_Q_f598280265d142": "train",
+      "0825_Q_733feba5ac7648": "validation",
+      "0825_Q_89716191c11a4d": "train",
+      "0825_Q_d92146f808cb47": "train",
+      "0910_Q_f31b2f78ddfe4a": "train",
+      "0918_Q_4a6bb66935b24c": "validation",
+      "0918_Q_d858345d662a44": "train",
+      "0922_Q_039af681c3cb48": "train"
+    },
+    "cross_scene_overlap_edges": [
+      [
+        "0812_Q_5746fe6e20e244",
+        "0820_Q_f598280265d142"
+      ],
+      [
+        "0817_Q_c6cd6e69bfce41",
+        "0820_Q_32f2300fdd3147"
+      ],
+      [
+        "0820_Q_32f2300fdd3147",
+        "0820_Q_f598280265d142"
+      ],
+      [
+        "0820_Q_3c16aaef706f45",
+        "0820_Q_921ef0a25d7045"
+      ],
+      [
+        "0820_Q_8a2f89c3a6d04f",
+        "0820_Q_921ef0a25d7045"
+      ],
+      [
+        "0820_Q_8a2f89c3a6d04f",
+        "0820_Q_f598280265d142"
+      ],
+      [
+        "0820_Q_921ef0a25d7045",
+        "0820_Q_f598280265d142"
+      ]
+    ],
+    "selected_cross_split_overlaps": [],
+    "crs": "EPSG:4326",
+    "policy": "Union entire scenes sharing source basename, manifest image hash or intersecting tile geographic bounds; split groups before sampling.",
+    "available_counts": {
+      "train": {
+        "正样本": 1161,
+        "困难正样本": 834,
+        "负样本": 1371
+      },
+      "validation": {
+        "正样本": 139,
+        "困难正样本": 34,
+        "负样本": 129
+      }
+    },
+    "limitation": "Uses supplied affine/CRS/provenance, not independently surveyed geography; no extra geographic buffer; rotated bounds are conservative.",
+    "train_ids": [
+      "pv001144",
+      "pv000071",
+      "pv000067",
+      "pv000206",
+      "pv000534",
+      "pv000566",
+      "pv002446",
+      "pv000059",
+      "pv003612",
+      "pv000489",
+      "pv003425",
+      "pv001139",
+      "pv000538",
+      "pv001232",
+      "pv000702",
+      "pv000015",
+      "pv001596",
+      "pv001718",
+      "pv002166",
+      "pv001487",
+      "pv001467",
+      "pv002365",
+      "pv001476",
+      "pv002285",
+      "pv002197",
+      "pv003326",
+      "pv001879",
+      "pv001366",
+      "pv002706",
+      "pv003021",
+      "pv001533",
+      "pv002358",
+      "pv003176",
+      "pv000459",
+      "pv000305",
+      "pv003036",
+      "pv002007",
+      "pv003499",
+      "pv002182",
+      "pv000494",
+      "pv002016",
+      "pv000629",
+      "pv002387",
+      "pv002143",
+      "pv002552",
+      "pv002974",
+      "pv002352",
+      "pv000886"
+    ],
+    "validation_ids": [
+      "pv000963",
+      "pv001202",
+      "pv001010",
+      "pv000994",
+      "pv001750",
+      "pv003283",
+      "pv003309",
+      "pv001866",
+      "pv003520",
+      "pv003519",
+      "pv003289",
+      "pv003313"
+    ],
+    "pilot": true,
+    "evaluation_scope": "development validation; all source scenes already used during prior development",
+    "split_sha256": "ea8ccce20d3e0a2b136f9ae037e4f9958c0a1c271c0f7e1b24b76b3e9d02519b"
+  }
+}
