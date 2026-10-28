@@ -20,6 +20,7 @@ from pvseg.sspnet import checkpoint
 from pvseg.sspnet.data import Episodes, ResizedPV, make_split
 from pvseg.sspnet.encoders import FrozenSAT, PSPNet, freeze_bn, load_text_cache, sha256
 from pvseg.sspnet.losses import objective
+from pvseg.sspnet.training import check_output_directory, resume_history
 
 
 def parser():
@@ -95,12 +96,10 @@ def evaluate(model, loader, precision, device, episodic, limit=0):
 
 def main(argv=None):
     args = parser().parse_args(argv)
-    if args.epochs < 1 or args.batch_size < 1 or args.accumulation < 1:
-        raise ValueError('epochs/batch-size/accumulation must be positive')
+    if args.epochs < 1 or args.batch_size < 1 or args.accumulation < 1 or args.max_steps < 0:
+        raise ValueError('epochs/batch-size/accumulation must be positive; max-steps must be nonnegative')
     output = Path(args.output)
-    output.mkdir(parents=True, exist_ok=True)
-    if (output/'completion.json').exists() and args.stage != 'evaluate':
-        raise RuntimeError('Completed output exists; use a new output directory')
+    check_output_directory(output, bool(args.resume) and args.stage != 'evaluate')
     seed_everything(args.seed)
     device = torch.device(args.device)
     precision = Precision(device)
@@ -108,12 +107,9 @@ def main(argv=None):
     if not (root/'manifest.csv').is_file():
         root = discover_root(root)
     train_rows, val_rows, split = make_split(read_manifest(root), args.pilot, args.seed)
-    write_json(output/'split.json', split)
-    write_json(output/'environment.json', environment())
     config = vars(args).copy()
     config.update(split_sha256=split['split_sha256'], precision=precision.describe(),
                   supervision='supervised_known_class_PV', raw_source_size=896)
-    write_json(output/'config.json', config)
     episodic = args.stage != 'base'
     cnn = PSPNet(imagenet=not episodic and not args.resume)
     base_state = None
@@ -145,24 +141,32 @@ def main(argv=None):
     train_loader = DataLoader(train_data, batch_size=args.batch_size, shuffle=True,
                               num_workers=args.workers, generator=generator)
     val_loader = DataLoader(val_data, batch_size=args.batch_size, shuffle=False, num_workers=args.workers)
-    start_epoch, global_step = 0, 0
+    start_epoch, global_step, history = 0, 0, []
     if args.resume:
-        restored = checkpoint.load(args.resume, model, optimizer, precision, True, generator)
-        keys = ['split_sha256', 'size', 'shots'] if args.stage == 'evaluate' else [
-            'split_sha256', 'size', 'shots', 'lr', 'accumulation', 'batch_size', 'epochs']
-        for key in keys:
-            if restored['config'][key] != config[key]:
-                raise ValueError(f'Resume config differs: {key}')
+        restored = checkpoint.load(args.resume, model, optimizer, precision, True, generator,
+                                   expected_config=config, evaluate=args.stage == 'evaluate')
         start_epoch, global_step = restored['epoch'] + 1, restored['step']
+        if args.stage != 'evaluate':
+            history = resume_history(restored, args.resume)
+            if start_epoch > args.epochs:
+                raise ValueError('Checkpoint epoch exceeds the configured training length')
+        del restored
+    if args.stage == 'evaluate' and not args.resume:
+        raise ValueError('evaluate requires --resume episodic checkpoint')
+    # Write only after config, checkpoint dependencies and history have passed.
+    software = environment()
+    output.mkdir(parents=True, exist_ok=True)
+    write_json(output/'split.json', split)
+    write_json(output/'environment.json', software)
+    write_json(output/'config.json', config)
+    if history:
+        write_json(output/'history.json', history)
     if args.stage == 'evaluate':
-        if not args.resume:
-            raise ValueError('evaluate requires --resume episodic checkpoint')
         report = evaluate(model, val_loader, precision, device, True, args.max_steps)
         write_json(output/'evaluation.json', report)
         return report
     steps_per_epoch = min(len(train_loader), args.max_steps) if args.max_steps else len(train_loader)
     total_updates = ((steps_per_epoch + args.accumulation - 1) // args.accumulation) * args.epochs
-    history = []
     started = time.perf_counter()
     for epoch in range(start_epoch, args.epochs):
         model.train()
@@ -210,10 +214,12 @@ def main(argv=None):
                               min(3, args.max_steps) if args.max_steps else 0)
         history.append({'epoch': epoch, 'training_losses': losses, 'validation': validation,
                         'training_support_assignments': training_assignments})
-        checkpoint.save(output/'last.pt', model, optimizer, precision, config, epoch, global_step, generator)
+        checkpoint.save(output/'last.pt', model, optimizer, precision, config, epoch, global_step, generator,
+                        history=history)
         write_json(output/'history.json', history)
     # Round trip checks all saved tensors, not only that torch.load succeeded.
-    saved = torch.load(output/'last.pt', map_location='cpu', weights_only=True)
+    last_path = output/'last.pt' if (output/'last.pt').exists() else Path(args.resume)
+    saved = torch.load(last_path, map_location='cpu', weights_only=True)
     for key, value in saved['state_dict'].items():
         if not torch.equal(value, model.state_dict()[key].cpu()):
             raise RuntimeError(f'Checkpoint round trip differs: {key}')

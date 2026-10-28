@@ -4,6 +4,71 @@
 
 **2026-10-28 验证状态：Kaggle 第 3 版真实权重工程检查通过。** 21 项行为测试通过，两阶段各完成 2 次参数更新，正／困难正／负查询的 5-shot 推理正常。验证源码包含 GeoRSCLIP QuickGELU 修正。输入为 512²；尚未充分训练，也未验证 896²，见 [实际运行记录](SSPNET_SMOKE_20261028.md)。
 
+## 结构图与模块作用
+
+**阶段一：** 训练 RGB 图像 + 真实像素掩膜 → ResNet-50 + PSPNet 二类分割预训练 → 保存基础分割器。阶段二冻结该分割器及 DINOv3-SAT，训练先验融合、注意力与分割预测模块。
+
+**阶段二主路径（按当前光伏适配代码绘制）：**
+
+```mermaid
+flowchart TB
+    I["图像输入<br/>1 张查询 RGB + K 张支持 RGB<br/>支持掩膜：背景 0 / 光伏 1，K = 1 或 5"]
+    T["固定光伏文本描述<br/>冻结 GeoRSCLIP → 512 维文本向量"]
+    C["冻结 ResNet-50 + PSPNet<br/>CNN 多层特征 + base 二类响应"]
+    D["冻结 DINOv3-SAT<br/>1024 维 patch 特征"]
+    P["层次先验 + Gram 支持加权<br/>前景/优势图 + 支持原型 + 差异量"]
+    F["DMSF 空间与语义融合<br/>空间 CAM + 语义 CAM → 融合 CAM"]
+    A["特征组装 + DCMA<br/>CAM 调制 + 支持前景交叉注意力"]
+    M["ASPP + 残差卷积 + meta 预测头<br/>meta 二类响应"]
+    L["Gram 校正 + base/meta 对应类别融合<br/>上采样至输入尺寸"]
+    O["最终输出<br/>背景/光伏分数 B × 2 × H × W<br/>argmax → 二值分割 B × H × W"]
+    U["辅助伪掩膜<br/>仅参与训练损失"]
+    I --> C
+    I --> D
+    C --> P
+    D --> F
+    T --> F
+    C -->|查询/支持特征| A
+    P -->|先验图与原型| A
+    F -->|融合 CAM| A
+    A --> M
+    A -.-> U
+    M --> L
+    C -->|base 响应| L
+    P -->|Gram 差异量| L
+    L --> O
+```
+
+支持掩膜同时用于 DMSF、层次先验／支持原型和 DCMA，图中省略其重复连线。文本向量可预先缓存；进入模型后，文本映射层仍参与训练。
+
+### 输入与输出
+
+| 项目 | 形状与含义 |
+| --- | --- |
+| 查询图 `query_rgb` | `[B, 3, H, W]`，待分割 RGB，数值范围 `[0,1]` |
+| 支持图 `support_rgb` | `[B, K, 3, H, W]`，提供光伏外观参考，`K=1/5` |
+| 支持掩膜 `support_masks` | `[B, K, 1, H, W]`，背景 0、光伏 1；每张支持图必须有光伏前景 |
+| 最终分数 `logits` | `[B, 2, H, W]`，通道 0 为背景、通道 1 为光伏；按通道取 `argmax` 得到二值分割 |
+| 查询真值 | 只在训练损失和评估指标中使用，**不传入推理模型** |
+
+`B` 为批大小。当前验证尺寸 `H=W=512`：DINO 特征为 `32×32`，CNN／DCMA 主特征为 `64×64`，最终分数恢复到 `512×512`；原始 `896×896` 输入尚未运行验证。
+
+### 各模块做什么
+
+| 模块 | 输入 → 输出 | 作用 |
+| --- | --- | --- |
+| ResNet-50 + PSPNet | 查询／支持 RGB → 多层 CNN 特征；查询 base 二类响应 | 提供局部纹理与分割特征，并保留第一阶段学到的光伏分割能力；第二阶段冻结 |
+| DINOv3-SAT | 查询／支持 RGB → 1024 通道、步长 16 的特征图 | 提供遥感预训练视觉表示，替换原文 DINOv2；冻结权重 |
+| GeoRSCLIP 文本编码 | 固定光伏描述 → 512 维向量 | 提供“光伏是什么”的语义参照；冻结编码器，缓存原始向量 |
+| DMSF | DINO 特征 + 支持掩膜 + 文本向量 → 空间、语义及融合 CAM | 用支持前景原型寻找外观相似区域，用可训练文本映射寻找语义相关区域，再学习融合两种提示 |
+| 层次先验 | 两层 CNN 特征 + 支持掩膜 → 前景相关图、前景优势图 | 从 block4 与 PSP 特征中选择相关图；用前景相对背景的优势抑制混淆区域。默认选择规则仍有近似平局疑点 |
+| Gram 支持加权 | 查询／支持低层特征 + 支持前景原型 → 每张支持的权重、加权原型与差异量 | 衡量查询和支持的特征统计差异，聚合由支持掩膜提取的前景原型，并向最终融合提供差异量；5-shot 加权层需要训练 |
+| 特征组装 + DCMA | CNN 特征、原型、先验／CAM、支持掩膜 → 256 通道增强特征及辅助伪掩膜 | 将线索汇入查询／支持特征，用 CAM 调制查询，再通过支持前景交叉注意力传递光伏信息；辅助头提供训练监督 |
+| ASPP + 残差卷积 + meta 头 | 增强特征 → meta 二类响应 | 汇集不同尺度的上下文，生成支持条件下的光伏分割响应 |
+| Gram 校正 + base/meta 融合 | meta 响应、Gram 差异量、base 响应 → 输入尺寸的最终二类分数 | 校正 meta 响应，并按背景／光伏对应类别融合基础预测；这是单类别光伏适配，不是原文新类协议的直接照搬 |
+
+第二阶段训练使用 `CE_final + Dice_meta + 0.2 BCE_pseudo + 0.04 Dice_spatial_CAM`。其中伪掩膜和空间 CAM 是辅助监督，最终分割来自图中的 base/meta 融合输出。
+
 ## 已实现的完整路径
 
 1. ImageNet 初始化的 ResNet-50 / output stride 8 / PSPNet，在训练空间分组内进行二类有监督分割预训练。
@@ -84,7 +149,11 @@ python scripts/sspnet.py episodic --data-root /kaggle/input --output /kaggle/wor
 python scripts/sspnet.py evaluate --data-root /kaggle/input --output /kaggle/working/sspnet_eval --base-checkpoint /kaggle/working/sspnet_base/last.pt --weights /kaggle/input/notebook5f7aef8a4f/verified_sat/model.safetensors --text-cache /kaggle/working/sspnet_assets/georsclip_pv_text.pt --shots 1 --resume /kaggle/working/sspnet_1shot/last.pt
 ```
 
-输出包含逐 epoch 四项训练损失、整体验证与分组 IoU/F1/误报/漏检指标、支持 ID、路由统计、依赖版本、划分与检查点。`--resume` 支持 epoch 边界恢复，正式训练要求保持 size／shots／划分／batch／累积／总 epoch 不变；不支持将半个 epoch 当成完整 epoch 恢复。首版保存 `last.pt`，不自动挑选最优模型或进行超参数搜索。
+输出包含逐 epoch 四项训练损失、整体验证与分组 IoU/F1/误报/漏检指标、支持 ID、路由统计、依赖版本、划分与检查点。`--resume` 支持 epoch 边界恢复；训练恢复校验 stage、size、shots、划分、学习率、batch、累积、总 epoch、max-steps、seed、workers、query-chunk、routing、pilot、工程模式及精度策略。不支持将半个 epoch 当成完整 epoch 恢复。首版保存 `last.pt`，不自动挑选最优模型或进行超参数搜索。
+
+检查点通过同目录临时文件原子替换，并内嵌截至该 epoch 的完整历史；恢复后继续追加，不重新建立空日志。旧检查点需有相邻且完整的 `history.json`。配置／模型依赖／历史检查通过前不写实验元信息；已有未完成目录须显式 `--resume`，已完成目录须使用新路径。本地回归测试模拟在保存检查点后、写 JSON 前中断，验证恢复与连续训练的参数、优化器、随机状态和历史一致，并检查不兼容的恢复不会覆盖元信息。
+
+小样本收敛诊断入口为 `python scripts/kaggle_sspnet_convergence.py`：从原训练划分固定选取 2 张正样本、1 张困难正样本、1 张负样本，关闭增强，在 512² 下分别进行最多 320／480 次更新；支持仍来自空间隔离的训练图。检查前景与 meta IoU、损失、各模块梯度、真实 GPU 单步断点恢复，并另做一次 896² 原尺寸前向／反向兼容检查。其阈值仅用于排查能否学习，输出保存在 `sspnet_convergence/`，不代表验证集精度；第一阶段诊断权重始终标记为 `engineering_only`。运行需挂载原数据集与 SSPNet 第 3 版的权重／文本缓存输出。
 
 梯度范数截断为 10，也是首版工程设置。Kaggle API 可能把带 `/4` 的 notebook 输入解析为较新归档版本；若归档没有 SAT 文件，检查入口会只在 Kaggle 内从固定 HF revision 恢复相同 SHA256 的权重，并保存恢复记录与实际文件供后续挂载。
 
