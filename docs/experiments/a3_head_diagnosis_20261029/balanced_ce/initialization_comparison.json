@@ -1,0 +1,9 @@
+{
+  "max_statistic_absolute_difference": 0.0,
+  "reference_source": "d399b38f64aa3aec98e1990ffb75ca6aceae5fa3",
+  "same_pairs_and_schedule": true,
+  "tolerance": {
+    "rtol": 0.0001,
+    "atol": 2e-05
+  }
+}

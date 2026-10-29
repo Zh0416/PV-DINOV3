@@ -1,0 +1,2275 @@
+{
+  "arms": {
+    "balanced_meta_ce_fp32": {
+      "initial": {
+        "label": "balanced_meta_ce_fp32_step000",
+        "per_image": [
+          {
+            "query": "pv001179",
+            "support": "pv003492",
+            "terms": {
+              "total": 2.198885440826416,
+              "main_ce": 0.7049435377120972,
+              "meta_dice": 0.6264660954475403,
+              "pseudo_bce": 0.6931471228599548,
+              "spatial_dice": 0.7432471513748169,
+              "balanced_meta_ce": 0.6991164684295654
+            },
+            "activations": {
+              "down_q": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.45430269837379456,
+                "mean": 0.033226899802684784,
+                "std": 0.04985706880688667,
+                "rms": 0.05991455912590027
+              },
+              "down_s": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.5694137215614319,
+                "mean": 0.0338917076587677,
+                "std": 0.05166997015476227,
+                "rms": 0.06179346889257431
+              },
+              "query_merge": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.2023744136095047,
+                "mean": 0.013735934160649776,
+                "std": 0.0212399959564209,
+                "rms": 0.025294529274106026
+              },
+              "support_merge": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.19734808802604675,
+                "mean": 0.013872192241251469,
+                "std": 0.020353935658931732,
+                "rms": 0.024631695821881294
+              },
+              "dcma": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": -2.579080581665039,
+                "maximum": 3.9528892040252686,
+                "mean": 0.011255594901740551,
+                "std": 1.012283205986023,
+                "rms": 1.012345790863037
+              },
+              "decoder": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.8390048146247864,
+                "mean": 0.10161114484071732,
+                "std": 0.13058419525623322,
+                "rms": 0.16546013951301575
+              },
+              "meta_head": {
+                "shape": [
+                  1,
+                  2,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": -0.12132510542869568,
+                "maximum": 0.03324325755238533,
+                "mean": -0.05401868000626564,
+                "std": 0.029825445264577866,
+                "rms": 0.06170555576682091
+              }
+            },
+            "outputs": {
+              "base": {
+                "tp": 40532,
+                "fp": 8045,
+                "fn": 7186,
+                "tn": 747053,
+                "iou": 0.7268618976740849,
+                "precision": 0.8343866438849661,
+                "recall": 0.8494069323944843,
+                "false_positive_rate": 0.01065424620380401,
+                "predicted_fraction": 0.060508258640766144,
+                "target_fraction": 0.059438277035951614,
+                "foreground_probability": 0.7491377592086792,
+                "background_probability": 0.01336208451539278,
+                "probability_min": 9.809580888743303e-15,
+                "probability_max": 0.9802431464195251,
+                "saturated_fraction": 0.6262891888618469,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -32.25541687011719,
+                  "maximum": 3.9043021202087402,
+                  "mean": -14.17837905883789,
+                  "std": 6.051826000213623,
+                  "rms": 15.415935516357422
+                }
+              },
+              "meta": {
+                "tp": 47287,
+                "fp": 754160,
+                "fn": 431,
+                "tn": 938,
+                "iou": 0.058970317180418966,
+                "precision": 0.05900203007809624,
+                "recall": 0.9909677689760678,
+                "false_positive_rate": 0.9987577771362128,
+                "predicted_fraction": 0.9982947111129761,
+                "target_fraction": 0.059438277035951614,
+                "foreground_probability": 0.5071812868118286,
+                "background_probability": 0.5129026770591736,
+                "probability_min": 0.49446678161621094,
+                "probability_max": 0.5283248424530029,
+                "saturated_fraction": 0.0,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -0.02213376760482788,
+                  "maximum": 0.1134210079908371,
+                  "mean": 0.05026458576321602,
+                  "std": 0.016529424116015434,
+                  "rms": 0.05291266739368439
+                }
+              },
+              "final": {
+                "tp": 47287,
+                "fp": 754160,
+                "fn": 431,
+                "tn": 938,
+                "iou": 0.058970317180418966,
+                "precision": 0.05900203007809624,
+                "recall": 0.9909677689760678,
+                "false_positive_rate": 0.9987577771362128,
+                "predicted_fraction": 0.9982947111129761,
+                "target_fraction": 0.059438277035951614,
+                "foreground_probability": 0.5035905241966248,
+                "background_probability": 0.5064508318901062,
+                "probability_min": 0.49723342061042786,
+                "probability_max": 0.5141586065292358,
+                "saturated_fraction": 0.0,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -0.011066406965255737,
+                  "maximum": 0.05664971470832825,
+                  "mean": 0.02512507513165474,
+                  "std": 0.008259174413979053,
+                  "rms": 0.026447748765349388
+                }
+              }
+            },
+            "pseudo": {
+              "shape": [
+                1,
+                1,
+                112,
+                112
+              ],
+              "finite": true,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "mean": 0.0,
+              "std": 0.0,
+              "rms": 0.0
+            },
+            "gamma": 0.6681877374649048
+          },
+          {
+            "query": "pv001181",
+            "support": "pv003492",
+            "terms": {
+              "total": 2.1894054412841797,
+              "main_ce": 0.7044219374656677,
+              "meta_dice": 0.620328426361084,
+              "pseudo_bce": 0.6931471228599548,
+              "spatial_dice": 0.7416056394577026,
+              "balanced_meta_ce": 0.6963611841201782
+            },
+            "activations": {
+              "down_q": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.454293429851532,
+                "mean": 0.03350329399108887,
+                "std": 0.050099968910217285,
+                "rms": 0.0602700412273407
+              },
+              "down_s": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.5694137215614319,
+                "mean": 0.0338917076587677,
+                "std": 0.05166997015476227,
+                "rms": 0.06179346889257431
+              },
+              "query_merge": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.20104177296161652,
+                "mean": 0.01381880883127451,
+                "std": 0.021416468545794487,
+                "rms": 0.025487734004855156
+              },
+              "support_merge": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.19734808802604675,
+                "mean": 0.013872192241251469,
+                "std": 0.020353935658931732,
+                "rms": 0.024631695821881294
+              },
+              "dcma": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": -2.5725107192993164,
+                "maximum": 3.9495630264282227,
+                "mean": 0.01114110741764307,
+                "std": 1.0128253698349,
+                "rms": 1.012886643409729
+              },
+              "decoder": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.8120324015617371,
+                "mean": 0.10161878168582916,
+                "std": 0.13065248727798462,
+                "rms": 0.16551873087882996
+              },
+              "meta_head": {
+                "shape": [
+                  1,
+                  2,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": -0.11610594391822815,
+                "maximum": 0.034097395837306976,
+                "mean": -0.05343521386384964,
+                "std": 0.029345734044909477,
+                "rms": 0.06096305698156357
+              }
+            },
+            "outputs": {
+              "base": {
+                "tp": 47667,
+                "fp": 9057,
+                "fn": 6946,
+                "tn": 739146,
+                "iou": 0.7486571383697188,
+                "precision": 0.8403321345462238,
+                "recall": 0.8728141651255196,
+                "false_positive_rate": 0.01210500358859828,
+                "predicted_fraction": 0.07065628468990326,
+                "target_fraction": 0.06802679598331451,
+                "foreground_probability": 0.7635038495063782,
+                "background_probability": 0.015916503965854645,
+                "probability_min": 1.6759327486990522e-13,
+                "probability_max": 0.9735196828842163,
+                "saturated_fraction": 0.6556084752082825,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -29.417236328125,
+                  "maximum": 3.604517936706543,
+                  "mean": -14.05838394165039,
+                  "std": 6.342433929443359,
+                  "rms": 15.422861099243164
+                }
+              },
+              "meta": {
+                "tp": 54609,
+                "fp": 748120,
+                "fn": 4,
+                "tn": 83,
+                "iou": 0.0680288464533039,
+                "precision": 0.06802918544116383,
+                "recall": 0.9999267573654624,
+                "false_positive_rate": 0.9998890675391572,
+                "predicted_fraction": 0.9998916387557983,
+                "target_fraction": 0.06802679598331451,
+                "foreground_probability": 0.5097900032997131,
+                "background_probability": 0.5127193927764893,
+                "probability_min": 0.4974311888217926,
+                "probability_max": 0.5277490615844727,
+                "saturated_fraction": 0.0,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -0.010275326669216156,
+                  "maximum": 0.1111103743314743,
+                  "mean": 0.05009447783231735,
+                  "std": 0.016315653920173645,
+                  "rms": 0.05268450453877449
+                }
+              },
+              "final": {
+                "tp": 54609,
+                "fp": 748120,
+                "fn": 4,
+                "tn": 83,
+                "iou": 0.0680288464533039,
+                "precision": 0.06802918544116383,
+                "recall": 0.9999267573654624,
+                "false_positive_rate": 0.9998890675391572,
+                "predicted_fraction": 0.9998916387557983,
+                "target_fraction": 0.06802679598331451,
+                "foreground_probability": 0.5048947930335999,
+                "background_probability": 0.5063592195510864,
+                "probability_min": 0.4987156093120575,
+                "probability_max": 0.513870894908905,
+                "saturated_fraction": 0.0,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -0.005137592554092407,
+                  "maximum": 0.0554979145526886,
+                  "mean": 0.025040045380592346,
+                  "std": 0.008151707239449024,
+                  "rms": 0.026333516463637352
+                }
+              }
+            },
+            "pseudo": {
+              "shape": [
+                1,
+                1,
+                112,
+                112
+              ],
+              "finite": true,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "mean": 0.0,
+              "std": 0.0,
+              "rms": 0.0
+            },
+            "gamma": 0.6681877374649048
+          },
+          {
+            "query": "pv003492",
+            "support": "pv001179",
+            "terms": {
+              "total": 2.2358455657958984,
+              "main_ce": 0.7052116990089417,
+              "meta_dice": 0.6571997404098511,
+              "pseudo_bce": 0.6931471228599548,
+              "spatial_dice": 0.9246206879615784,
+              "balanced_meta_ce": 0.697819709777832
+            },
+            "activations": {
+              "down_q": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.489505410194397,
+                "mean": 0.03254026174545288,
+                "std": 0.049100399017333984,
+                "rms": 0.05890430882573128
+              },
+              "down_s": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.4939386248588562,
+                "mean": 0.03358510509133339,
+                "std": 0.05110830068588257,
+                "rms": 0.06115568429231644
+              },
+              "query_merge": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.19497451186180115,
+                "mean": 0.013063909485936165,
+                "std": 0.020200859755277634,
+                "rms": 0.024057025089859962
+              },
+              "support_merge": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.18451663851737976,
+                "mean": 0.013697115704417229,
+                "std": 0.02024857886135578,
+                "rms": 0.024446183815598488
+              },
+              "dcma": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": -2.5749311447143555,
+                "maximum": 4.215448379516602,
+                "mean": 0.011240893043577671,
+                "std": 1.0122419595718384,
+                "rms": 1.012304425239563
+              },
+              "decoder": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.8125702142715454,
+                "mean": 0.10138535499572754,
+                "std": 0.13091039657592773,
+                "rms": 0.16557934880256653
+              },
+              "meta_head": {
+                "shape": [
+                  1,
+                  2,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": -0.11466270685195923,
+                "maximum": 0.03529911860823631,
+                "mean": -0.05370010435581207,
+                "std": 0.028914740309119225,
+                "rms": 0.0609898678958416
+              }
+            },
+            "outputs": {
+              "base": {
+                "tp": 11880,
+                "fp": 3747,
+                "fn": 2305,
+                "tn": 784884,
+                "iou": 0.6625027883113986,
+                "precision": 0.7602226914954886,
+                "recall": 0.8375044060627423,
+                "false_positive_rate": 0.004751271507206793,
+                "predicted_fraction": 0.019465232267975807,
+                "target_fraction": 0.017669053748250008,
+                "foreground_probability": 0.7836750745773315,
+                "background_probability": 0.004965885542333126,
+                "probability_min": 6.70933645555323e-14,
+                "probability_max": 0.9832415580749512,
+                "saturated_fraction": 0.6123108863830566,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -30.332691192626953,
+                  "maximum": 4.071954250335693,
+                  "mean": -14.884852409362793,
+                  "std": 5.171923637390137,
+                  "rms": 15.757780075073242
+                }
+              },
+              "meta": {
+                "tp": 14139,
+                "fp": 788445,
+                "fn": 46,
+                "tn": 186,
+                "iou": 0.017615837932795933,
+                "precision": 0.01761684758230914,
+                "recall": 0.9967571378216425,
+                "false_positive_rate": 0.999764148251844,
+                "predicted_fraction": 0.9997109770774841,
+                "target_fraction": 0.017669053748250008,
+                "foreground_probability": 0.5079091787338257,
+                "background_probability": 0.5123409032821655,
+                "probability_min": 0.4973958730697632,
+                "probability_max": 0.5253312587738037,
+                "saturated_fraction": 0.0,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -0.01041652262210846,
+                  "maximum": 0.10141190886497498,
+                  "mean": 0.04906269907951355,
+                  "std": 0.014266208745539188,
+                  "rms": 0.051094744354486465
+                }
+              },
+              "final": {
+                "tp": 14139,
+                "fp": 788445,
+                "fn": 46,
+                "tn": 186,
+                "iou": 0.017615837932795933,
+                "precision": 0.01761684758230914,
+                "recall": 0.9967571378216425,
+                "false_positive_rate": 0.999764148251844,
+                "predicted_fraction": 0.9997109770774841,
+                "target_fraction": 0.017669053748250008,
+                "foreground_probability": 0.5039544105529785,
+                "background_probability": 0.5061700344085693,
+                "probability_min": 0.4986979365348816,
+                "probability_max": 0.512662947177887,
+                "saturated_fraction": 0.0,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -0.005208253860473633,
+                  "maximum": 0.050662457942962646,
+                  "mean": 0.024524962529540062,
+                  "std": 0.007128413766622543,
+                  "rms": 0.025539932772517204
+                }
+              }
+            },
+            "pseudo": {
+              "shape": [
+                1,
+                1,
+                112,
+                112
+              ],
+              "finite": true,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "mean": 0.0,
+              "std": 0.0,
+              "rms": 0.0
+            },
+            "gamma": 0.6681877374649048
+          },
+          {
+            "query": "pv003494",
+            "support": "pv001179",
+            "terms": {
+              "total": 2.231804370880127,
+              "main_ce": 0.7047187089920044,
+              "meta_dice": 0.6568753123283386,
+              "pseudo_bce": 0.6931471228599548,
+              "spatial_dice": 0.9296622276306152,
+              "balanced_meta_ce": 0.6943944692611694
+            },
+            "activations": {
+              "down_q": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.4914950132369995,
+                "mean": 0.03301656246185303,
+                "std": 0.04963807389140129,
+                "rms": 0.05961570143699646
+              },
+              "down_s": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.4939386248588562,
+                "mean": 0.03358510509133339,
+                "std": 0.05110830068588257,
+                "rms": 0.06115568429231644
+              },
+              "query_merge": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.19658999145030975,
+                "mean": 0.013166663236916065,
+                "std": 0.020396053791046143,
+                "rms": 0.024276738986372948
+              },
+              "support_merge": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.18451663851737976,
+                "mean": 0.013697115704417229,
+                "std": 0.02024857886135578,
+                "rms": 0.024446183815598488
+              },
+              "dcma": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": -2.5351979732513428,
+                "maximum": 4.1761016845703125,
+                "mean": 0.01150509063154459,
+                "std": 1.0125563144683838,
+                "rms": 1.0126216411590576
+              },
+              "decoder": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.8104803562164307,
+                "mean": 0.10116765648126602,
+                "std": 0.13053101301193237,
+                "rms": 0.1651461273431778
+              },
+              "meta_head": {
+                "shape": [
+                  1,
+                  2,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": -0.11134631931781769,
+                "maximum": 0.03336894512176514,
+                "mean": -0.053423602133989334,
+                "std": 0.02798464149236679,
+                "rms": 0.060309380292892456
+              }
+            },
+            "outputs": {
+              "base": {
+                "tp": 12043,
+                "fp": 2727,
+                "fn": 2142,
+                "tn": 785904,
+                "iou": 0.7120979186376537,
+                "precision": 0.8153689911983751,
+                "recall": 0.848995417694748,
+                "false_positive_rate": 0.0034578909528030217,
+                "predicted_fraction": 0.01839773915708065,
+                "target_fraction": 0.017669053748250008,
+                "foreground_probability": 0.7662048935890198,
+                "background_probability": 0.0044321403838694096,
+                "probability_min": 1.5449953802751902e-14,
+                "probability_max": 0.9809262752532959,
+                "saturated_fraction": 0.5766863226890564,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -31.801170349121094,
+                  "maximum": 3.9401845932006836,
+                  "mean": -15.48383903503418,
+                  "std": 5.979357719421387,
+                  "rms": 16.59825325012207
+                }
+              },
+              "meta": {
+                "tp": 14185,
+                "fp": 788373,
+                "fn": 0,
+                "tn": 258,
+                "iou": 0.017674735034726462,
+                "precision": 0.017674735034726462,
+                "recall": 1.0,
+                "false_positive_rate": 0.9996728508009449,
+                "predicted_fraction": 0.9996786117553711,
+                "target_fraction": 0.017669053748250008,
+                "foreground_probability": 0.5109372138977051,
+                "background_probability": 0.5118982195854187,
+                "probability_min": 0.49466001987457275,
+                "probability_max": 0.5272442102432251,
+                "saturated_fraction": 0.0,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -0.02136082574725151,
+                  "maximum": 0.10908492654561996,
+                  "mean": 0.047536421567201614,
+                  "std": 0.014153840020298958,
+                  "rms": 0.0495988130569458
+                }
+              },
+              "final": {
+                "tp": 14185,
+                "fp": 788373,
+                "fn": 0,
+                "tn": 258,
+                "iou": 0.017674735034726462,
+                "precision": 0.017674735034726462,
+                "recall": 1.0,
+                "false_positive_rate": 0.9996728508009449,
+                "predicted_fraction": 0.9996786117553711,
+                "target_fraction": 0.017669053748250008,
+                "foreground_probability": 0.5054683089256287,
+                "background_probability": 0.5059487223625183,
+                "probability_min": 0.49733003973960876,
+                "probability_max": 0.5136187076568604,
+                "saturated_fraction": 0.0,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -0.010679960250854492,
+                  "maximum": 0.05448827147483826,
+                  "mean": 0.023762298747897148,
+                  "std": 0.00707223592326045,
+                  "rms": 0.02479240670800209
+                }
+              }
+            },
+            "pseudo": {
+              "shape": [
+                1,
+                1,
+                112,
+                112
+              ],
+              "finite": true,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "mean": 0.0,
+              "std": 0.0,
+              "rms": 0.0
+            },
+            "gamma": 0.6681877374649048
+          },
+          {
+            "query": "pv001860",
+            "support": "pv001179",
+            "terms": {
+              "total": 2.264448404312134,
+              "main_ce": 0.7026633620262146,
+              "meta_dice": 0.6708993911743164,
+              "pseudo_bce": 0.6931471228599548,
+              "spatial_dice": 0.9993497133255005,
+              "balanced_meta_ce": 0.712282121181488
+            },
+            "activations": {
+              "down_q": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.38508063554763794,
+                "mean": 0.03100544959306717,
+                "std": 0.04554684832692146,
+                "rms": 0.055098578333854675
+              },
+              "down_s": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.4939386248588562,
+                "mean": 0.03358510509133339,
+                "std": 0.05110830068588257,
+                "rms": 0.06115568429231644
+              },
+              "query_merge": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.1433890461921692,
+                "mean": 0.013086979277431965,
+                "std": 0.02015707455575466,
+                "rms": 0.024032825604081154
+              },
+              "support_merge": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.18451663851737976,
+                "mean": 0.013697115704417229,
+                "std": 0.02024857886135578,
+                "rms": 0.024446183815598488
+              },
+              "dcma": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": -2.449436664581299,
+                "maximum": 3.4710581302642822,
+                "mean": 0.004621580708771944,
+                "std": 1.008925437927246,
+                "rms": 1.0089361667633057
+              },
+              "decoder": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.8407132625579834,
+                "mean": 0.09952796250581741,
+                "std": 0.1289946585893631,
+                "rms": 0.16292771697044373
+              },
+              "meta_head": {
+                "shape": [
+                  1,
+                  2,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": -0.0949307531118393,
+                "maximum": 0.029935017228126526,
+                "mean": -0.04912899434566498,
+                "std": 0.024116497486829758,
+                "rms": 0.054728999733924866
+              }
+            },
+            "outputs": {
+              "base": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 0,
+                "tn": 802816,
+                "iou": null,
+                "precision": null,
+                "recall": null,
+                "false_positive_rate": 0.0,
+                "predicted_fraction": 0.0,
+                "target_fraction": 0.0,
+                "foreground_probability": null,
+                "background_probability": 6.146977966636769e-07,
+                "probability_min": 5.090082869085855e-12,
+                "probability_max": 0.002896918449550867,
+                "saturated_fraction": 0.9601116180419922,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -26.003726959228516,
+                  "maximum": -5.8412065505981445,
+                  "mean": -16.831525802612305,
+                  "std": 1.817354679107666,
+                  "rms": 16.92935562133789
+                }
+              },
+              "meta": {
+                "tp": 0,
+                "fp": 802689,
+                "fn": 0,
+                "tn": 127,
+                "iou": 0.0,
+                "precision": 0.0,
+                "recall": null,
+                "false_positive_rate": 0.9998418068399235,
+                "predicted_fraction": 0.9998418092727661,
+                "target_fraction": 0.0,
+                "foreground_probability": null,
+                "background_probability": 0.5094665288925171,
+                "probability_min": 0.4982861578464508,
+                "probability_max": 0.5232179760932922,
+                "saturated_fraction": 0.0,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -0.006855500862002373,
+                  "maximum": 0.0929386168718338,
+                  "mean": 0.03787225857377052,
+                  "std": 0.01249468233436346,
+                  "rms": 0.039880137890577316
+                }
+              },
+              "final": {
+                "tp": 0,
+                "fp": 802689,
+                "fn": 0,
+                "tn": 127,
+                "iou": 0.0,
+                "precision": 0.0,
+                "recall": null,
+                "false_positive_rate": 0.9998418068399235,
+                "predicted_fraction": 0.9998418092727661,
+                "target_fraction": 0.0,
+                "foreground_probability": null,
+                "background_probability": 0.5047330260276794,
+                "probability_min": 0.4991430640220642,
+                "probability_max": 0.5116068720817566,
+                "saturated_fraction": 0.0,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -0.0034277141094207764,
+                  "maximum": 0.04643583297729492,
+                  "mean": 0.018932970240712166,
+                  "std": 0.006244257092475891,
+                  "rms": 0.019936101511120796
+                }
+              }
+            },
+            "pseudo": {
+              "shape": [
+                1,
+                1,
+                112,
+                112
+              ],
+              "finite": true,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "mean": 0.0,
+              "std": 0.0,
+              "rms": 0.0
+            },
+            "gamma": 0.6681877374649048
+          }
+        ],
+        "pooled": {
+          "base": {
+            "tp": 112122,
+            "fp": 23576,
+            "fn": 18579,
+            "tn": 3859803,
+            "iou": 0.726757715019089,
+            "precision": 0.8262612566139516,
+            "recall": 0.8578511258521357,
+            "false_positive_rate": 0.00607100156847941
+          },
+          "meta": {
+            "tp": 130220,
+            "fp": 3881787,
+            "fn": 481,
+            "tn": 1592,
+            "iou": 0.032453679612250555,
+            "precision": 0.03245757048778828,
+            "recall": 0.9963198445306463,
+            "false_positive_rate": 0.9995900477393528
+          },
+          "final": {
+            "tp": 130220,
+            "fp": 3881787,
+            "fn": 481,
+            "tn": 1592,
+            "iou": 0.032453679612250555,
+            "precision": 0.03245757048778828,
+            "recall": 0.9963198445306463,
+            "false_positive_rate": 0.9995900477393528
+          }
+        },
+        "loss": 2.224077844619751
+      },
+      "final": {
+        "label": "balanced_meta_ce_fp32_step240",
+        "per_image": [
+          {
+            "query": "pv001179",
+            "support": "pv003492",
+            "terms": {
+              "total": 0.5522153973579407,
+              "main_ce": 0.32632526755332947,
+              "meta_dice": 0.11155465245246887,
+              "pseudo_bce": 0.05536500737071037,
+              "spatial_dice": 0.46938925981521606,
+              "balanced_meta_ce": 0.08448691666126251
+            },
+            "activations": {
+              "down_q": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.6520235538482666,
+                "mean": 0.03794533759355545,
+                "std": 0.06178078427910805,
+                "rms": 0.07250320166349411
+              },
+              "down_s": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.5434310436248779,
+                "mean": 0.02038927562534809,
+                "std": 0.045646678656339645,
+                "rms": 0.04999341443181038
+              },
+              "query_merge": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.262243390083313,
+                "mean": 0.021944530308246613,
+                "std": 0.030625123530626297,
+                "rms": 0.037675727158784866
+              },
+              "support_merge": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.12502595782279968,
+                "mean": 0.00824708677828312,
+                "std": 0.014066532254219055,
+                "rms": 0.01630588062107563
+              },
+              "dcma": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": -3.2947840690612793,
+                "maximum": 5.321033477783203,
+                "mean": 0.020388085395097733,
+                "std": 1.214561939239502,
+                "rms": 1.2147330045700073
+              },
+              "decoder": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 9.780594825744629,
+                "mean": 2.009004592895508,
+                "std": 2.2229113578796387,
+                "rms": 2.996236562728882
+              },
+              "meta_head": {
+                "shape": [
+                  1,
+                  2,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": -30.96044158935547,
+                "maximum": 15.870283126831055,
+                "mean": -5.3102030754089355,
+                "std": 17.54281234741211,
+                "rms": 18.32889747619629
+              }
+            },
+            "outputs": {
+              "base": {
+                "tp": 40532,
+                "fp": 8045,
+                "fn": 7186,
+                "tn": 747053,
+                "iou": 0.7268618976740849,
+                "precision": 0.8343866438849661,
+                "recall": 0.8494069323944843,
+                "false_positive_rate": 0.01065424620380401,
+                "predicted_fraction": 0.060508258640766144,
+                "target_fraction": 0.059438277035951614,
+                "foreground_probability": 0.7491377592086792,
+                "background_probability": 0.01336208451539278,
+                "probability_min": 9.809580888743303e-15,
+                "probability_max": 0.9802431464195251,
+                "saturated_fraction": 0.6262891888618469,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -32.25541687011719,
+                  "maximum": 3.9043021202087402,
+                  "mean": -14.17837905883789,
+                  "std": 6.051826000213623,
+                  "rms": 15.415935516357422
+                }
+              },
+              "meta": {
+                "tp": 47718,
+                "fp": 24973,
+                "fn": 0,
+                "tn": 730125,
+                "iou": 0.6564499043898144,
+                "precision": 0.6564499043898144,
+                "recall": 1.0,
+                "false_positive_rate": 0.033072528334070546,
+                "predicted_fraction": 0.09054502844810486,
+                "target_fraction": 0.059438277035951614,
+                "foreground_probability": 0.9981550574302673,
+                "background_probability": 0.03270025923848152,
+                "probability_min": 4.615885114515403e-21,
+                "probability_max": 0.9999637603759766,
+                "saturated_fraction": 0.8980962038040161,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -46.82478332519531,
+                  "maximum": 10.224401473999023,
+                  "mean": -32.18860626220703,
+                  "std": 13.870437622070312,
+                  "rms": 35.049896240234375
+                }
+              },
+              "final": {
+                "tp": 47718,
+                "fp": 25013,
+                "fn": 0,
+                "tn": 730085,
+                "iou": 0.6560888754451334,
+                "precision": 0.6560888754451334,
+                "recall": 1.0,
+                "false_positive_rate": 0.03312550159052202,
+                "predicted_fraction": 0.09059485793113708,
+                "target_fraction": 0.059438277035951614,
+                "foreground_probability": 0.7339119911193848,
+                "background_probability": 0.2709048092365265,
+                "probability_min": 0.25516006350517273,
+                "probability_max": 0.7362621426582336,
+                "saturated_fraction": 0.0,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -1.0712783336639404,
+                  "maximum": 1.0266307592391968,
+                  "mean": -0.8828250765800476,
+                  "std": 0.5912084579467773,
+                  "rms": 1.0625007152557373
+                }
+              }
+            },
+            "pseudo": {
+              "shape": [
+                1,
+                1,
+                112,
+                112
+              ],
+              "finite": true,
+              "minimum": -5.0,
+              "maximum": 0.7086185812950134,
+              "mean": -4.522265911102295,
+              "std": 1.5220463275909424,
+              "rms": 4.771531581878662
+            },
+            "gamma": 0.6689016819000244
+          },
+          {
+            "query": "pv001181",
+            "support": "pv003492",
+            "terms": {
+              "total": 0.5712012648582458,
+              "main_ce": 0.33116862177848816,
+              "meta_dice": 0.11411947011947632,
+              "pseudo_bce": 0.0613885298371315,
+              "spatial_dice": 0.4761820435523987,
+              "balanced_meta_ce": 0.09458819776773453
+            },
+            "activations": {
+              "down_q": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.6814935207366943,
+                "mean": 0.0383593924343586,
+                "std": 0.062360625714063644,
+                "rms": 0.07321400195360184
+              },
+              "down_s": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.5434310436248779,
+                "mean": 0.02038927562534809,
+                "std": 0.045646678656339645,
+                "rms": 0.04999341443181038
+              },
+              "query_merge": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.26066210865974426,
+                "mean": 0.02218928188085556,
+                "std": 0.03091616928577423,
+                "rms": 0.03805487975478172
+              },
+              "support_merge": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.12502595782279968,
+                "mean": 0.00824708677828312,
+                "std": 0.014066532254219055,
+                "rms": 0.01630588062107563
+              },
+              "dcma": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": -3.282540798187256,
+                "maximum": 5.334201335906982,
+                "mean": 0.01929219625890255,
+                "std": 1.210705041885376,
+                "rms": 1.2108588218688965
+              },
+              "decoder": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 10.294600486755371,
+                "mean": 1.948416829109192,
+                "std": 2.206981658935547,
+                "rms": 2.943993091583252
+              },
+              "meta_head": {
+                "shape": [
+                  1,
+                  2,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": -32.60381317138672,
+                "maximum": 16.737934112548828,
+                "mean": -5.140219688415527,
+                "std": 17.263566970825195,
+                "rms": 18.0125675201416
+              }
+            },
+            "outputs": {
+              "base": {
+                "tp": 47667,
+                "fp": 9057,
+                "fn": 6946,
+                "tn": 739146,
+                "iou": 0.7486571383697188,
+                "precision": 0.8403321345462238,
+                "recall": 0.8728141651255196,
+                "false_positive_rate": 0.01210500358859828,
+                "predicted_fraction": 0.07065628468990326,
+                "target_fraction": 0.06802679598331451,
+                "foreground_probability": 0.7635038495063782,
+                "background_probability": 0.015916503965854645,
+                "probability_min": 1.6759327486990522e-13,
+                "probability_max": 0.9735196828842163,
+                "saturated_fraction": 0.6556084752082825,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -29.417236328125,
+                  "maximum": 3.604517936706543,
+                  "mean": -14.05838394165039,
+                  "std": 6.342433929443359,
+                  "rms": 15.422861099243164
+                }
+              },
+              "meta": {
+                "tp": 54613,
+                "fp": 29028,
+                "fn": 0,
+                "tn": 719175,
+                "iou": 0.6529453258569362,
+                "precision": 0.6529453258569362,
+                "recall": 1.0,
+                "false_positive_rate": 0.03879695751019443,
+                "predicted_fraction": 0.10418451577425003,
+                "target_fraction": 0.06802679598331451,
+                "foreground_probability": 0.9985139966011047,
+                "background_probability": 0.03832495957612991,
+                "probability_min": 3.7865217427702905e-22,
+                "probability_max": 0.9999734163284302,
+                "saturated_fraction": 0.8725835084915161,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -49.32542419433594,
+                  "maximum": 10.533513069152832,
+                  "mean": -31.00354766845703,
+                  "std": 14.994321823120117,
+                  "rms": 34.43907165527344
+                }
+              },
+              "final": {
+                "tp": 54613,
+                "fp": 29117,
+                "fn": 0,
+                "tn": 719086,
+                "iou": 0.6522512838886898,
+                "precision": 0.6522512838886898,
+                "recall": 1.0,
+                "false_positive_rate": 0.03891590918507411,
+                "predicted_fraction": 0.10429538041353226,
+                "target_fraction": 0.06802679598331451,
+                "foreground_probability": 0.7342052459716797,
+                "background_probability": 0.27365249395370483,
+                "probability_min": 0.2551589608192444,
+                "probability_max": 0.7362194657325745,
+                "saturated_fraction": 0.0,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -1.0712840557098389,
+                  "maximum": 1.0264105796813965,
+                  "mean": -0.8542352914810181,
+                  "std": 0.6274948120117188,
+                  "rms": 1.059937596321106
+                }
+              }
+            },
+            "pseudo": {
+              "shape": [
+                1,
+                1,
+                112,
+                112
+              ],
+              "finite": true,
+              "minimum": -5.0,
+              "maximum": 0.706473171710968,
+              "mean": -4.452542781829834,
+              "std": 1.6119500398635864,
+              "rms": 4.735348224639893
+            },
+            "gamma": 0.6689016819000244
+          },
+          {
+            "query": "pv003492",
+            "support": "pv001179",
+            "terms": {
+              "total": 0.48909708857536316,
+              "main_ce": 0.3052521049976349,
+              "meta_dice": 0.11782920360565186,
+              "pseudo_bce": 0.020221145823597908,
+              "spatial_dice": 0.8179137110710144,
+              "balanced_meta_ce": 0.02925499901175499
+            },
+            "activations": {
+              "down_q": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.6726465225219727,
+                "mean": 0.0368863083422184,
+                "std": 0.061561692506074905,
+                "rms": 0.07176657766103745
+              },
+              "down_s": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.5273099541664124,
+                "mean": 0.02014978788793087,
+                "std": 0.04555104672908783,
+                "rms": 0.04980875551700592
+              },
+              "query_merge": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.27224546670913696,
+                "mean": 0.020924028009176254,
+                "std": 0.029662325978279114,
+                "rms": 0.036299705505371094
+              },
+              "support_merge": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.15495732426643372,
+                "mean": 0.008289054967463017,
+                "std": 0.014095954596996307,
+                "rms": 0.01635250262916088
+              },
+              "dcma": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": -3.328565835952759,
+                "maximum": 5.369379043579102,
+                "mean": 0.02354424260556698,
+                "std": 1.2341289520263672,
+                "rms": 1.2343536615371704
+              },
+              "decoder": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 10.876564979553223,
+                "mean": 2.2418313026428223,
+                "std": 2.365621566772461,
+                "rms": 3.259136915206909
+              },
+              "meta_head": {
+                "shape": [
+                  1,
+                  2,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": -34.198463439941406,
+                "maximum": 17.522682189941406,
+                "mean": -5.954150199890137,
+                "std": 19.027624130249023,
+                "rms": 19.937461853027344
+              }
+            },
+            "outputs": {
+              "base": {
+                "tp": 11880,
+                "fp": 3747,
+                "fn": 2305,
+                "tn": 784884,
+                "iou": 0.6625027883113986,
+                "precision": 0.7602226914954886,
+                "recall": 0.8375044060627423,
+                "false_positive_rate": 0.004751271507206793,
+                "predicted_fraction": 0.019465232267975807,
+                "target_fraction": 0.017669053748250008,
+                "foreground_probability": 0.7836750745773315,
+                "background_probability": 0.004965885542333126,
+                "probability_min": 6.70933645555323e-14,
+                "probability_max": 0.9832415580749512,
+                "saturated_fraction": 0.6123108863830566,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -30.332691192626953,
+                  "maximum": 4.071954250335693,
+                  "mean": -14.884852409362793,
+                  "std": 5.171923637390137,
+                  "rms": 15.757780075073242
+                }
+              },
+              "meta": {
+                "tp": 14185,
+                "fp": 8576,
+                "fn": 0,
+                "tn": 780055,
+                "iou": 0.6232151487193005,
+                "precision": 0.6232151487193005,
+                "recall": 1.0,
+                "false_positive_rate": 0.010874540818202683,
+                "predicted_fraction": 0.028351452201604843,
+                "target_fraction": 0.017669053748250008,
+                "foreground_probability": 0.9989268183708191,
+                "background_probability": 0.010730390436947346,
+                "probability_min": 3.490075892523904e-23,
+                "probability_max": 0.9999847412109375,
+                "saturated_fraction": 0.9651850461959839,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -51.70953369140625,
+                  "maximum": 11.09111213684082,
+                  "mean": -36.715755462646484,
+                  "std": 10.304390907287598,
+                  "rms": 38.13433074951172
+                }
+              },
+              "final": {
+                "tp": 14185,
+                "fp": 8586,
+                "fn": 0,
+                "tn": 780045,
+                "iou": 0.6229414606297483,
+                "precision": 0.6229414606297483,
+                "recall": 1.0,
+                "false_positive_rate": 0.010887221019716445,
+                "predicted_fraction": 0.02836390770971775,
+                "target_fraction": 0.017669053748250008,
+                "foreground_probability": 0.7343271970748901,
+                "background_probability": 0.2603345513343811,
+                "probability_min": 0.25516006350517273,
+                "probability_max": 0.7363057732582092,
+                "saturated_fraction": 0.0,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -1.0712783336639404,
+                  "maximum": 1.0268553495407104,
+                  "mean": -1.0122424364089966,
+                  "std": 0.3397398293018341,
+                  "rms": 1.067734956741333
+                }
+              }
+            },
+            "pseudo": {
+              "shape": [
+                1,
+                1,
+                112,
+                112
+              ],
+              "finite": true,
+              "minimum": -5.0,
+              "maximum": 0.7074998617172241,
+              "mean": -4.851693153381348,
+              "std": 0.865800678730011,
+              "rms": 4.928340435028076
+            },
+            "gamma": 0.6689016819000244
+          },
+          {
+            "query": "pv003494",
+            "support": "pv001179",
+            "terms": {
+              "total": 0.49349445104599,
+              "main_ce": 0.3055078089237213,
+              "meta_dice": 0.11941531300544739,
+              "pseudo_bce": 0.020095372572541237,
+              "spatial_dice": 0.8241186738014221,
+              "balanced_meta_ce": 0.031587518751621246
+            },
+            "activations": {
+              "down_q": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.737408459186554,
+                "mean": 0.037608981132507324,
+                "std": 0.06247778981924057,
+                "rms": 0.07292399555444717
+              },
+              "down_s": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.5273099541664124,
+                "mean": 0.02014978788793087,
+                "std": 0.04555104672908783,
+                "rms": 0.04980875551700592
+              },
+              "query_merge": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.2722760736942291,
+                "mean": 0.021145768463611603,
+                "std": 0.029780689626932144,
+                "rms": 0.036524415016174316
+              },
+              "support_merge": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.15495732426643372,
+                "mean": 0.008289054967463017,
+                "std": 0.014095954596996307,
+                "rms": 0.01635250262916088
+              },
+              "dcma": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": -3.304460048675537,
+                "maximum": 5.2055344581604,
+                "mean": 0.023007888346910477,
+                "std": 1.2262855768203735,
+                "rms": 1.2265013456344604
+              },
+              "decoder": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 10.396177291870117,
+                "mean": 2.1992673873901367,
+                "std": 2.32031512260437,
+                "rms": 3.1969735622406006
+              },
+              "meta_head": {
+                "shape": [
+                  1,
+                  2,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": -32.50160217285156,
+                "maximum": 16.668519973754883,
+                "mean": -5.8419036865234375,
+                "std": 18.673187255859375,
+                "rms": 19.565677642822266
+              }
+            },
+            "outputs": {
+              "base": {
+                "tp": 12043,
+                "fp": 2727,
+                "fn": 2142,
+                "tn": 785904,
+                "iou": 0.7120979186376537,
+                "precision": 0.8153689911983751,
+                "recall": 0.848995417694748,
+                "false_positive_rate": 0.0034578909528030217,
+                "predicted_fraction": 0.01839773915708065,
+                "target_fraction": 0.017669053748250008,
+                "foreground_probability": 0.7662048935890198,
+                "background_probability": 0.0044321403838694096,
+                "probability_min": 1.5449953802751902e-14,
+                "probability_max": 0.9809262752532959,
+                "saturated_fraction": 0.5766863226890564,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -31.801170349121094,
+                  "maximum": 3.9401845932006836,
+                  "mean": -15.48383903503418,
+                  "std": 5.979357719421387,
+                  "rms": 16.59825325012207
+                }
+              },
+              "meta": {
+                "tp": 14185,
+                "fp": 8685,
+                "fn": 0,
+                "tn": 779946,
+                "iou": 0.620244862264976,
+                "precision": 0.620244862264976,
+                "recall": 1.0,
+                "false_positive_rate": 0.011012755014702693,
+                "predicted_fraction": 0.028487224131822586,
+                "target_fraction": 0.017669053748250008,
+                "foreground_probability": 0.9995039105415344,
+                "background_probability": 0.010934298858046532,
+                "probability_min": 4.439372930511613e-22,
+                "probability_max": 0.999992847442627,
+                "saturated_fraction": 0.9626750946044922,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -49.166358947753906,
+                  "maximum": 11.853153228759766,
+                  "mean": -36.01457977294922,
+                  "std": 10.192251205444336,
+                  "rms": 37.42902755737305
+                }
+              },
+              "final": {
+                "tp": 14185,
+                "fp": 8738,
+                "fn": 0,
+                "tn": 779893,
+                "iou": 0.6188108013785281,
+                "precision": 0.6188108013785281,
+                "recall": 1.0,
+                "false_positive_rate": 0.011079960082725635,
+                "predicted_fraction": 0.02855324186384678,
+                "target_fraction": 0.017669053748250008,
+                "foreground_probability": 0.7347103357315063,
+                "background_probability": 0.2604876756668091,
+                "probability_min": 0.2551599442958832,
+                "probability_max": 0.736298680305481,
+                "saturated_fraction": 0.0,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -1.0712789297103882,
+                  "maximum": 1.026818871498108,
+                  "mean": -1.0115315914154053,
+                  "std": 0.3410188555717468,
+                  "rms": 1.0674690008163452
+                }
+              }
+            },
+            "pseudo": {
+              "shape": [
+                1,
+                1,
+                112,
+                112
+              ],
+              "finite": true,
+              "minimum": -5.0,
+              "maximum": 0.7075762748718262,
+              "mean": -4.852090358734131,
+              "std": 0.8637204766273499,
+              "rms": 4.928366184234619
+            },
+            "gamma": 0.6689016819000244
+          },
+          {
+            "query": "pv001860",
+            "support": "pv001179",
+            "terms": {
+              "total": 0.3358924686908722,
+              "main_ce": 0.29456743597984314,
+              "meta_dice": 5.829334259033203e-05,
+              "pseudo_bce": 0.006717698182910681,
+              "spatial_dice": 0.9980798363685608,
+              "balanced_meta_ce": 1.383913122987579e-10
+            },
+            "activations": {
+              "down_q": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.4108988046646118,
+                "mean": 0.030456561595201492,
+                "std": 0.05392366275191307,
+                "rms": 0.06193031370639801
+              },
+              "down_s": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.5273099541664124,
+                "mean": 0.02014978788793087,
+                "std": 0.04555104672908783,
+                "rms": 0.04980875551700592
+              },
+              "query_merge": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.1788533329963684,
+                "mean": 0.018516801297664642,
+                "std": 0.026655122637748718,
+                "rms": 0.032455623149871826
+              },
+              "support_merge": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 0.15495732426643372,
+                "mean": 0.008289054967463017,
+                "std": 0.014095954596996307,
+                "rms": 0.01635250262916088
+              },
+              "dcma": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": -3.253467559814453,
+                "maximum": 4.816708087921143,
+                "mean": 0.019835852086544037,
+                "std": 1.2788362503051758,
+                "rms": 1.2789900302886963
+              },
+              "decoder": {
+                "shape": [
+                  1,
+                  256,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": 0.0,
+                "maximum": 11.551724433898926,
+                "mean": 2.722611904144287,
+                "std": 2.7558233737945557,
+                "rms": 3.8739097118377686
+              },
+              "meta_head": {
+                "shape": [
+                  1,
+                  2,
+                  112,
+                  112
+                ],
+                "finite": true,
+                "minimum": -35.654937744140625,
+                "maximum": 18.226837158203125,
+                "mean": -7.272127628326416,
+                "std": 22.550369262695312,
+                "rms": 23.693944931030273
+              }
+            },
+            "outputs": {
+              "base": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 0,
+                "tn": 802816,
+                "iou": null,
+                "precision": null,
+                "recall": null,
+                "false_positive_rate": 0.0,
+                "predicted_fraction": 0.0,
+                "target_fraction": 0.0,
+                "foreground_probability": null,
+                "background_probability": 6.146977966636769e-07,
+                "probability_min": 5.090082869085855e-12,
+                "probability_max": 0.002896918449550867,
+                "saturated_fraction": 0.9601116180419922,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -26.003726959228516,
+                  "maximum": -5.8412065505981445,
+                  "mean": -16.831525802612305,
+                  "std": 1.817354679107666,
+                  "rms": 16.92935562133789
+                }
+              },
+              "meta": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 0,
+                "tn": 802816,
+                "iou": null,
+                "precision": null,
+                "recall": null,
+                "false_positive_rate": 0.0,
+                "predicted_fraction": 0.0,
+                "target_fraction": 0.0,
+                "foreground_probability": null,
+                "background_probability": 1.4521521485288957e-10,
+                "probability_min": 3.984649239380777e-24,
+                "probability_max": 1.4138355254544877e-05,
+                "saturated_fraction": 0.9999700784683228,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -53.87959289550781,
+                  "maximum": -11.166604995727539,
+                  "mean": -45.084083557128906,
+                  "std": 4.574095726013184,
+                  "rms": 45.31552505493164
+                }
+              },
+              "final": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 0,
+                "tn": 802816,
+                "iou": null,
+                "precision": null,
+                "recall": null,
+                "false_positive_rate": 0.0,
+                "predicted_fraction": 0.0,
+                "target_fraction": 0.0,
+                "foreground_probability": null,
+                "background_probability": 0.2551465928554535,
+                "probability_min": 0.2551465928554535,
+                "probability_max": 0.25516796112060547,
+                "saturated_fraction": 0.0,
+                "logit_margin": {
+                  "shape": [
+                    1,
+                    896,
+                    896
+                  ],
+                  "finite": true,
+                  "minimum": -1.0713492631912231,
+                  "maximum": -1.0712366104125977,
+                  "mean": -1.0713491439819336,
+                  "std": 6.435216164391022e-07,
+                  "rms": 1.0713492631912231
+                }
+              }
+            },
+            "pseudo": {
+              "shape": [
+                1,
+                1,
+                112,
+                112
+              ],
+              "finite": true,
+              "minimum": -5.0,
+              "maximum": -3.8477461338043213,
+              "mean": -4.9997711181640625,
+              "std": 0.013701383955776691,
+              "rms": 4.999790191650391
+            },
+            "gamma": 0.6689016819000244
+          }
+        ],
+        "pooled": {
+          "base": {
+            "tp": 112122,
+            "fp": 23576,
+            "fn": 18579,
+            "tn": 3859803,
+            "iou": 0.726757715019089,
+            "precision": 0.8262612566139516,
+            "recall": 0.8578511258521357,
+            "false_positive_rate": 0.00607100156847941
+          },
+          "meta": {
+            "tp": 130701,
+            "fp": 71262,
+            "fn": 0,
+            "tn": 3812117,
+            "iou": 0.6471531914261524,
+            "precision": 0.6471531914261524,
+            "recall": 1.0,
+            "false_positive_rate": 0.018350513817992013
+          },
+          "final": {
+            "tp": 130701,
+            "fp": 71454,
+            "fn": 0,
+            "tn": 3811925,
+            "iou": 0.6465385471544112,
+            "precision": 0.6465385471544112,
+            "recall": 1.0,
+            "false_positive_rate": 0.018399955296663034
+          }
+        },
+        "loss": 0.4883801341056824
+      },
+      "elapsed": 291.659550025
+    }
+  },
+  "scope": "training-only diagnosis",
+  "source_commit": "c0ab5caa828725f1481885ca721a35002944fe5a"
+}

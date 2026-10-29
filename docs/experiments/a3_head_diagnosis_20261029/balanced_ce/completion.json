@@ -1,0 +1,6 @@
+{
+  "status": "complete",
+  "steps_per_arm": 240,
+  "calibration_or_query_used": false,
+  "claim": "Diagnosis finished; metrics determine whether training succeeded"
+}

@@ -1,0 +1,1133 @@
+{
+  "label": "balanced_meta_ce_fp32_step005",
+  "per_image": [
+    {
+      "query": "pv001179",
+      "support": "pv003492",
+      "terms": {
+        "total": 2.0734782218933105,
+        "main_ce": 0.42555177211761475,
+        "meta_dice": 0.49199801683425903,
+        "pseudo_bce": 0.663611650466919,
+        "spatial_dice": 0.7047168612480164,
+        "balanced_meta_ce": 0.9950172901153564
+      },
+      "activations": {
+        "down_q": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": 0.0,
+          "maximum": 0.45430269837379456,
+          "mean": 0.03453759849071503,
+          "std": 0.05136563628911972,
+          "rms": 0.061897289007902145
+        },
+        "down_s": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": 0.0,
+          "maximum": 0.5946710705757141,
+          "mean": 0.033351294696331024,
+          "std": 0.051169902086257935,
+          "rms": 0.06107918918132782
+        },
+        "query_merge": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": 0.0,
+          "maximum": 0.2014314830303192,
+          "mean": 0.014266413636505604,
+          "std": 0.022517386823892593,
+          "rms": 0.026656391099095345
+        },
+        "support_merge": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": 0.0,
+          "maximum": 0.19051283597946167,
+          "mean": 0.014179513789713383,
+          "std": 0.020084038376808167,
+          "rms": 0.024585101753473282
+        },
+        "dcma": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": -2.5801191329956055,
+          "maximum": 4.403114318847656,
+          "mean": 0.016109827905893326,
+          "std": 1.0465655326843262,
+          "rms": 1.0466896295547485
+        },
+        "decoder": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": 0.0,
+          "maximum": 2.0058329105377197,
+          "mean": 0.2832840383052826,
+          "std": 0.3599039316177368,
+          "rms": 0.4580182135105133
+        },
+        "meta_head": {
+          "shape": [
+            1,
+            2,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": -1.6157827377319336,
+          "maximum": 0.7354080677032471,
+          "mean": -0.3766748905181885,
+          "std": 1.0116088390350342,
+          "rms": 1.0794610977172852
+        }
+      },
+      "outputs": {
+        "base": {
+          "tp": 40532,
+          "fp": 8045,
+          "fn": 7186,
+          "tn": 747053,
+          "iou": 0.7268618976740849,
+          "precision": 0.8343866438849661,
+          "recall": 0.8494069323944843,
+          "false_positive_rate": 0.01065424620380401,
+          "predicted_fraction": 0.060508258640766144,
+          "target_fraction": 0.059438277035951614,
+          "foreground_probability": 0.7491377592086792,
+          "background_probability": 0.01336208451539278,
+          "probability_min": 9.809580888743303e-15,
+          "probability_max": 0.9802431464195251,
+          "saturated_fraction": 0.6262891888618469,
+          "logit_margin": {
+            "shape": [
+              1,
+              896,
+              896
+            ],
+            "finite": true,
+            "minimum": -32.25541687011719,
+            "maximum": 3.9043021202087402,
+            "mean": -14.17837905883789,
+            "std": 6.051826000213623,
+            "rms": 15.415935516357422
+          }
+        },
+        "meta": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 47718,
+          "tn": 755098,
+          "iou": 0.0,
+          "precision": null,
+          "recall": 0.0,
+          "false_positive_rate": 0.0,
+          "predicted_fraction": 0.0,
+          "target_fraction": 0.059438277035951614,
+          "foreground_probability": 0.16058175265789032,
+          "background_probability": 0.1195082738995552,
+          "probability_min": 0.08784446865320206,
+          "probability_max": 0.38433825969696045,
+          "saturated_fraction": 0.0,
+          "logit_margin": {
+            "shape": [
+              1,
+              896,
+              896
+            ],
+            "finite": true,
+            "minimum": -2.340242624282837,
+            "maximum": -0.4711746573448181,
+            "mean": -2.0088298320770264,
+            "std": 0.2977074682712555,
+            "rms": 2.0307700634002686
+          }
+        },
+        "final": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 47718,
+          "tn": 755098,
+          "iou": 0.0,
+          "precision": null,
+          "recall": 0.0,
+          "false_positive_rate": 0.0,
+          "predicted_fraction": 0.0,
+          "target_fraction": 0.059438277035951614,
+          "foreground_probability": 0.33671486377716064,
+          "background_probability": 0.3183947205543518,
+          "probability_min": 0.3045995831489563,
+          "probability_max": 0.4423237442970276,
+          "saturated_fraction": 0.0,
+          "logit_margin": {
+            "shape": [
+              1,
+              896,
+              896
+            ],
+            "finite": true,
+            "minimum": -0.8254897594451904,
+            "maximum": -0.2317366600036621,
+            "mean": -0.7570427060127258,
+            "std": 0.07180345803499222,
+            "rms": 0.7604402303695679
+          }
+        }
+      },
+      "pseudo": {
+        "shape": [
+          1,
+          1,
+          112,
+          112
+        ],
+        "finite": true,
+        "minimum": -0.07207930088043213,
+        "maximum": -0.03143211081624031,
+        "mean": -0.06747518479824066,
+        "std": 0.004264349117875099,
+        "rms": 0.06760980188846588
+      },
+      "gamma": 0.6682500243186951
+    },
+    {
+      "query": "pv001181",
+      "support": "pv003492",
+      "terms": {
+        "total": 2.143380641937256,
+        "main_ce": 0.4344785213470459,
+        "meta_dice": 0.49678313732147217,
+        "pseudo_bce": 0.6642909646034241,
+        "spatial_dice": 0.6823359727859497,
+        "balanced_meta_ce": 1.0519672632217407
+      },
+      "activations": {
+        "down_q": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": 0.0,
+          "maximum": 0.46450138092041016,
+          "mean": 0.03481735289096832,
+          "std": 0.05163722485303879,
+          "rms": 0.062278810888528824
+        },
+        "down_s": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": 0.0,
+          "maximum": 0.5946710705757141,
+          "mean": 0.033351294696331024,
+          "std": 0.051169902086257935,
+          "rms": 0.06107918918132782
+        },
+        "query_merge": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": 0.0,
+          "maximum": 0.2047577053308487,
+          "mean": 0.01437143050134182,
+          "std": 0.022710561752319336,
+          "rms": 0.026875780895352364
+        },
+        "support_merge": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": 0.0,
+          "maximum": 0.19051283597946167,
+          "mean": 0.014179513789713383,
+          "std": 0.020084038376808167,
+          "rms": 0.024585101753473282
+        },
+        "dcma": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": -2.5815165042877197,
+          "maximum": 4.368387222290039,
+          "mean": 0.015966640785336494,
+          "std": 1.046318531036377,
+          "rms": 1.0464403629302979
+        },
+        "decoder": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": 0.0,
+          "maximum": 2.0235695838928223,
+          "mean": 0.281983882188797,
+          "std": 0.3584400713443756,
+          "rms": 0.456063836812973
+        },
+        "meta_head": {
+          "shape": [
+            1,
+            2,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": -1.6185766458511353,
+          "maximum": 0.7329877614974976,
+          "mean": -0.3738710284233093,
+          "std": 1.0065325498580933,
+          "rms": 1.0737258195877075
+        }
+      },
+      "outputs": {
+        "base": {
+          "tp": 47667,
+          "fp": 9057,
+          "fn": 6946,
+          "tn": 739146,
+          "iou": 0.7486571383697188,
+          "precision": 0.8403321345462238,
+          "recall": 0.8728141651255196,
+          "false_positive_rate": 0.01210500358859828,
+          "predicted_fraction": 0.07065628468990326,
+          "target_fraction": 0.06802679598331451,
+          "foreground_probability": 0.7635038495063782,
+          "background_probability": 0.015916503965854645,
+          "probability_min": 1.6759327486990522e-13,
+          "probability_max": 0.9735196828842163,
+          "saturated_fraction": 0.6556084752082825,
+          "logit_margin": {
+            "shape": [
+              1,
+              896,
+              896
+            ],
+            "finite": true,
+            "minimum": -29.417236328125,
+            "maximum": 3.604517936706543,
+            "mean": -14.05838394165039,
+            "std": 6.342433929443359,
+            "rms": 15.422861099243164
+          }
+        },
+        "meta": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 54613,
+          "tn": 748203,
+          "iou": 0.0,
+          "precision": null,
+          "recall": 0.0,
+          "false_positive_rate": 0.0,
+          "predicted_fraction": 0.0,
+          "target_fraction": 0.06802679598331451,
+          "foreground_probability": 0.14209213852882385,
+          "background_probability": 0.1214747205376625,
+          "probability_min": 0.0881953313946724,
+          "probability_max": 0.3780049681663513,
+          "saturated_fraction": 0.0,
+          "logit_margin": {
+            "shape": [
+              1,
+              896,
+              896
+            ],
+            "finite": true,
+            "minimum": -2.335871696472168,
+            "maximum": -0.49802467226982117,
+            "mean": -1.999157190322876,
+            "std": 0.29429924488067627,
+            "rms": 2.0207033157348633
+          }
+        },
+        "final": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 54613,
+          "tn": 748203,
+          "iou": 0.0,
+          "precision": null,
+          "recall": 0.0,
+          "false_positive_rate": 0.0,
+          "predicted_fraction": 0.0,
+          "target_fraction": 0.06802679598331451,
+          "foreground_probability": 0.3283810317516327,
+          "background_probability": 0.319261372089386,
+          "probability_min": 0.3047483265399933,
+          "probability_max": 0.4390468895435333,
+          "saturated_fraction": 0.0,
+          "logit_margin": {
+            "shape": [
+              1,
+              896,
+              896
+            ],
+            "finite": true,
+            "minimum": -0.8247876167297363,
+            "maximum": -0.24503102898597717,
+            "mean": -0.7551800608634949,
+            "std": 0.07045626640319824,
+            "rms": 0.7584596276283264
+          }
+        }
+      },
+      "pseudo": {
+        "shape": [
+          1,
+          1,
+          112,
+          112
+        ],
+        "finite": true,
+        "minimum": -0.07246709614992142,
+        "maximum": -0.033308759331703186,
+        "mean": -0.06734775006771088,
+        "std": 0.004241502843797207,
+        "rms": 0.06748118251562119
+      },
+      "gamma": 0.6682500243186951
+    },
+    {
+      "query": "pv003492",
+      "support": "pv001179",
+      "terms": {
+        "total": 1.9868355989456177,
+        "main_ce": 0.394699364900589,
+        "meta_dice": 0.5112173557281494,
+        "pseudo_bce": 0.6607120633125305,
+        "spatial_dice": 0.9025516510009766,
+        "balanced_meta_ce": 0.9126744270324707
+      },
+      "activations": {
+        "down_q": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": 0.0,
+          "maximum": 0.5275473594665527,
+          "mean": 0.03380591794848442,
+          "std": 0.050636302679777145,
+          "rms": 0.06088411435484886
+        },
+        "down_s": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": 0.0,
+          "maximum": 0.5153400301933289,
+          "mean": 0.03303706273436546,
+          "std": 0.0506620891392231,
+          "rms": 0.06048218905925751
+        },
+        "query_merge": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": 0.0,
+          "maximum": 0.191867396235466,
+          "mean": 0.013607277534902096,
+          "std": 0.02152269333600998,
+          "rms": 0.025463391095399857
+        },
+        "support_merge": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": 0.0,
+          "maximum": 0.17362549901008606,
+          "mean": 0.013997673988342285,
+          "std": 0.019979992881417274,
+          "rms": 0.02439538761973381
+        },
+        "dcma": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": -2.5486655235290527,
+          "maximum": 4.52577018737793,
+          "mean": 0.015576847828924656,
+          "std": 1.0474883317947388,
+          "rms": 1.0476042032241821
+        },
+        "decoder": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": 0.0,
+          "maximum": 1.9816949367523193,
+          "mean": 0.2861701250076294,
+          "std": 0.36255741119384766,
+          "rms": 0.46188876032829285
+        },
+        "meta_head": {
+          "shape": [
+            1,
+            2,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": -1.622960090637207,
+          "maximum": 0.7450008392333984,
+          "mean": -0.3793145716190338,
+          "std": 1.0219048261642456,
+          "rms": 1.0900317430496216
+        }
+      },
+      "outputs": {
+        "base": {
+          "tp": 11880,
+          "fp": 3747,
+          "fn": 2305,
+          "tn": 784884,
+          "iou": 0.6625027883113986,
+          "precision": 0.7602226914954886,
+          "recall": 0.8375044060627423,
+          "false_positive_rate": 0.004751271507206793,
+          "predicted_fraction": 0.019465232267975807,
+          "target_fraction": 0.017669053748250008,
+          "foreground_probability": 0.7836750745773315,
+          "background_probability": 0.004965885542333126,
+          "probability_min": 6.70933645555323e-14,
+          "probability_max": 0.9832415580749512,
+          "saturated_fraction": 0.6123108863830566,
+          "logit_margin": {
+            "shape": [
+              1,
+              896,
+              896
+            ],
+            "finite": true,
+            "minimum": -30.332691192626953,
+            "maximum": 4.071954250335693,
+            "mean": -14.884852409362793,
+            "std": 5.171923637390137,
+            "rms": 15.757780075073242
+          }
+        },
+        "meta": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 14185,
+          "tn": 788631,
+          "iou": 0.0,
+          "precision": null,
+          "recall": 0.0,
+          "false_positive_rate": 0.0,
+          "predicted_fraction": 0.0,
+          "target_fraction": 0.017669053748250008,
+          "foreground_probability": 0.18504081666469574,
+          "background_probability": 0.11831007897853851,
+          "probability_min": 0.08721975982189178,
+          "probability_max": 0.38320255279541016,
+          "saturated_fraction": 0.0,
+          "logit_margin": {
+            "shape": [
+              1,
+              896,
+              896
+            ],
+            "finite": true,
+            "minimum": -2.3480641841888428,
+            "maximum": -0.47597694396972656,
+            "mean": -2.030879259109497,
+            "std": 0.29170235991477966,
+            "rms": 2.0517213344573975
+          }
+        },
+        "final": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 14185,
+          "tn": 788631,
+          "iou": 0.0,
+          "precision": null,
+          "recall": 0.0,
+          "false_positive_rate": 0.0,
+          "predicted_fraction": 0.0,
+          "target_fraction": 0.017669053748250008,
+          "foreground_probability": 0.3475833237171173,
+          "background_probability": 0.31787043809890747,
+          "probability_min": 0.3043353259563446,
+          "probability_max": 0.44168534874916077,
+          "saturated_fraction": 0.0,
+          "logit_margin": {
+            "shape": [
+              1,
+              896,
+              896
+            ],
+            "finite": true,
+            "minimum": -0.826737642288208,
+            "maximum": -0.23432505130767822,
+            "mean": -0.7619941830635071,
+            "std": 0.06917288899421692,
+            "rms": 0.765127420425415
+          }
+        }
+      },
+      "pseudo": {
+        "shape": [
+          1,
+          1,
+          112,
+          112
+        ],
+        "finite": true,
+        "minimum": -0.07227964699268341,
+        "maximum": -0.031704530119895935,
+        "mean": -0.06819631159305573,
+        "std": 0.004053018521517515,
+        "rms": 0.06831664592027664
+      },
+      "gamma": 0.6682500243186951
+    },
+    {
+      "query": "pv003494",
+      "support": "pv001179",
+      "terms": {
+        "total": 2.1064295768737793,
+        "main_ce": 0.3964599370956421,
+        "meta_dice": 0.5165902376174927,
+        "pseudo_bce": 0.6607134938240051,
+        "spatial_dice": 0.9184486865997314,
+        "balanced_meta_ce": 1.0244989395141602
+      },
+      "activations": {
+        "down_q": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": 0.0,
+          "maximum": 0.5362414717674255,
+          "mean": 0.0343056283891201,
+          "std": 0.0511816069483757,
+          "rms": 0.06161520257592201
+        },
+        "down_s": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": 0.0,
+          "maximum": 0.5153400301933289,
+          "mean": 0.03303706273436546,
+          "std": 0.0506620891392231,
+          "rms": 0.06048218905925751
+        },
+        "query_merge": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": 0.0,
+          "maximum": 0.20073945820331573,
+          "mean": 0.013661520555615425,
+          "std": 0.021672386676073074,
+          "rms": 0.02561892569065094
+        },
+        "support_merge": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": 0.0,
+          "maximum": 0.17362549901008606,
+          "mean": 0.013997673988342285,
+          "std": 0.019979992881417274,
+          "rms": 0.02439538761973381
+        },
+        "dcma": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": -2.5622215270996094,
+          "maximum": 4.572495460510254,
+          "mean": 0.015556389465928078,
+          "std": 1.047561764717102,
+          "rms": 1.0476772785186768
+        },
+        "decoder": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": 0.0,
+          "maximum": 2.00331711769104,
+          "mean": 0.28503990173339844,
+          "std": 0.3612316846847534,
+          "rms": 0.4601478576660156
+        },
+        "meta_head": {
+          "shape": [
+            1,
+            2,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": -1.625012755393982,
+          "maximum": 0.7434202432632446,
+          "mean": -0.3771039843559265,
+          "std": 1.0179603099822998,
+          "rms": 1.0855646133422852
+        }
+      },
+      "outputs": {
+        "base": {
+          "tp": 12043,
+          "fp": 2727,
+          "fn": 2142,
+          "tn": 785904,
+          "iou": 0.7120979186376537,
+          "precision": 0.8153689911983751,
+          "recall": 0.848995417694748,
+          "false_positive_rate": 0.0034578909528030217,
+          "predicted_fraction": 0.01839773915708065,
+          "target_fraction": 0.017669053748250008,
+          "foreground_probability": 0.7662048935890198,
+          "background_probability": 0.0044321403838694096,
+          "probability_min": 1.5449953802751902e-14,
+          "probability_max": 0.9809262752532959,
+          "saturated_fraction": 0.5766863226890564,
+          "logit_margin": {
+            "shape": [
+              1,
+              896,
+              896
+            ],
+            "finite": true,
+            "minimum": -31.801170349121094,
+            "maximum": 3.9401845932006836,
+            "mean": -15.48383903503418,
+            "std": 5.979357719421387,
+            "rms": 16.59825325012207
+          }
+        },
+        "meta": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 14185,
+          "tn": 788631,
+          "iou": 0.0,
+          "precision": null,
+          "recall": 0.0,
+          "false_positive_rate": 0.0,
+          "predicted_fraction": 0.0,
+          "target_fraction": 0.017669053748250008,
+          "foreground_probability": 0.1485053449869156,
+          "background_probability": 0.11973095685243607,
+          "probability_min": 0.08678863197565079,
+          "probability_max": 0.3765748143196106,
+          "saturated_fraction": 0.0,
+          "logit_margin": {
+            "shape": [
+              1,
+              896,
+              896
+            ],
+            "finite": true,
+            "minimum": -2.35349178314209,
+            "maximum": -0.5041121244430542,
+            "mean": -2.0231881141662598,
+            "std": 0.28981325030326843,
+            "rms": 2.043839931488037
+          }
+        },
+        "final": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 14185,
+          "tn": 788631,
+          "iou": 0.0,
+          "precision": null,
+          "recall": 0.0,
+          "false_positive_rate": 0.0,
+          "predicted_fraction": 0.0,
+          "target_fraction": 0.017669053748250008,
+          "foreground_probability": 0.3311867415904999,
+          "background_probability": 0.3184937834739685,
+          "probability_min": 0.30415236949920654,
+          "probability_max": 0.4383428990840912,
+          "saturated_fraction": 0.0,
+          "logit_margin": {
+            "shape": [
+              1,
+              896,
+              896
+            ],
+            "finite": true,
+            "minimum": -0.827601969242096,
+            "maximum": -0.24789002537727356,
+            "mean": -0.7604950666427612,
+            "std": 0.06865973025560379,
+            "rms": 0.7635881900787354
+          }
+        }
+      },
+      "pseudo": {
+        "shape": [
+          1,
+          1,
+          112,
+          112
+        ],
+        "finite": true,
+        "minimum": -0.07321594655513763,
+        "maximum": -0.03364508971571922,
+        "mean": -0.06819140911102295,
+        "std": 0.004079145845025778,
+        "rms": 0.06831330060958862
+      },
+      "gamma": 0.6682500243186951
+    },
+    {
+      "query": "pv001860",
+      "support": "pv001179",
+      "terms": {
+        "total": 1.2167811393737793,
+        "main_ce": 0.38402238488197327,
+        "meta_dice": 0.5319727659225464,
+        "pseudo_bce": 0.6596741080284119,
+        "spatial_dice": 0.9991896748542786,
+        "balanced_meta_ce": 0.12888363003730774
+      },
+      "activations": {
+        "down_q": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": 0.0,
+          "maximum": 0.4170289933681488,
+          "mean": 0.03193419426679611,
+          "std": 0.04659213125705719,
+          "rms": 0.05648556351661682
+        },
+        "down_s": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": 0.0,
+          "maximum": 0.5153400301933289,
+          "mean": 0.03303706273436546,
+          "std": 0.0506620891392231,
+          "rms": 0.06048218905925751
+        },
+        "query_merge": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": 0.0,
+          "maximum": 0.14857450127601624,
+          "mean": 0.013176950626075268,
+          "std": 0.021095559000968933,
+          "rms": 0.02487277053296566
+        },
+        "support_merge": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": 0.0,
+          "maximum": 0.17362549901008606,
+          "mean": 0.013997673988342285,
+          "std": 0.019979992881417274,
+          "rms": 0.02439538761973381
+        },
+        "dcma": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": -2.4963932037353516,
+          "maximum": 3.768070936203003,
+          "mean": 0.009213721379637718,
+          "std": 1.0446650981903076,
+          "rms": 1.0447057485580444
+        },
+        "decoder": {
+          "shape": [
+            1,
+            256,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": 0.0,
+          "maximum": 1.9356904029846191,
+          "mean": 0.2838217318058014,
+          "std": 0.3611431121826172,
+          "rms": 0.4593246579170227
+        },
+        "meta_head": {
+          "shape": [
+            1,
+            2,
+            112,
+            112
+          ],
+          "finite": true,
+          "minimum": -1.5926915407180786,
+          "maximum": 0.7328953742980957,
+          "mean": -0.37348562479019165,
+          "std": 1.0179165601730347,
+          "rms": 1.0842719078063965
+        }
+      },
+      "outputs": {
+        "base": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "tn": 802816,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": 0.0,
+          "predicted_fraction": 0.0,
+          "target_fraction": 0.0,
+          "foreground_probability": null,
+          "background_probability": 6.146977966636769e-07,
+          "probability_min": 5.090082869085855e-12,
+          "probability_max": 0.002896918449550867,
+          "saturated_fraction": 0.9601116180419922,
+          "logit_margin": {
+            "shape": [
+              1,
+              896,
+              896
+            ],
+            "finite": true,
+            "minimum": -26.003726959228516,
+            "maximum": -5.8412065505981445,
+            "mean": -16.831525802612305,
+            "std": 1.817354679107666,
+            "rms": 16.92935562133789
+          }
+        },
+        "meta": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "tn": 802816,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": 0.0,
+          "predicted_fraction": 0.0,
+          "target_fraction": 0.0,
+          "foreground_probability": null,
+          "background_probability": 0.12022311985492706,
+          "probability_min": 0.08963177353143692,
+          "probability_max": 0.37686941027641296,
+          "saturated_fraction": 0.0,
+          "logit_margin": {
+            "shape": [
+              1,
+              896,
+              896
+            ],
+            "finite": true,
+            "minimum": -2.3181393146514893,
+            "maximum": -0.5028573274612427,
+            "mean": -2.0233874320983887,
+            "std": 0.2896365523338318,
+            "rms": 2.0440120697021484
+          }
+        },
+        "final": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "tn": 802816,
+          "iou": null,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": 0.0,
+          "predicted_fraction": 0.0,
+          "target_fraction": 0.0,
+          "foreground_probability": null,
+          "background_probability": 0.3187077045440674,
+          "probability_min": 0.30535754561424255,
+          "probability_max": 0.438487708568573,
+          "saturated_fraction": 0.0,
+          "logit_margin": {
+            "shape": [
+              1,
+              896,
+              896
+            ],
+            "finite": true,
+            "minimum": -0.8219138979911804,
+            "maximum": -0.24730199575424194,
+            "mean": -0.7605507969856262,
+            "std": 0.0690447986125946,
+            "rms": 0.7636784315109253
+          }
+        }
+      },
+      "pseudo": {
+        "shape": [
+          1,
+          1,
+          112,
+          112
+        ],
+        "finite": true,
+        "minimum": -0.07182855159044266,
+        "maximum": -0.03170551732182503,
+        "mean": -0.06810970604419708,
+        "std": 0.004075327422469854,
+        "rms": 0.06823152303695679
+      },
+      "gamma": 0.6682500243186951
+    }
+  ],
+  "pooled": {
+    "base": {
+      "tp": 112122,
+      "fp": 23576,
+      "fn": 18579,
+      "tn": 3859803,
+      "iou": 0.726757715019089,
+      "precision": 0.8262612566139516,
+      "recall": 0.8578511258521357,
+      "false_positive_rate": 0.00607100156847941
+    },
+    "meta": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 130701,
+      "tn": 3883379,
+      "iou": 0.0,
+      "precision": null,
+      "recall": 0.0,
+      "false_positive_rate": 0.0
+    },
+    "final": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 130701,
+      "tn": 3883379,
+      "iou": 0.0,
+      "precision": null,
+      "recall": 0.0,
+      "false_positive_rate": 0.0
+    }
+  },
+  "loss": 1.9053810358047485
+}
