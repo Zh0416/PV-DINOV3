@@ -48,8 +48,16 @@ def plan_samples(rows, config):
     named = [by_id[x['sample_id']] for x in config['records']]
     if len(named) != len({r['sample_id'] for r in named}):
         raise ValueError('Duplicate requested IDs')
-    query = [r for r in named if group_for[r['source_scene']] not in (support_key, calibration_key)]
+    supplied = {r['sample_id']: r for r in config['records']}
+    conflicts = [{'sample_id': r['sample_id'], 'workbook_pv_present': supplied[r['sample_id']]['pv_present'],
+                  'manifest_category': CATEGORIES[r['category']]}
+                 for r in named if supplied[r['sample_id']]['pv_present'] != (CATEGORIES[r['category']] != 'negative')]
+    conflict_ids = {r['sample_id'] for r in conflicts}
+    query = [r for r in named if group_for[r['source_scene']] not in (support_key, calibration_key)
+             and r['sample_id'] not in conflict_ids]
     preview = [r for r in named if r not in query]
+    preview_reasons = {r['sample_id']: ('workbook_label_presence_conflict' if r['sample_id'] in conflict_ids
+                       else 'same_spatial_group_as_support_or_calibration') for r in preview}
     named_ids = {r['sample_id'] for r in named}
     support_pool = [r for r in rows if group_for[r['source_scene']] == support_key
                     and CATEGORIES[r['category']] == 'positive' and r['sample_id'] not in named_ids]
@@ -80,9 +88,10 @@ def plan_samples(rows, config):
                              'source_label_uncertain_filename': r.get('source_label_uncertain_filename')}
                             for r in records] for key, records in roles.items()},
              'preview_only_ids': [r['sample_id'] for r in preview],
+             'preview_reasons': preview_reasons, 'annotation_conflicts': conflicts,
              'support_runs': [{'seed_label': seed, 'support_id': r['sample_id']}
                               for seed, r in zip(config['support_seeds'], supports)],
-             'policy': 'Separate complete spatial groups for support, threshold calibration and named queries. Preview-only same-calibration-scene samples excluded from all aggregate metrics.',
+             'policy': 'Separate complete spatial groups for support, threshold calibration and named queries. Presence conflicts and same-calibration-group previews excluded from aggregate metrics; no labels modified.',
              'scope': 'Exploratory user-curated development set; not a new independent benchmark.'}
     return supports, calibration, query, preview, audit
 
@@ -164,6 +173,7 @@ def main():
     dataset = PV896Dataset(root, active, [0, 0, 0], [1, 1, 1])
     items = {}
     supplied = {r['sample_id']: r for r in config['records']}
+    conflict_ids = {r['sample_id'] for r in audit['annotation_conflicts']}
     observed = []
     for index, row in enumerate(active):
         item = dataset[index]
@@ -171,11 +181,13 @@ def main():
         # Verify exact mounted bytes against manifest, not only matching filenames.
         if sha256(root / row['image']) != row['image_sha256'] or sha256(root / row['label']) != row['label_sha256']:
             raise ValueError('Image/label hash mismatch: ' + sid)
-        if sid in supplied and bool(item['mask'].any()) != supplied[sid]['pv_present']:
-            raise ValueError('Workbook presence disagrees with label: ' + sid)
+        disagrees = sid in supplied and bool(item['mask'].any()) != supplied[sid]['pv_present']
+        if disagrees != (sid in conflict_ids):
+            raise ValueError('Actual label disagrees with manifest-based conflict audit: ' + sid)
         items[sid] = item
         observed.append({'sample_id': sid, 'foreground_pixels': int(item['mask'].sum()),
-                         'foreground_fraction': float(item['mask'].mean()), 'shape': list(item['image'].shape)})
+                         'foreground_fraction': float(item['mask'].mean()), 'shape': list(item['image'].shape),
+                         'workbook_presence_disagrees_with_label': disagrees})
     write_json(output / 'data_observed.json', observed)
     print(json.dumps({'phase': 'audit', 'queries': len(queries), 'calibration': len(calibration),
                       'supports': [r['sample_id'] for r in supports], 'previews': len(previews)}), flush=True)
@@ -248,6 +260,7 @@ def main():
         target = items[sid]['mask'][0].numpy().astype(bool)
         is_query = row in queries
         record = {'sample_id': sid, 'included_in_summary': is_query, 'category': CATEGORIES[row['category']],
+                  'preview_reason': audit['preview_reasons'].get(sid),
                   'source_scene': row['source_scene'], 'annotation': supplied[sid], 'foreground_pixels': int(target.sum()), 'methods': {}}
         for name in names:
             count = confusion(maps[name], target, thresholds[name]['threshold'])
@@ -262,7 +275,8 @@ def main():
                 histograms[name] += hist
         per_image.append(record)
         fmt = lambda v: f'{v:.3f}' if v is not None else 'n/a'
-        footer = f"{sid} | {'QUERY' if is_query else 'PREVIEW ONLY: calibration scene'} | GT fraction {target.mean():.4f} | A0 IoU {fmt(record['methods']['A0']['iou'])} | A1 IoU {fmt(record['methods']['A1_42']['iou'])}"
+        status = 'QUERY' if is_query else ('PREVIEW ONLY: workbook/label conflict' if sid in conflict_ids else 'PREVIEW ONLY: calibration group')
+        footer = f"{sid} | {status} | GT fraction {target.mean():.4f} | A0 IoU {fmt(record['methods']['A0']['iou'])} | A1 IoU {fmt(record['methods']['A1_42']['iou'])}"
         make_panel(output / 'predictions' / (sid + '.png'), load_pil(root, row), target, maps, thresholds, display_ranges, footer)
     write_json(output / 'per_image.json', per_image)
     summary = {}
