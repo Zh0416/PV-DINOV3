@@ -83,6 +83,13 @@ The [completed A2 report](docs/A2_RESULTS_20261029.md) records mean IoU of
 44.05% versus A1's 40.52%, improved recall, and increased negative-image
 false-positive area, with paired support results and scene-group failures.
 
+The frozen A3 experiment aligns GeoRSCLIP crop features with the DINO grid
+and adds a fixed linear semantic readout to A2. One shared fusion weight and
+three thresholds are selected only on the unchanged calibration group. See
+the [A3 protocol](docs/A3_PROTOCOL_20261029.md). It recomputes A0, A1 and A2
+and requires exact reproduction of their previous thresholds, confusion
+counts and aggregate metrics before marking the run complete.
+
 The separate SSPNet PV adaptation is implemented in `pvseg/sspnet/` with
 two-stage PSPNet pretraining and episodic training/evaluation in
 `scripts/sspnet.py`. It retains GeoRSCLIP, hierarchical CNN priors, DMSF,

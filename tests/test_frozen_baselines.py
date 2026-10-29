@@ -4,12 +4,47 @@ import numpy as np
 import torch
 
 from pvseg.frozen_baselines import (calibrate_threshold, confusion, foreground_prototype,
+                                    aligned_crop_features, calibrate_fusion, fuse_responses,
                                     foreground_background_prototypes, foreground_background_response,
                                     metrics, overlap_response, prototype_response,
                                     ranking_metrics, score_histogram)
 
 
 class FrozenBaselineChecks(unittest.TestCase):
+    def test_crop_feature_alignment_preserves_native_semantic_scores(self):
+        vectors = torch.tensor([[1., 0.], [0., 1.]])
+        boxes = [(0, 0, 4, 4), (2, 0, 6, 4)]
+        grid = aligned_crop_features(vectors, boxes, (4, 6), (2, 3))
+        torch.testing.assert_close(grid[0, :, 0], torch.tensor([[1., .5, 0.], [0., .5, 1.]]))
+        text = torch.nn.functional.normalize(torch.tensor([1., 2.]), dim=0)
+        actual = (grid * text[None, :, None, None]).sum(1)[0].numpy()
+        native = overlap_response((vectors @ text).numpy(), boxes, (4, 6))
+        np.testing.assert_allclose(actual, native.reshape(2, 2, 3, 2).mean((1, 3)))
+        with self.assertRaisesRegex(ValueError, 'align'):
+            aligned_crop_features(vectors, [(0, 0, 3, 4), (2, 0, 6, 4)], (4, 6), (2, 3))
+
+    def test_fusion_feature_readout_endpoints_and_calibration(self):
+        dino = np.array([1., 0.], np.float32)
+        clip = np.array([.3, .4], np.float32)
+        fg, bg, text = np.array([1., 0.]), np.array([0., 1.]), np.array([0., 1.])
+        spatial, semantic = np.array([dino @ (fg - bg) / 2]), np.array([clip @ text])
+        alpha = .3
+        joined = np.r_[np.sqrt(1-alpha)*dino, np.sqrt(alpha)*clip]
+        foreground = np.r_[np.sqrt(1-alpha)*fg, np.sqrt(alpha)*text]
+        background = np.r_[np.sqrt(1-alpha)*bg, -np.sqrt(alpha)*text]
+        np.testing.assert_allclose(fuse_responses(spatial, semantic, alpha), [joined @ (foreground-background) / 2])
+        np.testing.assert_array_equal(fuse_responses(spatial, semantic, 0), spatial)
+        np.testing.assert_array_equal(fuse_responses(spatial, semantic, 1), semantic)
+        spatial = np.array([.8, .7, .6, .5], np.float32)
+        semantic = np.array([-.8, -.7, .6, .5], np.float32)
+        target = np.array([0, 0, 1, 1], bool)
+        fitted = calibrate_fusion({42: [spatial], 43: [spatial]}, [semantic], [target], [0., .5, 1.])
+        self.assertEqual(fitted['selected_semantic_weight'], .5)
+        self.assertEqual(fitted['selected_runs']['42']['calibration_micro_iou'], 1)
+        self.assertEqual(fitted['selected_runs']['42'], fitted['selected_runs']['43'])
+        with self.assertRaises(ValueError):
+            fuse_responses(spatial, semantic, -1)
+
     def test_background_prototype_and_signed_margin(self):
         features = torch.tensor([[[[1., -1.], [1., -1.]], [[0., 0.], [0., 0.]]]])
         mask = torch.tensor([[[[1., 0.], [1., 0.]]]])

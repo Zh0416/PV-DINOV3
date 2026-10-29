@@ -1,4 +1,4 @@
-"""Frozen response construction and calibration for A0/A1/A2 diagnostics."""
+"""Frozen response construction and calibration for A0 through A3 diagnostics."""
 
 import numpy as np
 import torch
@@ -51,6 +51,67 @@ def overlap_response(scores, boxes, size):
     if not (count > 0).all():
         raise ValueError('Crop grid leaves uncovered pixels')
     return total / count
+
+
+def aligned_crop_features(embeddings, boxes, image_size, grid_size):
+    """Overlap-average CLIP crop vectors on the DINO grid, preserving coordinates.
+
+    Crop vectors are normalized before this operation. Do not renormalize their
+    mean: dotting it with the text vector must preserve mean crop cosine scores.
+    Only exact integer-grid boundaries are accepted; no guessed offsets.
+    """
+    ih, iw = image_size
+    gh, gw = grid_size
+    if embeddings.ndim != 2 or len(embeddings) != len(boxes) or not torch.isfinite(embeddings).all():
+        raise ValueError('Invalid crop embeddings/boxes')
+    total = embeddings.new_zeros((1, embeddings.shape[1], gh, gw))
+    count = embeddings.new_zeros((1, 1, gh, gw))
+    for embedding, (left, top, right, bottom) in zip(embeddings, boxes):
+        if not (0 <= left < right <= iw and 0 <= top < bottom <= ih):
+            raise ValueError('Crop box outside image')
+        if any((v * g) % n for v, g, n in ((left, gw, iw), (right, gw, iw), (top, gh, ih), (bottom, gh, ih))):
+            raise ValueError('Crop boundaries do not align to grid')
+        x0, x1, y0, y1 = left * gw // iw, right * gw // iw, top * gh // ih, bottom * gh // ih
+        total[..., y0:y1, x0:x1] += embedding[None, :, None, None]
+        count[..., y0:y1, x0:x1] += 1
+    if not (count > 0).all():
+        raise ValueError('Crop grid leaves uncovered pixels')
+    return total / count
+
+
+def fuse_responses(spatial, semantic, semantic_weight):
+    """Linear direct-sum feature readout; neither branch changes its coordinates."""
+    if not np.isfinite(semantic_weight) or not 0 <= semantic_weight <= 1:
+        raise ValueError('Semantic weight must lie in [0, 1]')
+    spatial, semantic = np.asarray(spatial), np.asarray(semantic)
+    if spatial.shape != semantic.shape or not np.isfinite(spatial).all() or not np.isfinite(semantic).all():
+        raise ValueError('Invalid fusion responses')
+    return (1 - semantic_weight) * spatial + semantic_weight * semantic
+
+
+def calibrate_fusion(spatial_by_run, semantic, targets, weights):
+    """One shared weight, chosen only from caller-supplied calibration images.
+
+    Optimize the mean of separately calibrated run IoUs. Ties prefer less
+    semantic weight; each threshold still uses the existing higher-threshold
+    tie rule. Query images are never passed to this function.
+    """
+    if not semantic or len(semantic) != len(targets) or any(len(v) != len(targets) for v in spatial_by_run.values()):
+        raise ValueError('Invalid calibration lengths')
+    weights = sorted(set(weights))
+    if not weights or not spatial_by_run:
+        raise ValueError('Calibration requires weights and spatial runs')
+    curve = []
+    for weight in weights:
+        calibrated = {}
+        for run, spatial in spatial_by_run.items():
+            hist = sum(score_histogram(fuse_responses(s, c, weight), t)
+                       for s, c, t in zip(spatial, semantic, targets))
+            calibrated[str(run)] = calibrate_threshold(hist)
+        curve.append({'semantic_weight': weight, 'runs': calibrated,
+                      'mean_calibration_iou': float(np.mean([v['calibration_micro_iou'] for v in calibrated.values()]))})
+    selected = max(curve, key=lambda row: (row['mean_calibration_iou'], -row['semantic_weight']))
+    return {'selected_semantic_weight': selected['semantic_weight'], 'selected_runs': selected['runs'], 'curve': curve}
 
 
 def score_histogram(score, target, bins=4096):
