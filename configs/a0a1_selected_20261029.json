@@ -1,0 +1,556 @@
+{
+  "source_workbook": "小样本数据集.xlsx",
+  "source_sha256": "eb5da21189b100b8da8336785268e0e185f00802ada24cf46097a420b8a08705",
+  "sheet": "Sheet1",
+  "records": [
+    {
+      "sample_id": "pv000017",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "大",
+      "morphology": "地面阵列",
+      "difficulty": "普通",
+      "source_row": 2
+    },
+    {
+      "sample_id": "pv000025",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "大",
+      "morphology": "地面阵列",
+      "difficulty": "大棚干扰",
+      "source_row": 3
+    },
+    {
+      "sample_id": "pv000026",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "大",
+      "morphology": "地面阵列",
+      "difficulty": "普通",
+      "source_row": 4
+    },
+    {
+      "sample_id": "pv000047",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "大",
+      "morphology": "地面阵列",
+      "difficulty": "普通",
+      "source_row": 5
+    },
+    {
+      "sample_id": "pv000055",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "中",
+      "morphology": "地面阵列",
+      "difficulty": "背景混乱",
+      "source_row": 6
+    },
+    {
+      "sample_id": "pv000095",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "中",
+      "morphology": "地面阵列",
+      "difficulty": "大棚干扰",
+      "source_row": 7
+    },
+    {
+      "sample_id": "pv000102",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "大",
+      "morphology": "地面阵列",
+      "difficulty": "大棚干扰",
+      "source_row": 8
+    },
+    {
+      "sample_id": "pv000115",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "大",
+      "morphology": "地面阵列+零碎板块",
+      "difficulty": "普通",
+      "source_row": 9
+    },
+    {
+      "sample_id": "pv000125",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "小",
+      "morphology": "地面阵列",
+      "difficulty": "建筑复杂",
+      "source_row": 10
+    },
+    {
+      "sample_id": "pv000137",
+      "pv_present": false,
+      "mask_checked": true,
+      "area": "",
+      "morphology": "",
+      "difficulty": "",
+      "source_row": 11
+    },
+    {
+      "sample_id": "pv000182",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "大",
+      "morphology": "地面阵列",
+      "difficulty": "普通",
+      "source_row": 12
+    },
+    {
+      "sample_id": "pv000188",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "大",
+      "morphology": "地面阵列",
+      "difficulty": "普通",
+      "source_row": 13
+    },
+    {
+      "sample_id": "pv000201",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "大",
+      "morphology": "地面阵列",
+      "difficulty": "普通",
+      "source_row": 14
+    },
+    {
+      "sample_id": "pv000214",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "小",
+      "morphology": "地面阵列",
+      "difficulty": "建筑复杂",
+      "source_row": 15
+    },
+    {
+      "sample_id": "pv000220",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "大",
+      "morphology": "地面阵列",
+      "difficulty": "影像模糊",
+      "source_row": 16
+    },
+    {
+      "sample_id": "pv000252",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "小",
+      "morphology": "地面阵列",
+      "difficulty": "影像模糊",
+      "source_row": 17
+    },
+    {
+      "sample_id": "pv000296",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "中",
+      "morphology": "地面阵列",
+      "difficulty": "影像模糊",
+      "source_row": 18
+    },
+    {
+      "sample_id": "pv000323",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "大",
+      "morphology": "地面阵列",
+      "difficulty": "普通",
+      "source_row": 19
+    },
+    {
+      "sample_id": "pv000336",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "大",
+      "morphology": "地面阵列",
+      "difficulty": "普通",
+      "source_row": 20
+    },
+    {
+      "sample_id": "pv000361",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "大",
+      "morphology": "地面阵列",
+      "difficulty": "普通",
+      "source_row": 21
+    },
+    {
+      "sample_id": "pv000555",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "大",
+      "morphology": "地面阵列",
+      "difficulty": "大棚干扰",
+      "source_row": 22
+    },
+    {
+      "sample_id": "pv000574",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "小",
+      "morphology": "地面阵列",
+      "difficulty": "阴影干扰",
+      "source_row": 23
+    },
+    {
+      "sample_id": "pv000597",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "中",
+      "morphology": "地面阵列",
+      "difficulty": "阴影干扰",
+      "source_row": 24
+    },
+    {
+      "sample_id": "pv000605",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "中",
+      "morphology": "地面阵列",
+      "difficulty": "普通",
+      "source_row": 25
+    },
+    {
+      "sample_id": "pv000756",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "大",
+      "morphology": "地面阵列",
+      "difficulty": "普通",
+      "source_row": 26
+    },
+    {
+      "sample_id": "pv000897",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "大",
+      "morphology": "地面阵列",
+      "difficulty": "背景混乱",
+      "source_row": 27
+    },
+    {
+      "sample_id": "pv000903",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "大",
+      "morphology": "地面阵列",
+      "difficulty": "大棚干扰",
+      "source_row": 28
+    },
+    {
+      "sample_id": "pv000915",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "中",
+      "morphology": "地面阵列",
+      "difficulty": "大棚干扰",
+      "source_row": 29
+    },
+    {
+      "sample_id": "pv001006",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "大",
+      "morphology": "地面阵列",
+      "difficulty": "薄云干扰",
+      "source_row": 30
+    },
+    {
+      "sample_id": "pv001018",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "大",
+      "morphology": "地面阵列",
+      "difficulty": "普通",
+      "source_row": 31
+    },
+    {
+      "sample_id": "pv001097",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "中",
+      "morphology": "地面阵列",
+      "difficulty": "薄云干扰",
+      "source_row": 32
+    },
+    {
+      "sample_id": "pv001112",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "大",
+      "morphology": "地面阵列",
+      "difficulty": "影像模糊",
+      "source_row": 33
+    },
+    {
+      "sample_id": "pv001155",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "小",
+      "morphology": "地面阵列",
+      "difficulty": "薄云干扰",
+      "source_row": 34
+    },
+    {
+      "sample_id": "pv001191",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "中",
+      "morphology": "地面阵列",
+      "difficulty": "建筑复杂",
+      "source_row": 35
+    },
+    {
+      "sample_id": "pv001214",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "小",
+      "morphology": "地面阵列+零碎板块",
+      "difficulty": "普通",
+      "source_row": 36
+    },
+    {
+      "sample_id": "pv002777",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "小",
+      "morphology": "地面阵列",
+      "difficulty": "普通",
+      "source_row": 37
+    },
+    {
+      "sample_id": "pv003612",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "小",
+      "morphology": "地面阵列",
+      "difficulty": "大棚干扰",
+      "source_row": 38
+    },
+    {
+      "sample_id": "pv002536",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "小",
+      "morphology": "零碎板块",
+      "difficulty": "背景混乱",
+      "source_row": 39
+    },
+    {
+      "sample_id": "pv002038",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "小",
+      "morphology": "地面阵列",
+      "difficulty": "大棚干扰",
+      "source_row": 40
+    },
+    {
+      "sample_id": "pv000099",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "小",
+      "morphology": "零碎板块",
+      "difficulty": "小目标光伏",
+      "source_row": 41
+    },
+    {
+      "sample_id": "pv000163",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "小",
+      "morphology": "地面阵列",
+      "difficulty": "大棚干扰",
+      "source_row": 42
+    },
+    {
+      "sample_id": "pv000450",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "小",
+      "morphology": "地面阵列",
+      "difficulty": "建筑复杂",
+      "source_row": 43
+    },
+    {
+      "sample_id": "pv000495",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "小",
+      "morphology": "地面阵列",
+      "difficulty": "建筑复杂",
+      "source_row": 44
+    },
+    {
+      "sample_id": "pv002108",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "小",
+      "morphology": "地面阵列",
+      "difficulty": "大棚干扰",
+      "source_row": 45
+    },
+    {
+      "sample_id": "pv002675",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "小",
+      "morphology": "地面阵列",
+      "difficulty": "普通",
+      "source_row": 46
+    },
+    {
+      "sample_id": "pv002722",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "小",
+      "morphology": "地面阵列",
+      "difficulty": "普通",
+      "source_row": 47
+    },
+    {
+      "sample_id": "pv001303",
+      "pv_present": false,
+      "mask_checked": true,
+      "area": "",
+      "morphology": "",
+      "difficulty": "大棚干扰",
+      "source_row": 48
+    },
+    {
+      "sample_id": "pv001352",
+      "pv_present": false,
+      "mask_checked": true,
+      "area": "",
+      "morphology": "",
+      "difficulty": "建筑复杂",
+      "source_row": 49
+    },
+    {
+      "sample_id": "pv001381",
+      "pv_present": false,
+      "mask_checked": true,
+      "area": "",
+      "morphology": "",
+      "difficulty": "大棚干扰",
+      "source_row": 50
+    },
+    {
+      "sample_id": "pv001637",
+      "pv_present": false,
+      "mask_checked": true,
+      "area": "",
+      "morphology": "",
+      "difficulty": "建筑复杂",
+      "source_row": 51
+    },
+    {
+      "sample_id": "pv001647",
+      "pv_present": false,
+      "mask_checked": true,
+      "area": "",
+      "morphology": "",
+      "difficulty": "背景混乱",
+      "source_row": 52
+    },
+    {
+      "sample_id": "pv001791",
+      "pv_present": false,
+      "mask_checked": true,
+      "area": "",
+      "morphology": "",
+      "difficulty": "海上养殖",
+      "source_row": 53
+    },
+    {
+      "sample_id": "pv001796",
+      "pv_present": false,
+      "mask_checked": true,
+      "area": "",
+      "morphology": "",
+      "difficulty": "背景混乱",
+      "source_row": 54
+    },
+    {
+      "sample_id": "pv000154",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "中",
+      "morphology": "地面阵列",
+      "difficulty": "大棚干扰",
+      "source_row": 55
+    },
+    {
+      "sample_id": "pv000332",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "大",
+      "morphology": "地面阵列",
+      "difficulty": "普通",
+      "source_row": 56
+    },
+    {
+      "sample_id": "pv000133",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "小",
+      "morphology": "零碎板块",
+      "difficulty": "普通",
+      "source_row": 57
+    },
+    {
+      "sample_id": "pv000080",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "大",
+      "morphology": "零碎板块",
+      "difficulty": "背景混乱",
+      "source_row": 58
+    },
+    {
+      "sample_id": "pv000263",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "中",
+      "morphology": "零碎板块",
+      "difficulty": "背景混乱",
+      "source_row": 59
+    },
+    {
+      "sample_id": "pv001056",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "中",
+      "morphology": "地面阵列",
+      "difficulty": "普通",
+      "source_row": 60
+    },
+    {
+      "sample_id": "pv000877",
+      "pv_present": true,
+      "mask_checked": true,
+      "area": "大",
+      "morphology": "零碎板块",
+      "difficulty": "普通",
+      "source_row": 61
+    }
+  ],
+  "support_group": "0910_Q_f31b2f78ddfe4a",
+  "calibration_group": "0918_Q_4a6bb66935b24c",
+  "support_seeds": [
+    42,
+    43,
+    44
+  ],
+  "calibration_per_category": 4,
+  "size": 896
+}
