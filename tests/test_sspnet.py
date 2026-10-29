@@ -174,6 +174,14 @@ class SSPNetChecks(unittest.TestCase):
         self.assertTrue(all(p.grad is None for p in net.cnn.parameters()))
         self.assertTrue(all(p.grad is None for p in net.dino.parameters()))
 
+    def test_stage_transition_erases_base_training_gradients(self):
+        cnn, dino = TinyCNN(), TinyDINO()
+        rgb = torch.rand(1, 3, 64, 64)
+        cnn.features(rgb)['mid'].square().sum().backward()
+        self.assertTrue(any(p.grad is not None for p in cnn.parameters()))
+        net = SSPNet(cnn, dino, torch.randn(1, 10), {}, hidden=16, heads=4)
+        self.assertTrue(all(p.grad is None and not p.requires_grad for p in net.cnn.parameters()))
+
     def test_five_shot_forward_and_empty_support_rejection(self):
         net = model(5).eval()
         image = torch.rand(1, 3, 64, 64)

@@ -12,6 +12,10 @@ class SSPNet(nn.Module):
                  heads=8, query_chunk=256, routing='literal'):
         super().__init__()
         self.cnn, self.dino = cnn.requires_grad_(False), dino.requires_grad_(False)
+        # Freezing does not erase gradients left by base-stage pretraining.
+        # Remove them at the stage boundary so later audits detect new grads.
+        self.cnn.zero_grad(set_to_none=True)
+        self.dino.zero_grad(set_to_none=True)
         self.cnn.eval()
         self.dino.eval()
         self.register_buffer('raw_text', text_embedding.detach().clone())
