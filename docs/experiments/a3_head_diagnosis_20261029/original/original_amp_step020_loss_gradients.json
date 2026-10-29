@@ -1,0 +1,344 @@
+{
+  "total": {
+    "meta_head": {
+      "shape": [
+        2,
+        256,
+        1,
+        1
+      ],
+      "finite": true,
+      "minimum": 0.0,
+      "maximum": 0.0,
+      "mean": 0.0,
+      "std": 0.0,
+      "rms": 0.0
+    },
+    "decoder": {
+      "shape": [
+        256,
+        1280,
+        1,
+        1
+      ],
+      "finite": true,
+      "minimum": 0.0,
+      "maximum": 0.0,
+      "mean": 0.0,
+      "std": 0.0,
+      "rms": 0.0
+    },
+    "attention_q": {
+      "shape": [
+        256,
+        256
+      ],
+      "finite": true,
+      "minimum": 0.0,
+      "maximum": 0.0,
+      "mean": 0.0,
+      "std": 0.0,
+      "rms": 0.0
+    },
+    "attention_v": {
+      "shape": [
+        256,
+        256
+      ],
+      "finite": true,
+      "minimum": 0.0,
+      "maximum": 0.0,
+      "mean": 0.0,
+      "std": 0.0,
+      "rms": 0.0
+    },
+    "visual": {
+      "shape": [
+        256,
+        1024
+      ],
+      "finite": true,
+      "minimum": -0.0082550048828125,
+      "maximum": 0.0128631591796875,
+      "mean": 9.276845958083868e-10,
+      "std": 0.0003194806049577892,
+      "rms": 0.0003194806049577892
+    },
+    "text": {
+      "shape": [
+        1024,
+        512
+      ],
+      "finite": true,
+      "minimum": -0.0,
+      "maximum": -0.0,
+      "mean": 0.0,
+      "std": 0.0,
+      "rms": 0.0
+    },
+    "beta": {
+      "shape": [],
+      "finite": true,
+      "minimum": 0.0,
+      "maximum": 0.0,
+      "mean": 0.0,
+      "std": 0.0,
+      "rms": 0.0
+    }
+  },
+  "main_ce": {
+    "meta_head": {
+      "shape": [
+        2,
+        256,
+        1,
+        1
+      ],
+      "finite": true,
+      "minimum": 0.0,
+      "maximum": 0.0,
+      "mean": 0.0,
+      "std": 0.0,
+      "rms": 0.0
+    },
+    "decoder": {
+      "shape": [
+        256,
+        1280,
+        1,
+        1
+      ],
+      "finite": true,
+      "minimum": 0.0,
+      "maximum": 0.0,
+      "mean": 0.0,
+      "std": 0.0,
+      "rms": 0.0
+    },
+    "attention_q": {
+      "shape": [
+        256,
+        256
+      ],
+      "finite": true,
+      "minimum": 0.0,
+      "maximum": 0.0,
+      "mean": 0.0,
+      "std": 0.0,
+      "rms": 0.0
+    },
+    "attention_v": {
+      "shape": [
+        256,
+        256
+      ],
+      "finite": true,
+      "minimum": 0.0,
+      "maximum": 0.0,
+      "mean": 0.0,
+      "std": 0.0,
+      "rms": 0.0
+    },
+    "visual": {
+      "shape": [
+        256,
+        1024
+      ],
+      "finite": true,
+      "minimum": 0.0,
+      "maximum": 0.0,
+      "mean": 0.0,
+      "std": 0.0,
+      "rms": 0.0
+    },
+    "text": {
+      "shape": [
+        1024,
+        512
+      ],
+      "finite": true,
+      "minimum": -0.0,
+      "maximum": -0.0,
+      "mean": 0.0,
+      "std": 0.0,
+      "rms": 0.0
+    },
+    "beta": {
+      "shape": [],
+      "finite": true,
+      "minimum": 0.0,
+      "maximum": 0.0,
+      "mean": 0.0,
+      "std": 0.0,
+      "rms": 0.0
+    }
+  },
+  "meta_dice": {
+    "meta_head": {
+      "shape": [
+        2,
+        256,
+        1,
+        1
+      ],
+      "finite": true,
+      "minimum": 0.0,
+      "maximum": 0.0,
+      "mean": 0.0,
+      "std": 0.0,
+      "rms": 0.0
+    },
+    "decoder": {
+      "shape": [
+        256,
+        1280,
+        1,
+        1
+      ],
+      "finite": true,
+      "minimum": 0.0,
+      "maximum": 0.0,
+      "mean": 0.0,
+      "std": 0.0,
+      "rms": 0.0
+    },
+    "attention_q": {
+      "shape": [
+        256,
+        256
+      ],
+      "finite": true,
+      "minimum": 0.0,
+      "maximum": 0.0,
+      "mean": 0.0,
+      "std": 0.0,
+      "rms": 0.0
+    },
+    "attention_v": {
+      "shape": [
+        256,
+        256
+      ],
+      "finite": true,
+      "minimum": 0.0,
+      "maximum": 0.0,
+      "mean": 0.0,
+      "std": 0.0,
+      "rms": 0.0
+    },
+    "visual": {
+      "shape": [
+        256,
+        1024
+      ],
+      "finite": true,
+      "minimum": 0.0,
+      "maximum": 0.0,
+      "mean": 0.0,
+      "std": 0.0,
+      "rms": 0.0
+    },
+    "text": {
+      "shape": [
+        1024,
+        512
+      ],
+      "finite": true,
+      "minimum": -0.0,
+      "maximum": -0.0,
+      "mean": 0.0,
+      "std": 0.0,
+      "rms": 0.0
+    },
+    "beta": {
+      "shape": [],
+      "finite": true,
+      "minimum": 0.0,
+      "maximum": 0.0,
+      "mean": 0.0,
+      "std": 0.0,
+      "rms": 0.0
+    }
+  },
+  "pseudo_bce": {
+    "meta_head": null,
+    "decoder": null,
+    "attention_q": {
+      "shape": [
+        256,
+        256
+      ],
+      "finite": true,
+      "minimum": 0.0,
+      "maximum": 0.0,
+      "mean": 0.0,
+      "std": 0.0,
+      "rms": 0.0
+    },
+    "attention_v": {
+      "shape": [
+        256,
+        256
+      ],
+      "finite": true,
+      "minimum": -0.000820159912109375,
+      "maximum": 0.0007371902465820312,
+      "mean": -1.1144165910081938e-06,
+      "std": 6.53791066724807e-05,
+      "rms": 6.538860179716721e-05
+    },
+    "visual": {
+      "shape": [
+        256,
+        1024
+      ],
+      "finite": true,
+      "minimum": -0.000652313232421875,
+      "maximum": 0.0003972053527832031,
+      "mean": 2.298747858731076e-10,
+      "std": 1.813306698750239e-05,
+      "rms": 1.8133065168512985e-05
+    },
+    "text": {
+      "shape": [
+        1024,
+        512
+      ],
+      "finite": true,
+      "minimum": -5.042552947998047e-05,
+      "maximum": 3.999471664428711e-05,
+      "mean": 8.185452315956354e-12,
+      "std": 9.135204095400695e-07,
+      "rms": 9.135204095400695e-07
+    },
+    "beta": {
+      "shape": [],
+      "finite": true,
+      "minimum": -6.724038394168019e-05,
+      "maximum": -6.724038394168019e-05,
+      "mean": -6.724038394168019e-05,
+      "std": 0.0,
+      "rms": 6.724038394168019e-05
+    }
+  },
+  "spatial_dice": {
+    "meta_head": null,
+    "decoder": null,
+    "attention_q": null,
+    "attention_v": null,
+    "visual": {
+      "shape": [
+        256,
+        1024
+      ],
+      "finite": true,
+      "minimum": -0.206298828125,
+      "maximum": 0.3212890625,
+      "mean": -2.6716406864579767e-09,
+      "std": 0.007982783019542694,
+      "rms": 0.007982783019542694
+    },
+    "text": null,
+    "beta": null
+  }
+}

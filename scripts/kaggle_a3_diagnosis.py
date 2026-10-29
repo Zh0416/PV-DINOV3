@@ -11,6 +11,7 @@ import subprocess
 import sys
 import time
 import traceback
+from types import SimpleNamespace
 
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO))
@@ -31,7 +32,7 @@ def main(args):
     from pvseg.sspnet.diagnostics import binary_report, tensor_stats, pooled_reports, gradient_norms
     from pvseg.sspnet.encoders import PSPNet, FrozenSAT, load_text_cache, sha256
     from pvseg.sspnet.learned_protocol import training_plan
-    from pvseg.sspnet.losses import objective
+    from pvseg.sspnet.losses import objective as paper_objective
     from scripts.kaggle_a0a1 import plan_samples
 
     if not torch.cuda.is_available():
@@ -75,11 +76,29 @@ def main(args):
     positive_pairs, negative_pair = pairs[:-1], pairs[-1]
     schedule = [positive_pairs[(i // 2) % len(positive_pairs)] if i % 2 == 0 else negative_pair
                 for i in range(args.steps)]
+    arms = [('balanced_meta_ce_fp32', False)] if args.meta_ce_weight else [
+        ('original_amp', True), ('original_fp32', False)]
+    reference = None
+    if args.meta_ce_weight:
+        reference = find('summary.json', 'a3_diagnosis').parent
+        old_protocol = json.loads((reference / 'protocol.json').read_text())
+        old_summary = json.loads((reference / 'summary.json').read_text())
+        if old_summary['source_commit'] != 'd399b38f64aa3aec98e1990ffb75ca6aceae5fa3':
+            raise ValueError('Expected the completed original paired diagnosis v1')
+        if old_protocol['pairs'] != [list(pair) for pair in pairs] or old_protocol['schedule'] != [
+                list(pair) for pair in schedule[:old_protocol['steps']]]:
+            raise ValueError('Repair and original diagnosis pairs/schedule differ')
+
+    def objective(result, mask):
+        return paper_objective(result, mask, meta_ce_weight=args.meta_ce_weight)
+
     write_json(out / 'protocol.json', dict(scope='TRAINING-ONLY engineering diagnosis; NOT validation/test',
         input_size=896, pairs=pairs, schedule=schedule, split_sha256=allocation['split_sha256'],
         steps=args.steps, lr=.0001, optimizer='AdamW', weight_decay=.0001, clip=10.,
-        arms=['original_amp', 'original_fp32'], same_initial_state=True, same_rng=True,
-        model_and_objective='unchanged learned A3', query_or_calibration_images_read=False,
+        arms=[arm for arm, _ in arms], same_initial_state=True, same_rng=True,
+        model_and_objective=('unchanged learned A3' if not args.meta_ce_weight else
+            'unchanged model; paper objective + explicit balanced raw-meta CE adaptation'),
+        balanced_meta_ce_weight=args.meta_ce_weight, query_or_calibration_images_read=False,
         previous_source=previous_env['source_commit']))
     write_json(out / 'environment.json', environment())
     base = PSPNet(imagenet=False).cuda()
@@ -191,12 +210,29 @@ def main(args):
     measure('selected_fp32', False)
     loss_gradients('selected_fp32', False)
     all_history, conclusions = {}, {}
-    for arm, amp in [('original_amp', True), ('original_fp32', False)]:
+    for arm, amp in arms:
         net.load_state_dict(initial, strict=False)
         checkpoint.restore_rng(initial_rng)
         scaler = torch.amp.GradScaler('cuda', enabled=amp and precision.scaler.is_enabled())
         optimizer = torch.optim.AdamW([p for p in net.parameters() if p.requires_grad], lr=.0001, weight_decay=.0001)
         history, measurements = [], [measure(arm + '_step000', amp, True)]
+        if reference:
+            # Verify the initialization against saved measurements, before any
+            # repair update. The comparison ignores losses because they differ.
+            old = json.loads((reference / 'original_fp32_step000.json').read_text())
+            differences = []
+            for before, current in zip(old['per_image'], measurements[0]['per_image']):
+                if (before['query'], before['support']) != (current['query'], current['support']):
+                    raise ValueError('Initialization pair ordering differs')
+                for name in ('base', 'meta', 'final'):
+                    for key in ('mean', 'std', 'minimum', 'maximum'):
+                        a, b = before['outputs'][name]['logit_margin'][key], current['outputs'][name]['logit_margin'][key]
+                        differences.append(abs(a - b))
+                        if not np.isclose(a, b, rtol=1e-4, atol=2e-5):
+                            raise ValueError('Original/repair initialization mismatch')
+            write_json(out / 'initialization_comparison.json', dict(
+                max_statistic_absolute_difference=max(differences), reference_source=old_summary['source_commit'],
+                same_pairs_and_schedule=True, tolerance=dict(rtol=1e-4, atol=2e-5)))
         loss_gradients(arm + '_step000', amp)
         started = time.monotonic()
         for step, pair in enumerate(schedule, 1):
@@ -220,7 +256,7 @@ def main(args):
                 gradients=gradients, norm_before_clip=float(norm), meta=binary_report(result['meta_logits'], items[pair[0]]['mask'][None].cuda()),
                 final=binary_report(result['logits'], items[pair[0]]['mask'][None].cuda())))
             del result, loss, terms
-            if step in (1, 5, 10, 20, 40, 80, args.steps):
+            if step in (1, 5, 10, 20, 40, 80, 120, 160, args.steps):
                 rng = checkpoint.rng_state()
                 measurements.append(measure(f'{arm}_step{step:03d}', amp, step == args.steps))
                 if step in (20, args.steps):
@@ -229,7 +265,8 @@ def main(args):
                 write_json(out / (arm + '_history.json'), history)
         conclusions[arm] = dict(initial=measurements[0], final=measurements[-1], elapsed=time.monotonic() - started)
         all_history[arm] = history
-        checkpoint.save(out / (arm + '.pt'), net, optimizer, precision, dict(diagnostic_arm=arm), 0, args.steps, history=history)
+        checkpoint.save(out / (arm + '.pt'), net, optimizer, SimpleNamespace(scaler=scaler),
+            dict(diagnostic_arm=arm, meta_ce_weight=args.meta_ce_weight, amp=amp), 0, args.steps, history=history)
         del optimizer
         net.zero_grad(set_to_none=True)
         gc.collect()
@@ -250,7 +287,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, default=Path('/kaggle/working/a3_diagnosis'))
     parser.add_argument('--steps', type=int, default=120)
+    parser.add_argument('--meta-ce-weight', type=float, default=0.,
+        help='Explicit PV adaptation; >0 runs only FP32 against mounted original diagnosis')
     arguments = parser.parse_args()
+    if arguments.steps < 1 or arguments.meta_ce_weight < 0:
+        parser.error('steps must be positive; meta-ce-weight must be nonnegative')
     try:
         main(arguments)
     except Exception:
