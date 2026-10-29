@@ -65,6 +65,15 @@ and generated artifacts.
 
 ## SSPNet with DINOv3-SAT
 
+The user-selected A0/A1 frozen diagnostic is defined in the
+[experiment protocol](docs/A0A1_PROTOCOL_20261029.md). It compares native
+GeoRSCLIP crop responses with DINOv3-SAT single-support foreground prototypes
+at 896 pixels, using separate spatial groups for support, threshold calibration
+and queries. It runs no model training. The
+[completed A0/A1 report](docs/A0A1_RESULTS_20261029.md) records query IoU of
+28.92% for A0 and 40.52% on average across three distinct A1 supports, together
+with support sensitivity, exclusions and failure groups.
+
 The separate SSPNet PV adaptation is implemented in `pvseg/sspnet/` with
 two-stage PSPNet pretraining and episodic training/evaluation in
 `scripts/sspnet.py`. It retains GeoRSCLIP, hierarchical CNN priors, DMSF,
