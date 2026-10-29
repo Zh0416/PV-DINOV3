@@ -1,4 +1,4 @@
-"""Frozen response construction and calibration for A0/A1 diagnostics."""
+"""Frozen response construction and calibration for A0/A1/A2 diagnostics."""
 
 import numpy as np
 import torch
@@ -17,6 +17,27 @@ def foreground_prototype(features, mask):
 def prototype_response(features, prototype, size):
     similarity = (F.normalize(features.float(), dim=1) * prototype[:, :, None, None]).sum(1, keepdim=True)
     return F.interpolate(similarity, size=size, mode='bilinear', align_corners=False)
+
+
+def foreground_background_prototypes(features, mask):
+    """Pool both classes from the same support; mixed patches keep area weights."""
+    if not torch.isfinite(mask).all() or (mask < 0).any() or (mask > 1).any():
+        raise ValueError('Support mask must contain finite weights in [0, 1]')
+    if not ((1 - mask).sum((-2, -1)) > 0).all():
+        raise ValueError('Support has no background')
+    return foreground_prototype(features, mask), foreground_prototype(features, 1 - mask)
+
+
+def foreground_background_response(features, foreground, background, size):
+    """Half the cosine margin is in [-1, 1]; positive means foreground wins.
+
+    The factor 1/2 only matches the calibration histogram's score range. No
+    temperature, learned weight, query normalization or softmax is introduced.
+    """
+    normalized = F.normalize(features.float(), dim=1)
+    direction = (foreground - background)[:, :, None, None]
+    margin = (normalized * direction).sum(1, keepdim=True) * .5
+    return F.interpolate(margin, size=size, mode='bilinear', align_corners=False)
 
 
 def overlap_response(scores, boxes, size):

@@ -74,6 +74,12 @@ and queries. It runs no model training. The
 28.92% for A0 and 40.52% on average across three distinct A1 supports, together
 with support sensitivity, exclusions and failure groups.
 
+The paired frozen A2 experiment adds one background prototype from the same
+support mask and scores half the foreground/background cosine margin. See the
+[A2 protocol](docs/A2_PROTOCOL_20261029.md). It reuses the exact A0/A1 roles,
+calibration and three supports, with a mandatory reproduction check against
+the previous run's A1 thresholds and every per-image confusion count.
+
 The separate SSPNet PV adaptation is implemented in `pvseg/sspnet/` with
 two-stage PSPNet pretraining and episodic training/evaluation in
 `scripts/sspnet.py`. It retains GeoRSCLIP, hierarchical CNN priors, DMSF,
