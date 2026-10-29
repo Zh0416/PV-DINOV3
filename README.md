@@ -65,6 +65,11 @@ and generated artifacts.
 
 ## SSPNet with DINOv3-SAT
 
+The previous frozen A3 response mixture is a control, not the paper's learned
+DMSF. The [corrected A3 protocol](docs/A3_LEARNED_PROTOCOL_20261029.md) trains
+visual/text projections and the fusion scalar through the downstream SSPNet
+losses. It explicitly records extra supervised training and its limitations.
+
 The user-selected A0/A1 frozen diagnostic is defined in the
 [experiment protocol](docs/A0A1_PROTOCOL_20261029.md). It compares native
 GeoRSCLIP crop responses with DINOv3-SAT single-support foreground prototypes

@@ -1,0 +1,22 @@
+{
+  "seed": 42,
+  "input_size": 896,
+  "shots": 1,
+  "base_steps": 160,
+  "base_optimizer": "SGD",
+  "base_lr": 0.005,
+  "episode_steps": 320,
+  "episode_optimizer": "AdamW",
+  "episode_lr": 0.0001,
+  "weight_decay": 0.0001,
+  "gradient_clip": 10.0,
+  "selection_every": 80,
+  "hidden": 256,
+  "heads": 8,
+  "query_chunk": 256,
+  "routing": "literal",
+  "cam_selection": "mean calibration fused-prior micro-IoU over three reserved support choices",
+  "final_threshold": 0.5,
+  "augment": false,
+  "scope": "bounded supervised known-PV development run; additional training masks; native896; no novel-class claim"
+}

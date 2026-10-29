@@ -60,6 +60,19 @@ class SSPNet(nn.Module):
             qcnn, qdino = self.cnn.features(query), self.dino(query)
             scnn = [self.cnn.features(image) for image in images]
             sdino = [self.dino(image) for image in images]
+        return self.forward_from_features(qcnn, qdino, scnn, sdino, masks, query.shape[-2:])
+
+    def forward_from_features(self, qcnn, qdino, scnn, sdino, masks, output_size):
+        """Train the same network from frozen encoder outputs, without query labels.
+
+        Cache only the encoder outputs. DMSF projections, CAMs, assembly and
+        DCMA must run with autograd on every episode, including support pooling.
+        """
+        if not (len(scnn) == len(sdino) == len(masks) == self.shots):
+            raise ValueError('Cached support count differs from configured shot count')
+        if any(not (resize(m.float(), s.shape[-2:], 'nearest').flatten(1).sum(1) > 0).all()
+               for s, m in zip(sdino, masks)):
+            raise ValueError('Support foreground disappeared on the DINO patch grid')
         cam = self.dmsf(qdino, sdino, masks, self.raw_text)
         q = self.down_q(qcnn['mid'])
         s = [self.down_s(x['mid']) for x in scnn]
@@ -79,8 +92,9 @@ class SSPNet(nn.Module):
         adjusted = [self.gram_merge(torch.cat([meta_prob[:, i:i+1], est], 1)) for i in range(2)]
         final = torch.cat([merge(torch.cat([adjusted[i], base_prob[:, i:i+1]], 1))
                            for i, merge in enumerate(self.class_merges)], 1)
-        return {'logits': resize(final, query.shape[-2:]), 'meta_logits': resize(meta, query.shape[-2:]),
-                'base_logits': resize(qcnn['base_logits'], query.shape[-2:]),
+        return {'logits': resize(final, output_size), 'meta_logits': resize(meta, output_size),
+                'base_logits': resize(qcnn['base_logits'], output_size),
                 'pseudo_logits': pseudo, 'spatial_cam': cam['spatial'],
-                'semantic_cam': cam['semantic'], 'fused_cam': fused, 'gamma': cam['gamma'],
+                'semantic_cam': cam['semantic'], 'prior_cam': cam['fused'],
+                'fused_cam': fused, 'gamma': cam['gamma'],
                 'shot_weights': weights, 'routing': routing}

@@ -146,6 +146,34 @@ class SSPNetChecks(unittest.TestCase):
             optimizer.step()
         self.assertGreater(float(net.dmsf.text_to_dino[0].weight.grad.abs().sum()), 0)
 
+    def test_frozen_feature_cache_matches_rgb_and_keeps_downstream_gradients(self):
+        net = model().eval()
+        image, support = torch.rand(1, 3, 64, 64), torch.rand(1, 3, 64, 64)
+        mask = torch.zeros(1, 1, 64, 64)
+        mask[:, :, :32] = 1
+        with torch.no_grad():
+            direct = net(image, support[:, None], mask[:, None])
+            qcnn, qdino = net.cnn.features(image), net.dino(image)
+            scnn, sdino = net.cnn.features(support), net.dino(support)
+            cached = net.forward_from_features(qcnn, qdino, [scnn], [sdino], [mask], (64, 64))
+        for key in ('logits', 'meta_logits', 'pseudo_logits', 'spatial_cam', 'semantic_cam', 'prior_cam'):
+            torch.testing.assert_close(direct[key], cached[key], rtol=0, atol=0)
+        optimizer = torch.optim.SGD([p for p in net.parameters() if p.requires_grad], lr=.01)
+        # Pseudo head is zero initialized. Its downstream BCE must reach both
+        # projections and the fusion scalar once that head has taken one step.
+        for _ in range(2):
+            optimizer.zero_grad(set_to_none=True)
+            result = net.forward_from_features(qcnn, qdino, [scnn], [sdino], [mask], (64, 64))
+            target = torch.rand_like(result['pseudo_logits'])
+            torch.nn.functional.binary_cross_entropy_with_logits(result['pseudo_logits'], target).backward()
+            optimizer.step()
+        for p in (net.dmsf.visual.net[0].weight, net.dmsf.text_to_dino[0].weight,
+                  net.dmsf.text_hidden.net[0].weight, net.dmsf.beta):
+            self.assertTrue(torch.isfinite(p.grad).all())
+            self.assertGreater(float(p.grad.abs().sum()), 0)
+        self.assertTrue(all(p.grad is None for p in net.cnn.parameters()))
+        self.assertTrue(all(p.grad is None for p in net.dino.parameters()))
+
     def test_five_shot_forward_and_empty_support_rejection(self):
         net = model(5).eval()
         image = torch.rand(1, 3, 64, 64)
