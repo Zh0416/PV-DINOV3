@@ -89,6 +89,11 @@ three thresholds are selected only on the unchanged calibration group. See
 the [A3 protocol](docs/A3_PROTOCOL_20261029.md). It recomputes A0, A1 and A2
 and requires exact reproduction of their previous thresholds, confusion
 counts and aggregate metrics before marking the run complete.
+The [completed A3 report](docs/A3_RESULTS_20261029.md) records mean IoU of
+47.55% versus A2's 44.05%. Complex-building false positives decrease, while
+greenhouse confusion persists and foreground precision declines. This is
+spatial alignment with fixed response fusion; no shared embedding mapping
+was learned.
 
 The separate SSPNet PV adaptation is implemented in `pvseg/sspnet/` with
 two-stage PSPNet pretraining and episodic training/evaluation in
