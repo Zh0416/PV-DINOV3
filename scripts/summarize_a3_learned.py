@@ -78,7 +78,12 @@ def main(root, reference):
     fmt = lambda v: f'{v * 100:.2f}%' if v is not None else '未定义'
     labels = dict(A2='冻结 A2', spatial='联合训练空间 CAM', semantic='联合训练语义 CAM',
                   fused='学习融合先验', final='完整网络（校准阈值）', final_fixed='完整网络（固定 0.5）')
+    verdict = ('**判定：完整网络在固定 0.5 下全部输出背景，未通过收敛检查，不能称 A3 复现成功。**'
+               if all(summary['methods'][f'final_fixed_{seed}']['tp'] + summary['methods'][f'final_fixed_{seed}']['fp'] == 0
+                      for seed in (42, 43, 44)) else
+               '完整网络的实测结果见下表；训练完成与非零梯度本身不代表复现成功。')
     lines = ['# A3 可学习先验实测', '',
+             verdict, '',
              f"源码 `{completion['source_commit']}`；基础更新 {completion['base_updates']} 次，第二阶段更新 {completion['episode_updates']} 次，校准选择第 {chosen['step']} 次更新。",
              '', '22 张额外训练图（4 张含前景），12 张校准图，3 个独立支持选择。58 张统计查询、2 张仅预览。相对 A2 增加了监督训练，不能将变化单独归因于融合；单分支 CAM 是联合训练后的诊断。', '',
              '| 输出 | 前景 IoU | 精确率 | 召回率 | 背景误检率 |', '|---|---:|---:|---:|---:|']
@@ -95,6 +100,25 @@ def main(root, reference):
     lines += ['', '## 负样本', '', '| 输出 | 负图背景误检率（三支持均值） |', '|---|---:|']
     for family in families:
         lines.append(f"| {labels[family]} | {fmt(mean_runs(negatives, family)['false_positive_rate'])} |")
+    lines += ['', '## 校准选择与学习证据', '',
+              '按预先规定的融合先验指标选择 checkpoint，未用查询指标挑选。完整分割头与先验的最优训练时刻可能不同。', '',
+              '| 更新数 | 校准融合先验 IoU（三支持均值） | 空间权重 gamma |', '|---:|---:|---:|']
+    for item in selection['curve']:
+        lines.append(f"| {item['step']} | {fmt(item['mean_calibration_iou'])} | {item['gamma']:.6f} |")
+    lines += ['', '| 模块 | 全程最大绝对梯度 | 训练结束相对初始的最大参数变化 |', '|---|---:|---:|']
+    for module, label in [('dmsf.visual', '共享视觉投影'), ('dmsf.text_to_dino', '文本跨模态 MLP'),
+                          ('dmsf.text_hidden', '文本隐藏空间投影'), ('dmsf.beta', '融合参数 beta'),
+                          ('dcma.pseudo', 'DCMA 辅助头')]:
+        lines.append(f"| {label} | {learning['maximum_abs_gradient_by_module'][module]:.6g} | {learning['maximum_parameter_delta_by_module'][module]:.6g} |")
+    lines += ['', '梯度与参数变化统计覆盖全部 320 次更新，不是仅所选 checkpoint 的变化；非零只证明该路径参与学习，不能证明它已经充分收敛。', '',
+              '## 逐图退化与改善（融合先验，支持 pv001183）', '',
+              '按已固定方法评估后的描述性排序，不用于调参。', '',
+              '| 样本 | 背景 | A2 IoU | 融合先验 IoU | 完整网络 IoU |', '|---|---|---:|---:|---:|']
+    ranked = sorted(positives, key=lambda r: r['methods']['fused_42']['iou'] - r['methods']['A2_42']['iou'])
+    for r in ranked[:5] + list(reversed(ranked[-5:])):
+        cells = [r['sample_id'], r['annotation']['difficulty']]
+        cells += [fmt(r['methods'][f'{family}_42']['iou']) for family in ('A2', 'fused', 'final')]
+        lines.append('| ' + ' | '.join(cells) + ' |')
     lines += ['', '## 核验', '', '历史 A2 的全部逐图混淆像素计数完全复现；输出像素总量、支持与数据角色、校准选择及 60 张预览校验通过。视觉投影、文本跨模态映射、语义投影、融合标量与 DCMA 辅助头均有非零梯度和实际参数变化。这证明训练路径接通，效果由上表决定。', '',
               '局限：仅一个训练空间组、4 张前景训练图、固定训练随机种子；训练步数有界，原文 SGD 改为 AdamW，DINOv3 替换 DINOv2，采用已知光伏类合并方式。当前用户挑选的开发查询已被多轮查看，不作为独立泛化结论。']
     (root / 'REPORT.md').write_text('\n'.join(lines) + '\n', encoding='utf-8')
@@ -103,7 +127,7 @@ def main(root, reference):
         delta = r['methods']['fused_42']['iou']
         cards.append(f'<article data-id="{escape(r["sample_id"])}"><h3>{escape(r["sample_id"])} — {escape(r["annotation"]["difficulty"])} — {"统计查询" if r["included_in_summary"] else "仅预览"}</h3><img loading="lazy" src="predictions/{escape(r["sample_id"])}.png"><p>A2 IoU {fmt(r["methods"]["A2_42"]["iou"])} · 融合先验 {fmt(delta)} · 完整网络 {fmt(r["methods"]["final_42"]["iou"])}</p></article>')
     table = ''.join(f'<tr><td>{escape(labels[f])}</td>' + ''.join(f'<td>{fmt(means[f][k])}</td>' for k in keys) + '</tr>' for f in families)
-    page = '<!doctype html><html lang="zh"><meta charset="utf-8"><title>A3 可学习先验实测</title><style>body{font-family:Arial,sans-serif;background:#f4f5f7;color:#182130;margin:24px}article,table{background:white;padding:12px;margin:16px 0;border-radius:8px}img{width:100%;height:auto}td,th{padding:10px;border-bottom:1px solid #ddd}input{padding:10px;min-width:240px}</style><h1>A3 可学习先验实测</h1><p>加入 22 张训练图；与冻结 A2 的比较含有监督差异。CAM 是先验，完整网络 mask 单独展示。</p><table><tr><th>输出</th><th>IoU</th><th>精确率</th><th>召回率</th><th>背景误检率</th></tr>' + table + '</table><p><a href="REPORT.md">实验报告</a> · <a href="learning_audit.json">学习核验</a> · <a href="checkpoint_selection.json">校准选择</a></p><input placeholder="按 ID 筛选" oninput="document.querySelectorAll(\'article\').forEach(e=>e.hidden=!e.dataset.id.includes(this.value))">' + ''.join(cards) + '</html>'
+    page = '<!doctype html><html lang="zh"><meta charset="utf-8"><title>A3 可学习先验实测</title><style>body{font-family:Arial,sans-serif;background:#f4f5f7;color:#182130;margin:24px}article,table{background:white;padding:12px;margin:16px 0;border-radius:8px}img{width:100%;height:auto}td,th{padding:10px;border-bottom:1px solid #ddd}input{padding:10px;min-width:240px}</style><h1>A3 可学习先验实测</h1><p><strong>' + escape(verdict.replace('**', '')) + '</strong></p><p>加入 22 张训练图；与冻结 A2 的比较含有监督差异。CAM 是先验，完整网络 mask 单独展示。</p><table><tr><th>输出</th><th>IoU</th><th>精确率</th><th>召回率</th><th>背景误检率</th></tr>' + table + '</table><p><a href="REPORT.md">实验报告</a> · <a href="learning_audit.json">学习核验</a> · <a href="checkpoint_selection.json">校准选择</a></p><input placeholder="按 ID 筛选" oninput="document.querySelectorAll(\'article\').forEach(e=>e.hidden=!e.dataset.id.includes(this.value))">' + ''.join(cards) + '</html>'
     (root / 'index.html').write_text(page, encoding='utf-8')
     integrity = dict(status='passed', query_count=58, preview_count=2, decoded_panels=60,
                      exact_historical_A2_counts=True, pooled_counts_verified=True,

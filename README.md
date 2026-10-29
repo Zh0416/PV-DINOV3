@@ -69,6 +69,10 @@ The previous frozen A3 response mixture is a control, not the paper's learned
 DMSF. The [corrected A3 protocol](docs/A3_LEARNED_PROTOCOL_20261029.md) trains
 visual/text projections and the fusion scalar through the downstream SSPNet
 losses. It explicitly records extra supervised training and its limitations.
+The [learned A3 result](docs/A3_LEARNED_RESULTS_20261029.md) completed 320
+episode updates: the fused prior reached 44.38% IoU versus A2's 44.05%, but
+the full network still predicted background everywhere at threshold 0.5.
+Passing engineering checks does not establish successful reproduction.
 
 The user-selected A0/A1 frozen diagnostic is defined in the
 [experiment protocol](docs/A0A1_PROTOCOL_20261029.md). It compares native

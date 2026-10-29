@@ -1,0 +1,18 @@
+{
+  "status": "complete",
+  "source_commit": "a6733794eb2fc2cf43c762ecf62952c5b1e4b15c",
+  "base_updates": 160,
+  "episode_updates": 320,
+  "selected_step": 80,
+  "query_labels_used_for_selection": false,
+  "exact_A2_reproduction": true,
+  "memory": {
+    "allocated_bytes": 2365007872,
+    "reserved_bytes": 3521118208,
+    "peak_allocated_bytes": 10872830464,
+    "peak_reserved_bytes": 11188305920,
+    "free_device_bytes": 11906383872,
+    "total_device_bytes": 15636037632
+  },
+  "claim": "Training/evaluation completed; improvement is determined by recorded metrics, not this status"
+}

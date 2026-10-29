@@ -328,7 +328,8 @@ def main(output):
         result['negative_pixel_false_positive_rate'] = aggregate(negatives, method)['false_positive_rate']
         result['negative_images_with_any_fp'] = sum(r['methods'][method]['fp'] > 0 for r in negatives)
         summary[method] = result
-    means = {name: {k: float(np.mean([summary[f'{name}_{seed}'][k] or 0. for seed in selection['support_seeds']]))
+    means = {name: {k: (float(np.mean([summary[f'{name}_{seed}'][k] for seed in selection['support_seeds']]))
+                        if all(summary[f'{name}_{seed}'][k] is not None for seed in selection['support_seeds']) else None)
                     for k in ('iou', 'precision', 'recall', 'false_positive_rate', 'negative_pixel_false_positive_rate')}
              for name in ('A2', 'spatial', 'semantic', 'fused', 'final', 'final_fixed')}
     groups = {field: {value: {m: aggregate([r for r in entries if r['annotation'][field] == value], m)
