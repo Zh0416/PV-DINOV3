@@ -1,0 +1,70 @@
+{
+  "ids": [
+    "pv001179",
+    "pv001181",
+    "pv001860",
+    "pv001861",
+    "pv001862",
+    "pv003483",
+    "pv003484",
+    "pv003485",
+    "pv003486",
+    "pv003490",
+    "pv003491",
+    "pv003492",
+    "pv003493",
+    "pv003494",
+    "pv003495",
+    "pv003496",
+    "pv003497",
+    "pv003506",
+    "pv003508",
+    "pv003509",
+    "pv003510",
+    "pv003511",
+    "pv001183",
+    "pv003504",
+    "pv001177",
+    "pv001195",
+    "pv001210",
+    "pv003534",
+    "pv001188",
+    "pv003536",
+    "pv001867",
+    "pv001863",
+    "pv001864",
+    "pv001206",
+    "pv001186",
+    "pv003552",
+    "pv003519"
+  ],
+  "dtype": "float32",
+  "bytes": 9984431685,
+  "trainable_features_cached": false,
+  "dino": {
+    "model": "vit_large_patch16_dinov3.sat493m",
+    "sha256": "8d18337f766102f951ac0ca543a22536f58caeb6b6c33cfef73326f866791286",
+    "block_zero_based": 23,
+    "patch_size": 16,
+    "mean": [
+      0.43,
+      0.411,
+      0.296
+    ],
+    "std": [
+      0.213,
+      0.156,
+      0.143
+    ]
+  },
+  "text": {
+    "architecture": "ViT-B-32",
+    "repository": "Zilun/GeoRSCLIP",
+    "filename": "ckpt/RS5M_ViT-B-32.pt",
+    "sha256": "129bafaa6a097b8be52e2babf27d24f0a934dae919201e538dc698611bd1ea01",
+    "revision": "4920188e6eba4e711ef9848cfd7cb77e874ee33f",
+    "prompt": "a satellite aerial image of photovoltaic solar panels and solar arrays, dark rectangular modules arranged in regular rows on rooftops or on the ground",
+    "activation": "QuickGELU",
+    "missing_visual_keys": []
+  }
+}

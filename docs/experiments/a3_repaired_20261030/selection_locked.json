@@ -1,0 +1,6 @@
+{
+  "selected_step": 240,
+  "criterion": "mean calibration full-final micro-IoU over support42/43/44 at probability >= 0.5; ties choose earlier step",
+  "query_images_loaded": false,
+  "query_labels_loaded": false
+}

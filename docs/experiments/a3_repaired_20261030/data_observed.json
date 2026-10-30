@@ -1,0 +1,390 @@
+[
+  {
+    "sample_id": "pv001179",
+    "foreground_pixels": 47718
+  },
+  {
+    "sample_id": "pv001181",
+    "foreground_pixels": 54613
+  },
+  {
+    "sample_id": "pv001860",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv001861",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv001862",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv003483",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv003484",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv003485",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv003486",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv003490",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv003491",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv003492",
+    "foreground_pixels": 14185
+  },
+  {
+    "sample_id": "pv003493",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv003494",
+    "foreground_pixels": 14185
+  },
+  {
+    "sample_id": "pv003495",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv003496",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv003497",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv003506",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv003508",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv003509",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv003510",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv003511",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv001183",
+    "foreground_pixels": 53652
+  },
+  {
+    "sample_id": "pv003504",
+    "foreground_pixels": 20775
+  },
+  {
+    "sample_id": "pv001177",
+    "foreground_pixels": 29903
+  },
+  {
+    "sample_id": "pv001195",
+    "foreground_pixels": 46988
+  },
+  {
+    "sample_id": "pv001210",
+    "foreground_pixels": 50179
+  },
+  {
+    "sample_id": "pv003534",
+    "foreground_pixels": 26074
+  },
+  {
+    "sample_id": "pv001188",
+    "foreground_pixels": 25637
+  },
+  {
+    "sample_id": "pv003536",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv001867",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv001863",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv001864",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv001206",
+    "foreground_pixels": 3479
+  },
+  {
+    "sample_id": "pv001186",
+    "foreground_pixels": 13101
+  },
+  {
+    "sample_id": "pv003552",
+    "foreground_pixels": 13101
+  },
+  {
+    "sample_id": "pv003519",
+    "foreground_pixels": 1971
+  },
+  {
+    "sample_id": "pv000017",
+    "foreground_pixels": 149638
+  },
+  {
+    "sample_id": "pv000025",
+    "foreground_pixels": 130020
+  },
+  {
+    "sample_id": "pv000026",
+    "foreground_pixels": 169632
+  },
+  {
+    "sample_id": "pv000047",
+    "foreground_pixels": 99419
+  },
+  {
+    "sample_id": "pv000055",
+    "foreground_pixels": 50259
+  },
+  {
+    "sample_id": "pv000095",
+    "foreground_pixels": 133721
+  },
+  {
+    "sample_id": "pv000102",
+    "foreground_pixels": 262171
+  },
+  {
+    "sample_id": "pv000115",
+    "foreground_pixels": 207880
+  },
+  {
+    "sample_id": "pv000125",
+    "foreground_pixels": 17203
+  },
+  {
+    "sample_id": "pv000182",
+    "foreground_pixels": 175324
+  },
+  {
+    "sample_id": "pv000188",
+    "foreground_pixels": 182753
+  },
+  {
+    "sample_id": "pv000201",
+    "foreground_pixels": 110763
+  },
+  {
+    "sample_id": "pv000214",
+    "foreground_pixels": 25742
+  },
+  {
+    "sample_id": "pv000220",
+    "foreground_pixels": 119996
+  },
+  {
+    "sample_id": "pv000252",
+    "foreground_pixels": 19500
+  },
+  {
+    "sample_id": "pv000296",
+    "foreground_pixels": 29768
+  },
+  {
+    "sample_id": "pv000323",
+    "foreground_pixels": 64576
+  },
+  {
+    "sample_id": "pv000336",
+    "foreground_pixels": 67873
+  },
+  {
+    "sample_id": "pv000361",
+    "foreground_pixels": 61456
+  },
+  {
+    "sample_id": "pv000555",
+    "foreground_pixels": 81215
+  },
+  {
+    "sample_id": "pv000574",
+    "foreground_pixels": 24492
+  },
+  {
+    "sample_id": "pv000597",
+    "foreground_pixels": 55503
+  },
+  {
+    "sample_id": "pv000605",
+    "foreground_pixels": 70707
+  },
+  {
+    "sample_id": "pv000756",
+    "foreground_pixels": 107593
+  },
+  {
+    "sample_id": "pv000897",
+    "foreground_pixels": 91534
+  },
+  {
+    "sample_id": "pv000903",
+    "foreground_pixels": 169616
+  },
+  {
+    "sample_id": "pv000915",
+    "foreground_pixels": 77478
+  },
+  {
+    "sample_id": "pv001006",
+    "foreground_pixels": 233443
+  },
+  {
+    "sample_id": "pv001018",
+    "foreground_pixels": 283063
+  },
+  {
+    "sample_id": "pv001097",
+    "foreground_pixels": 224275
+  },
+  {
+    "sample_id": "pv001112",
+    "foreground_pixels": 260555
+  },
+  {
+    "sample_id": "pv001155",
+    "foreground_pixels": 234912
+  },
+  {
+    "sample_id": "pv001214",
+    "foreground_pixels": 21607
+  },
+  {
+    "sample_id": "pv002777",
+    "foreground_pixels": 20070
+  },
+  {
+    "sample_id": "pv003612",
+    "foreground_pixels": 36260
+  },
+  {
+    "sample_id": "pv002536",
+    "foreground_pixels": 30333
+  },
+  {
+    "sample_id": "pv002038",
+    "foreground_pixels": 34725
+  },
+  {
+    "sample_id": "pv000099",
+    "foreground_pixels": 9216
+  },
+  {
+    "sample_id": "pv000163",
+    "foreground_pixels": 12312
+  },
+  {
+    "sample_id": "pv000450",
+    "foreground_pixels": 9032
+  },
+  {
+    "sample_id": "pv000495",
+    "foreground_pixels": 14415
+  },
+  {
+    "sample_id": "pv002108",
+    "foreground_pixels": 1831
+  },
+  {
+    "sample_id": "pv002675",
+    "foreground_pixels": 205
+  },
+  {
+    "sample_id": "pv002722",
+    "foreground_pixels": 14481
+  },
+  {
+    "sample_id": "pv001303",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv001352",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv001381",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv001637",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv001647",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv001791",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv001796",
+    "foreground_pixels": 0
+  },
+  {
+    "sample_id": "pv000154",
+    "foreground_pixels": 54904
+  },
+  {
+    "sample_id": "pv000332",
+    "foreground_pixels": 61950
+  },
+  {
+    "sample_id": "pv000133",
+    "foreground_pixels": 32979
+  },
+  {
+    "sample_id": "pv000080",
+    "foreground_pixels": 120518
+  },
+  {
+    "sample_id": "pv000263",
+    "foreground_pixels": 40702
+  },
+  {
+    "sample_id": "pv001056",
+    "foreground_pixels": 42940
+  },
+  {
+    "sample_id": "pv000877",
+    "foreground_pixels": 74902
+  },
+  {
+    "sample_id": "pv000137",
+    "foreground_pixels": 81796
+  },
+  {
+    "sample_id": "pv001191",
+    "foreground_pixels": 48785
+  }
+]

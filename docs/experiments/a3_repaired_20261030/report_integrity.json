@@ -1,0 +1,30 @@
+{
+  "status": "passed",
+  "statistical_queries": 58,
+  "previews": 2,
+  "support_choices": 3,
+  "successful_updates": 320,
+  "selected_step": 240,
+  "exact_historical_A2_counts": true,
+  "checkpoint_selection_recomputed": true,
+  "per_image_and_group_counts_recomputed": true,
+  "finite_all_losses": true,
+  "reports_sha256": {
+    "base_reuse.json": "9add7cdc474a2af5be1b5f9c1ea8452531623aa64256791379ceb601011006b0",
+    "cache.json": "80799c4e649285a18823b32ddd8ff65d7161d1371169dc3f07f1d8ae22a3bcd7",
+    "checkpoint_selection.json": "6ad2bceef4f4db25ce18d0477bcd5406f23c99c294fe0ec3b87bf15ba4eff9ac",
+    "completion.json": "749c257234769025ccdc72887505084267f4dac0fa31e5c39461e62f85f4d52f",
+    "data_observed.json": "130cffea824c7abe4f35d09c3120890e6312c0fbe8d431b549aad24a7b52038b",
+    "environment.json": "b5337d07c1e828b951580b343de8634ef7baa93bf52a1299c32cc9f0f9cc1037",
+    "episode_schedule.json": "ced1468f166468cd8704c4cfab645e69487f9123030952dd55531fa9ffecd75e",
+    "episode_training.json": "3e584a51fca4fc76edc4d00af2c4e0af08eac92e1ce6884c5c5da999c18d38ee",
+    "learning_audit.json": "08f40a96b2a63d4b3ac573021c4281bf321fc465efedb20339b485c06545aca4",
+    "per_image.json": "a81ed1f5a35d8ab419266fcf8d3374bc43291c66b5d95eea4ea1ab6c27104e8b",
+    "protocol.json": "7a33ca8488a6333068b7120d0e02e915731622f872f42eb1fccca480db6718ce",
+    "selection_audit.json": "c85cf825f759bc8cbb2d26987db0f1131c0dad84a1298228aeb75233146d33b1",
+    "selection_locked.json": "d43c131776a7d3d0b19de532fa90b8039fe5b9d5c179dc42e916b7ff89328c49",
+    "summary.json": "9843db22699309d7b69b9d1c1be7a555f0113d164ac860a23c87ba9ee2c8248f",
+    "thresholds.json": "ba9fdb36d59909d59ccd29819bb64f60eb004edf729d64f860d96662d34cfcd1",
+    "training_allocation.json": "f038f767e68a03ba7e43cad687a5354dbf27a39f8b2047f0b4b9feb8f3412ff0"
+  }
+}

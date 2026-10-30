@@ -1,0 +1,8 @@
+{
+  "source_commit": "a6733794eb2fc2cf43c762ecf62952c5b1e4b15c",
+  "step": 160,
+  "checkpoint_sha256": "f7649935f92088fda4c880dbe6339424d5d05a4d53636c50ed39d4482e34de73",
+  "allocation_identical": true,
+  "schedule_identical": true,
+  "initialization": "fresh stage2 seed42; not diagnostic checkpoint"
+}

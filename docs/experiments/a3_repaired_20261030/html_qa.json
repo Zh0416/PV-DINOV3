@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "samples": 60,
+  "decoded_images": 60,
+  "filters": true,
+  "pagination": true,
+  "support_tables": true,
+  "zoom": true,
+  "search": true,
+  "mobile_no_page_overflow": true,
+  "js_errors": [],
+  "external_network_requests": 0
+}
