@@ -1,5 +1,7 @@
 # 局部动态权重基线
 
+模型流程图和逐模块输入/输出：[结构与张量接口](PV_DYNAMIC_ALPHA_ARCHITECTURE.md)。
+
 分支：`codex/pv-dynamic-alpha-baseline`
 
 基线实验：私有 Kaggle `zh0416/pv-brightness-dynamic-fusion`，Version 1
