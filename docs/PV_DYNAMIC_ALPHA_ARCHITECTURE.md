@@ -1,89 +1,106 @@
-# 局部动态权重基线：模块关系
+# SSPNet 光伏适配：模块关系与接口
 
-分支：`codex/pv-dynamic-alpha-baseline`
+分支：`codex/pv-dynamic-alpha-baseline`；当前最佳 CAM 先验实验：私有 Kaggle `zh0416/pv-brightness-dynamic-fusion` Version 1。
 
-对应实验：`zh0416/pv-brightness-dynamic-fusion` Version 1
+主图按 SSPNet 原文 Fig. 1 的模块边界重绘，只表示模块之间的关系；模块内部结构另行展开。完整光伏适配路径沿用论文的 SSPNet 主线，并标出项目替换与调整。当前最佳的局部动态权重结果来自一条独立 CAM 先验实验路径，尚未接入完整 SSPNet，因此单独说明。
 
-本页只描述模块边界、模块之间的数据关系和接口。图中不展开编码器、池化或网络层等内部步骤。后续新增或替换模块时，先更新本页的模块关系和 I/O；模块内部结构另建对应的子文档，避免主图变成实现细节流程。
-
-## 模块关系图
+## 完整 SSPNet 光伏适配
 
 ```mermaid
 flowchart LR
-    Q["查询 RGB<br/>896×896×3"]
-    SUP["1-shot 支持 RGB + mask"]
-    PROMPT["光伏/大棚/其他背景 prompt"]
-    CAL["校准 RGB + mask"]
+    Q["查询 RGB"]
+    S["支持集<br/>RGB + 光伏 mask"]
+    T["光伏类别文本 prompt"]
 
-    M1["M1 空间匹配<br/>查询 + 支持 → D"]
-    M2["M2 语义先验<br/>影像 + prompt → S, P"]
-    M3["M3 亮度估计<br/>影像 + 校准参考 → z, g"]
-    M4["M4 语义修正<br/>S, P, g → S_b"]
-    M5["M5 动态权重<br/>D, S_b, z, g, P×g → alpha"]
-    M6["M6 分数融合<br/>D, S_b, alpha → F"]
-    M7["M7 阈值输出<br/>F + 校准阈值 → mask"]
-    OUT["896×896 光伏二值 mask"]
+    B["M1 共享 PSPNet 主干<br/>ResNet-50"]
+    D["M2 DMSF 双流先验<br/>DINOv3-SAT 替换 DINOv2"]
+    A["M3 支持条件先验与特征组装"]
+    C["M4 DCMA 先验调制与交叉注意力"]
+    DEC["M5 Decoder / meta 预测"]
+    MERGE["M6 Base/meta 分数融合"]
+    OUT["最终光伏二类分数 / mask"]
 
-    Q --> M1
-    SUP --> M1
-    Q --> M2
-    PROMPT --> M2
-    Q --> M3
-    CAL --> M3
-    M2 --> M4
-    M3 --> M4
-    M1 --> M5
-    M3 --> M5
-    M4 --> M5
-    M1 --> M6
-    M4 --> M6
-    M5 --> M6
-    M6 --> M7
-    CAL --> M7
-    M7 --> OUT
+    Q --> B
+    S --> B
+    Q --> D
+    S --> D
+    T --> D
+    B -->|多层 query/support 特征| A
+    S -->|support mask| A
+    D -->|spatial / semantic CAM，融合为 A| A
+    D -->|融合 CAM A| C
+    A -->|组装后的 query/support 特征与层次先验| C
+    S -->|support mask| C
+    C -->|refined query features| DEC
+    B -->|base scores| MERGE
+    DEC -->|meta scores| MERGE
+    A -.->|Gram discrepancy| MERGE
+    MERGE --> OUT
+
+    classDef input fill:#f1f4f2,stroke:#7c8b82,color:#26352d
+    classDef paper fill:#e8f1ee,stroke:#4f7567,color:#17382f
+    classDef adapted fill:#fff0d6,stroke:#b77b25,color:#51390f
+    classDef output fill:#e7f2e5,stroke:#5c8c4e,color:#25421e
+    class Q,S,T input
+    class B,D,C,DEC paper
+    class A,MERGE adapted
+    class OUT output
+```
+
+### 模块接口
+
+`B` 为 batch size，`K` 为 support shot 数，图像张量按 `B×C×H×W` 表示。
+
+| 模块 | 输入 | 输出 | 与原文及光伏实现的关系 |
+|---|---|---|---|
+| M1 共享 PSPNet 主干 | Query RGB；support RGB | Query/support 多层特征；query base scores | 原文使用预训练 PSPNet 的 ResNet-50 或 VGG-16，episodic 阶段冻结；本项目使用 ResNet-50 |
+| M2 DMSF 双流先验 | Query/support RGB、support masks、类别文本 | Spatial CAM、semantic CAM、融合 CAM `A`、全局融合系数 | 原文 DINOv2 空间流 + GeoRSCLIP 语义流；本项目以 DINOv3-SAT 替换 DINOv2，保留可学习投影、CAM 修正和全局融合。基础编码器冻结 |
+| M3 支持条件先验与特征组装 | M1 多层特征、support masks、`A` 与 `1-A` | Query/support 组装特征、前景/优势先验、support 权重与 Gram discrepancy | 按论文的多层先验选择与组装流程实现；多 shot 支持加权及 discrepancy 融合结合了 Gram 机制 |
+| M4 DCMA | 组装后的 query/support 特征、support masks、融合 CAM `A` | Refined query features；训练用 pseudo-mask logits | 保留 CAM 调制与前景约束的支持/查询交叉注意力；pseudo-mask 仅作训练辅助，不并入最终预测 |
+| M5 Decoder / meta 预测 | Refined query features | Meta 两类分数 | ASPP 与 meta prediction head，输出背景/光伏分数 |
+| M6 Base/meta 分数融合 | Base scores、meta scores、Gram discrepancy | 最终两类分数；取 argmax 得到光伏 mask | 保留 base/meta 融合思想；已知单类光伏适配按背景、光伏类别分别融合 |
+| Training supervision | Query GT；final/meta scores、pseudo-mask logits、spatial CAM | 标量训练损失 | GT 只在训练/评估使用，不作为推理输入。完整修正实验在论文式 CE、Dice、pseudo-mask、CAM 损失外增加 balanced raw-meta CE |
+
+### 原文设计与本项目改动
+
+| 位置 | SSPNet 原文 | 本项目当前实现 |
+|---|---|---|
+| 基础表征 | ResNet-50/VGG-16 + PSPNet；冻结的 DINOv2 与 GeoRSCLIP | ResNet-50 + PSPNet；DINOv3-SAT 替换 DINOv2；GeoRSCLIP 保留 |
+| DMSF 融合 | 视觉/文本投影、互补空间与语义 CAM、单个全局可学习融合系数 | 完整 SSPNet 适配仍使用全局融合系数；局部动态 alpha 只在独立 CAM 实验中使用 |
+| 任务设定 | base 与 novel 类互斥的遥感 few-shot segmentation | 已知光伏单类适配；训练阶段见过光伏标签，不是论文 novel-class 协议的严格复现 |
+| 预测与监督 | DCMA 后解码，融合 base/meta 预测；辅助 pseudo-mask 和 spatial CAM 监督 | 保留主干流程；完整修正实验另加 balanced raw-meta CE，以缓解光伏前景漏检 |
+
+### 独立 CAM 先验实验
+
+```mermaid
+flowchart LR
+    IMG["Query/support RGB + support mask"]
+    CAM["冻结 CAM 响应<br/>DINOv3-SAT spatial D<br/>GeoRSCLIP semantic S / P"]
+    PV["光伏专用 CAM 修正<br/>大棚语义竞争 + 亮度门控"]
+    ALPHA["局部动态 alpha 融合"]
+    THR["校准阈值"]
+    MASK["CAM prior mask"]
+
+    IMG --> CAM --> PV --> ALPHA --> THR --> MASK
+    CAL["校准图像与 masks"] --> PV
+    CAL --> THR
 
     classDef input fill:#f1f4f2,stroke:#7c8b82,color:#26352d
     classDef frozen fill:#e8f1ee,stroke:#4f7567,color:#17382f
-    classDef learned fill:#fff0d6,stroke:#b77b25,color:#51390f
-    classDef transform fill:#eaf0f4,stroke:#6b8795,color:#243943
-    classDef calibration fill:#e9effa,stroke:#627ca8,color:#263b61
-    class Q,SUP,PROMPT input
-    class M1,M2 frozen
-    class M3,M7,CAL calibration
-    class M4,M6 transform
-    class M5 learned
-    class OUT input
+    classDef adapted fill:#fff0d6,stroke:#b77b25,color:#51390f
+    classDef output fill:#e7f2e5,stroke:#5c8c4e,color:#25421e
+    class IMG,CAL input
+    class CAM frozen
+    class PV,ALPHA,THR adapted
+    class MASK output
 ```
 
-`D` 是支持图产生的 DINO 前景/背景空间响应；`S` 是 GeoRSCLIP 光伏语义响应；`P` 是大棚竞争惩罚；`z/g` 是归一化亮度及其门控；`S_b` 是亮度修正后的语义响应；`alpha` 是局部语义融合权重；`F` 是连续融合分数，不是概率。
+这条实验路径**没有接入 M4 DCMA、M5 decoder 或 M6 base/meta 融合**。当前报告的 **51.26% IoU** 是 24 张开发图上的 CAM prior 结果，不是端到端 SSPNet 指标；完整 SSPNet 修正实验的 final 输出在校准阈值下，于 58 张统计查询上达到 **21.73% IoU**。两者的输出范围与实验路径不同，不能直接作为同一模型版本对比。详见[动态权重实验](PV_DYNAMIC_BRIGHTNESS_20261030.md)和[A3 完整评估](A3_REPAIRED_RESULTS_20261030.md)。
 
-## 模块接口
+## 后续维护
 
-形状使用 PyTorch `B×C×H×W`；所有 `56×56` 标量图均对应 DINO patch 网格。
+新增、替换或连接模块时，先同步更新完整结构图与接口表。需要查看内部层级时，再为对应模块增加子图；DCMA 内部结构可参考原文 Fig. 2（PDF 第 6 页）。本文总图对应原文 Fig. 1（PDF 第 4 页），模块组织参考 Section III-B 至 III-D；图为重绘，不是论文插图的复制。
 
-| 模块 | 输入 | 输出 | 当前职责 |
-|---|---|---|---|
-| M1 空间匹配 | 查询 RGB、支持 RGB、支持光伏 mask | `D: B×1×56×56` | 冻结 DINOv3-SAT；从支持图建立前景/背景原型，为查询图提供空间响应 |
-| M2 语义先验 | 查询 RGB、固定文本 prompt | `S, P: B×1×56×56` | 冻结 GeoRSCLIP；输出光伏语义分数和大棚竞争惩罚 |
-| M3 亮度估计 | 查询 RGB、校准 RGB/mask | `z, g: B×1×56×56` | 从校准集拟合亮度参考；为查询图生成归一化亮度与门控 |
-| M4 语义修正 | `S, P, g` | `P×g`、`S_b: B×1×56×56` | 按亮度调制大棚惩罚：`S_b=clip(S-P×g,-1,1)` |
-| M5 动态权重 | `D, S_b, z, g, P×g` 及其差值/局部统计 | `alpha: B×1×56×56`，范围 `[0,1]` | 593 参数的局部网络，为每个位置预测语义分支权重；当前基线选中 step 160 |
-| M6 分数融合 | `D, S_b, alpha` | `F: B×1×896×896` | 分别上采样后计算 `(1-alpha)D + alpha S_b` |
-| M7 阈值输出 | `F`、校准分数和校准 mask | 校准阈值 `t`；`F≥t` 的二值 mask | 按支持选择校准阈值并生成最终光伏掩膜 |
+参考文献：Yi Zhong and Guodong Zhao, “SSPNet: Spatial-Semantic Foundation Prior Network for Remote Sensing Few-Shot Segmentation,” IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing, DOI: `10.1109/JSTARS.2026.3745987`。
 
-## 训练与数据角色
-
-- **训练集：**22 张影像及二值 mask（4 张正图、18 张负图）；分割损失通过 M6 的分数更新 M5。两路编码器和 CAM 输入保持冻结。
-- **校准集：**12 张影像及 mask；用于 M3 的 Q75/Q95 亮度参考、M7 阈值，以及每 80 步的 checkpoint 选择。
-- **支持集：**3 种保留的 1-shot 支持选择；每种各自为 M1 提供一个支持前景/背景原型，不是训练随机种子或集成。
-- **查询集：**24 张已查看过的开发影像；模型与阈值锁定后才读取其 mask 计算指标，不参与训练或选择。
-
-checkpoint 根据三种支持选择上的平均校准 micro-IoU 选择，本次局部动态权重选中 step 160。大棚是整图场景标签；FP 表示所有非光伏背景上的误报。
-
-## 后续扩展
-
-如果改变模块之间的连接或某个模块的输入/输出，更新本页关系图和接口表。需要查看内部计算时，按模块分别建立子文档，例如 `docs/modules/M1_spatial_matching.md`，在子文档中展开该模块内部结构；除非模块接口发生变化，不必改动主图。
-
-对应实现：`pvseg/frozen_baselines.py`、`pvseg/greenhouse_prior.py`、`pvseg/brightness_gate.py`、`pvseg/dynamic_brightness_fusion.py`、`pvseg/losses.py` 和 `scripts/kaggle_dynamic_brightness.py`。完整实验记录见 [动态权重实验](PV_DYNAMIC_BRIGHTNESS_20261030.md)。
-
-**权重文件状态：** 当前仓库没有 `local_selected.pt`。锁定记录中的 SHA256 为 `91d355ca014a325dc566d2229539f29bd5e9d0e75ccfbf4c7422edd26f7bafc5`；`weight_grids.npz` 是校准/查询图的 alpha 输出，不是模型 checkpoint。
+对应实现：`pvseg/sspnet/model.py`、`pvseg/sspnet/modules.py`、`pvseg/sspnet/losses.py`；独立 CAM 实验实现：`pvseg/brightness_gate.py`、`pvseg/dynamic_brightness_fusion.py`、`pvseg/greenhouse_prior.py`、`scripts/kaggle_dynamic_brightness.py`。
