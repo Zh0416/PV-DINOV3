@@ -1,0 +1,59 @@
+{
+  "experiment": "dynamic_brightness_fusion",
+  "run": "zh0416/pv-brightness-dynamic-fusion/1",
+  "source_branch": "codex/sspnet-dinov3-pv",
+  "source_commit": "aab8827948e033e52b4c76a25e4ee7b9d834645d",
+  "scope": "known-PV supervised development pilot; not an independent spatial test",
+  "data": {
+    "training_images": 22,
+    "training_positive_images": 4,
+    "calibration_images": 12,
+    "one_shot_support_choices": 3,
+    "development_queries": 24
+  },
+  "selection": {
+    "seed": 42,
+    "training_steps": 320,
+    "check_interval": 80,
+    "local_selected_step": 160,
+    "selection_metric": "mean per-support calibration micro-IoU",
+    "query_masks_used_for_selection": false
+  },
+  "metrics_percent": {
+    "fixed_alpha_0_7": {
+      "all_24_iou": 49.02,
+      "greenhouse_13_iou": 47.67,
+      "greenhouse_13_recall": 85.53
+    },
+    "learned_global_alpha": {
+      "all_24_iou": 49.41,
+      "greenhouse_13_iou": 47.94,
+      "greenhouse_13_recall": 85.26
+    },
+    "learned_local_alpha": {
+      "all_24_iou": 51.26,
+      "greenhouse_13_iou": 49.80,
+      "greenhouse_13_recall": 86.06,
+      "greenhouse_background_fp_mean": 726852.0
+    }
+  },
+  "checkpoint": {
+    "filename": "local_selected.pt",
+    "sha256_from_lock_record": "91d355ca014a325dc566d2229539f29bd5e9d0e75ccfbf4c7422edd26f7bafc5",
+    "parameters": 593,
+    "included_in_repository": false
+  },
+  "independent_validation": {
+    "status": "passed",
+    "reconstructed_confusion_tables": 432,
+    "reconstructed_thresholds": 9,
+    "historical_brightness_maps_exact": true,
+    "convex_fusion_bounds": true
+  },
+  "limitations": [
+    "The 24 query images were previously observed during development.",
+    "Learned alpha models use 22 training masks; the fixed baseline does not.",
+    "This evaluates a fusion prior, not the complete SSPNet downstream segmenter.",
+    "The checkpoint file is absent from the local exported run artifacts; the SHA256 is transcribed from the model lock record."
+  ]
+}

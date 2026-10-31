@@ -1,0 +1,23 @@
+{
+  "seed": 42,
+  "input_size": 896,
+  "steps": 320,
+  "selection_every": 80,
+  "optimizer": "AdamW",
+  "lr": 0.001,
+  "weight_decay": 0.0001,
+  "gradient_clip": 10.0,
+  "initial_alpha": 0.7,
+  "hidden": 8,
+  "loss_scale": 20.0,
+  "loss_reference_thresholds": {"42": 0.189453125, "43": 0.19189453125, "44": 0.2080078125},
+  "anchor_weight": 0.01,
+  "tv_weight": 0.001,
+  "arms": ["global", "local"],
+  "loss": "Native896 balanced BCE + .5 Dice on sigmoid(20*(CAM-mean historical brightness thresholds)); alpha anchor + TV regularization",
+  "selection": "80/160/240/320 steps; mean calibration micro-IoU over three 1-shot support choices with per-support thresholds; earlier step wins ties",
+  "precision": "FP32; TF32 disabled",
+  "augmentation": false,
+  "query_ids": ["pv000025", "pv000095", "pv000102", "pv000555", "pv000903", "pv000915", "pv003612", "pv002038", "pv000163", "pv002108", "pv001303", "pv001381", "pv000154", "pv001352", "pv001637", "pv001647", "pv001791", "pv001796", "pv000017", "pv000026", "pv000047", "pv000115", "pv000099", "pv000125"],
+  "scope": "Known-PV supervised development pilot: 22 training masks, 12 calibration masks, 3 reserved independent 1-shot supports, 24 previously observed query images"
+}
