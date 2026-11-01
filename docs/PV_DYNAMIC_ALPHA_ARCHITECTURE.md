@@ -1,5 +1,7 @@
 # SSPNet 光伏适配：模块关系与接口
 
+2026-11-01 新增的误检校正候选见 [背景误检校正模块图](PV_HARD_NEGATIVE_ARCHITECTURE.md)。它在 CAM 先验路径增加有界残差与可选局部纹理描述，仍未接入完整 SSPNet 下游；本页保留原动态 alpha 基线结构。
+
 分支：`codex/pv-dynamic-alpha-baseline`；当前最佳 CAM 先验实验：私有 Kaggle `zh0416/pv-brightness-dynamic-fusion` Version 1。
 
 主图按 SSPNet 原文 Fig. 1 的模块边界重绘，只表示模块之间的关系；模块内部结构另行展开。完整光伏适配路径沿用论文的 SSPNet 主线，并标出项目替换与调整。当前最佳的局部动态权重结果来自一条独立 CAM 先验实验路径，尚未接入完整 SSPNet，因此单独说明。
