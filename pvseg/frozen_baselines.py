@@ -53,6 +53,24 @@ def overlap_response(scores, boxes, size):
     return total / count
 
 
+def aligned_crop_boxes(image_size, crop_size=224, stride=112, patch_size=16):
+    """Cover an image with GeoRSCLIP crops aligned to the DINO patch grid."""
+    height, width = image_size
+    if (min(height, width) < crop_size or min(crop_size, stride, patch_size) <= 0 or
+            stride > crop_size or
+            any(value % patch_size for value in (height, width, crop_size, stride))):
+        raise ValueError('Image, crop, and stride must align to the patch grid')
+
+    def starts(length):
+        positions = list(range(0, length - crop_size + 1, stride))
+        if positions[-1] != length - crop_size:
+            positions.append(length - crop_size)
+        return positions
+
+    return [(x, y, x + crop_size, y + crop_size)
+            for y in starts(height) for x in starts(width)]
+
+
 def aligned_crop_features(embeddings, boxes, image_size, grid_size):
     """Overlap-average CLIP crop vectors on the DINO grid, preserving coordinates.
 

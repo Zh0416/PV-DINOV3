@@ -4,13 +4,25 @@ import numpy as np
 import torch
 
 from pvseg.frozen_baselines import (calibrate_threshold, confusion, foreground_prototype,
-                                    aligned_crop_features, calibrate_fusion, fuse_responses,
+                                    aligned_crop_boxes, aligned_crop_features, calibrate_fusion, fuse_responses,
                                     foreground_background_prototypes, foreground_background_response,
                                     metrics, overlap_response, prototype_response,
                                     ranking_metrics, score_histogram)
 
 
 class FrozenBaselineChecks(unittest.TestCase):
+    def test_geo_crop_boxes_cover_multiple_patch_grids(self):
+        for size in ((512, 512), (896, 896), (1024, 1024), (512, 1024)):
+            with self.subTest(size=size):
+                boxes = aligned_crop_boxes(size)
+                vectors = torch.ones(len(boxes), 2)
+                grid = aligned_crop_features(vectors, boxes, size,
+                                             (size[0] // 16, size[1] // 16))
+                torch.testing.assert_close(grid, torch.ones_like(grid))
+        self.assertEqual(aligned_crop_boxes((896, 896)),
+                         [(x, y, x + 224, y + 224)
+                          for y in range(0, 673, 112) for x in range(0, 673, 112)])
+
     def test_crop_feature_alignment_preserves_native_semantic_scores(self):
         vectors = torch.tensor([[1., 0.], [0., 1.]])
         boxes = [(0, 0, 4, 4), (2, 0, 6, 4)]
