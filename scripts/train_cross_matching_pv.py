@@ -64,9 +64,10 @@ def select_queries(rows, limit, seed):
     rng = random.Random(seed)
     categories = ('正样本', '困难正样本', '负样本')
     selected = []
-    for category in categories:
+    for category_index, category in enumerate(categories):
         pool = [row for row in rows if row['category'] == category]
-        chosen = rng.sample(pool, min(len(pool), limit // len(categories)))
+        quota = limit // len(categories) + (category_index < limit % len(categories))
+        chosen = rng.sample(pool, min(len(pool), quota))
         selected.extend(chosen)
     selected_ids = {chosen['sample_id'] for chosen in selected}
     remainder = [row for row in rows if row['sample_id'] not in selected_ids]
@@ -175,7 +176,12 @@ def run(args):
     model = CrossMatchingNet()
     backbone_source = load_backbone(model, args)
     model.to(device)
-    optimizer = torch.optim.SGD(model.matcher.parameters(), lr=args.learning_rate,
+    head_weights = [parameter for name, parameter in model.matcher.named_parameters()
+                    if name.endswith('weight')]
+    head_biases = [parameter for name, parameter in model.matcher.named_parameters()
+                   if name.endswith('bias')]
+    optimizer = torch.optim.SGD([{'params': head_weights, 'lr': args.learning_rate * 10},
+                                 {'params': head_biases, 'lr': args.learning_rate * 20}],
                                 momentum=0.9, weight_decay=5e-4)
     scaler = torch.amp.GradScaler('cuda', enabled=args.amp)
     counts = Counter(row['category'] for row in train_queries)
@@ -193,7 +199,9 @@ def run(args):
               'backbone_source': backbone_source, 'input_original_size': 896,
               'patch_size': args.patch_size, 'train_shots': 1,
               'eval_shots': args.eval_shots, 'epochs': args.epochs,
-              'batch_size': args.batch_size, 'learning_rate': args.learning_rate,
+              'batch_size': args.batch_size, 'base_learning_rate': args.learning_rate,
+              'head_weight_learning_rate_multiplier': 10,
+              'head_bias_learning_rate_multiplier': 20,
               'seed': args.seed, 'device': str(device), 'amp': args.amp,
               'train_query_ids': [row['sample_id'] for row in train_queries],
               'validation_query_ids': [row['sample_id'] for row in validation_queries]}
@@ -208,8 +216,8 @@ def run(args):
             loss_sum = 0.0
             for batch in loader:
                 current_learning_rate = args.learning_rate * (1 - global_step / total_steps) ** 0.9
-                for group in optimizer.param_groups:
-                    group['lr'] = current_learning_rate
+                optimizer.param_groups[0]['lr'] = current_learning_rate * 10
+                optimizer.param_groups[1]['lr'] = current_learning_rate * 20
                 query = batch['query'].to(device)
                 support = batch['supports'][:, 0].to(device)
                 support_mask = batch['support_masks'][:, 0].to(device)
@@ -234,7 +242,9 @@ def run(args):
                 profile = {'epoch': epoch, 'step': global_step,
                            'query_ids': list(batch['query_id']),
                            'support_ids': list(batch['support_ids'][0]),
-                           'learning_rate': current_learning_rate,
+                           'base_learning_rate': current_learning_rate,
+                           'head_weight_learning_rate': optimizer.param_groups[0]['lr'],
+                           'head_bias_learning_rate': optimizer.param_groups[1]['lr'],
                            **model.last_forward_profile,
                            'step_seconds': time.perf_counter() - step_started,
                            'step_peak_allocated_bytes': torch.cuda.max_memory_allocated(device)

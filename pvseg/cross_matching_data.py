@@ -27,8 +27,10 @@ def spatial_partition(rows, seed=42, validation_fraction=0.2):
     scene_group = {scene: group for group, scenes in groups.items() for scene in scenes}
     train = [row for row in rows if scene_group[row['source_scene']] not in validation_groups]
     validation = [row for row in rows if scene_group[row['source_scene']] in validation_groups]
-    if not any(row['category'] in POSITIVE_CATEGORIES for row in train + validation):
-        raise ValueError('No positive photovoltaic samples')
+    if not train or not validation or any(
+            not any(row['category'] in POSITIVE_CATEGORIES for row in partition)
+            for partition in (train, validation)):
+        raise ValueError('Training and validation both need photovoltaic samples')
     report = {
         'seed': seed, 'validation_fraction': validation_fraction,
         'validation_groups': sorted(validation_groups), 'spatial_groups': groups,
