@@ -2,6 +2,9 @@
 
 The ResNet50 + SCCNet Cross-Matching-only PV-896 support-query baseline is
 documented in [docs/CROSS_MATCHING_PV_BASELINE.md](docs/CROSS_MATCHING_PV_BASELINE.md).
+The [Kaggle smoke and pilot report](docs/CROSS_MATCHING_KAGGLE_PILOT_20261104.md)
+records completed GPU checks and an all-background development result; the
+model has not yet established a usable foreground-accuracy baseline.
 
 Photovoltaic research workspace. GitHub stores source code, configuration,
 notebooks, and documentation. Kaggle stores datasets, model weights, and run
