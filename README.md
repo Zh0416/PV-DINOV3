@@ -1,5 +1,8 @@
 # PV-DINOV3
 
+The ResNet50 + SCCNet Cross-Matching-only PV-896 support-query baseline is
+documented in [docs/CROSS_MATCHING_PV_BASELINE.md](docs/CROSS_MATCHING_PV_BASELINE.md).
+
 Photovoltaic research workspace. GitHub stores source code, configuration,
 notebooks, and documentation. Kaggle stores datasets, model weights, and run
 outputs, and provides the compute environment.
