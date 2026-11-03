@@ -1,0 +1,8 @@
+{
+  "dataset_root": "../../PV-896",
+  "manifest": "manifest.csv",
+  "split_seed": 321,
+  "split_group_counts": {"train": 6, "validation": 2, "test": 2},
+  "official_repository": "https://github.com/JIA-Lab-research/PFENet",
+  "official_commit": "a5056754d232829644e84d36b1e1d30818bd4c4f"
+}
