@@ -2,10 +2,17 @@ import unittest
 
 import torch
 
-from pvseg.support_only_segmenter import fit_from_support, predict
+from pvseg.support_only_segmenter import _support_threshold, fit_from_support, predict
 
 
 class SupportOnlySegmenterTests(unittest.TestCase):
+    def test_support_threshold_uses_original_histogram_order(self):
+        probability = torch.tensor([[[[.8, .2]]]])
+        target = torch.tensor([[[[1., 0.]]]])
+        threshold, iou, bins = _support_threshold(probability, target, bins=4)
+        self.assertEqual((threshold, iou, bins), (.75, 1., 4))
+        self.assertEqual(float(((probability >= threshold) == target.bool()).float().mean()), 1.)
+
     def test_support_mask_fits_fresh_heads_and_changes_query_prediction(self):
         features = torch.zeros(1, 2, 4, 4)
         features[:, 0, :, :2] = 1

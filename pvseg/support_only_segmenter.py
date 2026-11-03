@@ -61,8 +61,8 @@ def _support_threshold(probability, target, bins=4096):
     fp = counts[:, ::-1].cumsum(1)[1]
     positive = counts[0].sum()
     iou = tp / np.maximum(positive + fp, 1)
-    best = np.flatnonzero(iou == iou.max())[-1]
-    return float(edges[best]), float(iou[best]), int(bins)
+    best = np.flatnonzero(iou == iou.max())[0]
+    return float(edges[bins - 1 - best]), float(iou[best]), int(bins)
 
 
 def fit_from_support(features, mask, *, steps=80, learning_rate=.05, seed=20261103):
