@@ -62,6 +62,20 @@ class DualPriorTests(unittest.TestCase):
         torch.testing.assert_close(self.run_model(model, self.haar)['logits'],
                                    self.run_model(without_haar)['logits'])
 
+    def test_unused_modules_are_not_trainable(self):
+        model = DualPriorSegmenter(channels=8, branch='dino',
+                                   fusion='fixed', cam_guidance=False)
+        self.assertFalse(any(parameter.requires_grad for parameter in
+                             model.geo_projection.parameters()))
+        self.assertFalse(any(parameter.requires_grad for parameter in
+                             model.feature_gate.parameters()))
+        self.assertFalse(any(parameter.requires_grad for parameter in
+                             model.feature_modulation.parameters()))
+        self.assertFalse(any(parameter.requires_grad for parameter in
+                             model.score_correction.parameters()))
+        self.assertFalse(any(parameter.requires_grad for parameter in
+                             model.decoder.guidance.parameters()))
+
 
 if __name__ == '__main__':
     unittest.main()

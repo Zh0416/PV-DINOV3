@@ -70,7 +70,9 @@ def main():
     with manifests[0].open(encoding='utf-8-sig', newline='') as stream:
         rows = {row['sample_id']: row for row in csv.DictReader(stream)}
     if (protocol['support_id'] in protocol['query_ids'] or
-            len(protocol['query_ids']) != 24 or len(set(protocol['query_ids'])) != 24):
+            len(protocol['query_ids']) != 24 or len(set(protocol['query_ids'])) != 24 or
+            set(protocol['train_query_ids']) & set(protocol['query_ids']) or
+            set(protocol['smoke_query_ids']) - set(protocol['train_query_ids'])):
         raise ValueError('Support and paired query selection must be disjoint')
     sat_paths = [path for path in Path('/kaggle/input').rglob('model.safetensors')
                  if digest(path) == MODEL_SHA256]
@@ -119,9 +121,17 @@ def main():
     support_target = support_target.float()[None, None].to(device)
     support_dino, support_geo = encode(support_rgb)
     support_dino, support_geo = support_dino.to(device), support_geo.to(device)
-    support_haar = haar_features(support_rgb).to(device)
 
-    def train_variant(name, spec, steps):
+    training = {}
+    for sample_id in protocol['train_query_ids']:
+        rgb = read_rgb(sample_id)
+        dino, geo = encode(rgb)
+        with Image.open(data / rows[sample_id]['label']) as image:
+            target = torch.from_numpy((np.asarray(image.convert('L')) == 255).copy())
+        training[sample_id] = (dino, geo, haar_features(rgb),
+                               target.float()[None, None])
+
+    def train_variant(name, spec, steps, episode_ids):
         torch.manual_seed(protocol['seed'])
         model = DualPriorSegmenter(channels=protocol['channels'], **spec).to(device)
         parameters = [parameter for parameter in model.parameters() if parameter.requires_grad]
@@ -140,13 +150,16 @@ def main():
             expected.append('score_correction')
         history, gradient_norms = [], {}
         torch.cuda.reset_peak_memory_stats()
+        torch.cuda.synchronize()
         start = time.perf_counter()
         for step in range(steps):
+            sample_id = episode_ids[step % len(episode_ids)]
+            query_dino, query_geo, query_haar, query_target = training[sample_id]
             optimizer.zero_grad(set_to_none=True)
             output = model(support_dino, support_geo, support_target,
-                           support_dino, support_geo, (896, 896),
-                           support_haar if spec['frequency'] != 'none' else None)
-            loss = segmentation_loss(output['logits'], support_target)
+                           query_dino.to(device), query_geo.to(device), (896, 896),
+                           query_haar.to(device) if spec['frequency'] != 'none' else None)
+            loss = segmentation_loss(output['logits'], query_target.to(device))
             if not torch.isfinite(loss):
                 raise FloatingPointError(f'{name}: nonfinite loss')
             loss.backward()
@@ -161,16 +174,17 @@ def main():
                     raise RuntimeError(f'{name}: missing expected gradient {gradient_norms}')
             torch.nn.utils.clip_grad_norm_(parameters, 10, error_if_nonfinite=True)
             optimizer.step()
-            if step == 0 or step == steps - 1:
-                history.append(dict(step=step + 1, loss=float(loss.detach())))
+            history.append(dict(step=step + 1, query_id=sample_id,
+                                loss=float(loss.detach())))
+        torch.cuda.synchronize()
         return model.eval(), dict(history=history, gradient_norms=gradient_norms,
                                   train_seconds=time.perf_counter() - start,
                                   peak_gpu_bytes=torch.cuda.max_memory_allocated(),
                                   parameter_count=sum(parameter.numel() for parameter in parameters),
-                                  support_foreground_fraction=float(
+                                  last_train_foreground_fraction=float(
                                       (output['logits'].detach().sigmoid() >= .5).float().mean()))
 
-    def evaluate(model, selected, spec, cached=None):
+    def evaluate(model, selected, spec, cached=None, training_targets=False):
         records = {}
         for sample_id in selected:
             if cached is None:
@@ -178,15 +192,18 @@ def main():
                 dino, geo = encode(rgb)
                 haar = haar_features(rgb)
             else:
-                dino, geo, haar = cached[sample_id]
+                dino, geo, haar = cached[sample_id][:3]
             with torch.no_grad():
                 score = model(support_dino, support_geo, support_target,
                               dino.to(device), geo.to(device), (896, 896),
                               haar.to(device) if spec['frequency'] != 'none' else None
                               )['logits'].sigmoid()[0, 0].cpu().numpy()
             prediction = score >= .5
-            with Image.open(data / rows[sample_id]['label']) as image:
-                target = np.asarray(image.convert('L')) == 255
+            if training_targets:
+                target = cached[sample_id][3][0, 0].numpy().astype(bool)
+            else:
+                with Image.open(data / rows[sample_id]['label']) as image:
+                    target = np.asarray(image.convert('L')) == 255
             records[sample_id] = dict(**metrics(prediction, target),
                                       category=rows[sample_id]['category'],
                                       predicted_fraction=float(prediction.mean()))
@@ -208,10 +225,13 @@ def main():
 
     full_spec = dict(branch='both', fusion='dynamic', frequency='feature',
                      cam_guidance=True)
-    smoke_model, smoke_fit = train_variant('smoke', full_spec, protocol['smoke_steps'])
-    smoke_eval = evaluate(smoke_model, protocol['smoke_query_ids'], full_spec)
+    smoke_id = protocol['smoke_query_ids'][0]
+    smoke_model, smoke_fit = train_variant('smoke', full_spec,
+                                          protocol['smoke_steps'], [smoke_id])
+    smoke_eval = evaluate(smoke_model, protocol['smoke_query_ids'], full_spec,
+                          training, training_targets=True)
     smoke_pass = (smoke_fit['history'][-1]['loss'] < smoke_fit['history'][0]['loss']
-                  and 0 < smoke_fit['support_foreground_fraction'] < 1)
+                  and 0 < smoke_fit['last_train_foreground_fraction'] < 1)
     save_json(OUTPUT / 'smoke.json', dict(passed=smoke_pass, fit=smoke_fit,
                                          evaluation=smoke_eval))
     if not smoke_pass:
@@ -219,10 +239,16 @@ def main():
     del smoke_model
     torch.cuda.empty_cache()
     cached = {}
+    torch.cuda.reset_peak_memory_stats()
+    torch.cuda.synchronize()
+    encoding_start = time.perf_counter()
     for sample_id in protocol['query_ids']:
         rgb = read_rgb(sample_id)
         dino, geo = encode(rgb)
         cached[sample_id] = (dino, geo, haar_features(rgb))
+    torch.cuda.synchronize()
+    encoding_seconds = time.perf_counter() - encoding_start
+    encoding_peak_gpu_bytes = torch.cuda.max_memory_allocated()
 
     variants = {
         'A_dino_only': dict(branch='dino', fusion='fixed', frequency='none',
@@ -241,9 +267,12 @@ def main():
     }
     results = {}
     for name, spec in variants.items():
-        model, fit = train_variant(name, spec, protocol['ablation_steps'])
+        model, fit = train_variant(name, spec, protocol['ablation_steps'],
+                                   protocol['train_query_ids'])
+        torch.cuda.synchronize()
         started = time.perf_counter()
         evaluation = evaluate(model, protocol['query_ids'], spec, cached)
+        torch.cuda.synchronize()
         results[name] = dict(config=spec, fit=fit, evaluation=evaluation,
                              inference_seconds=time.perf_counter() - started)
         save_json(OUTPUT / 'results_partial.json',
@@ -254,6 +283,8 @@ def main():
         print(json.dumps(dict(variant=name, iou=evaluation['summary']['iou'])), flush=True)
     save_json(OUTPUT / 'results.json',
               dict(status='complete', protocol=protocol, smoke=smoke_fit,
+                   encoding_seconds=encoding_seconds,
+                   encoding_peak_gpu_bytes=encoding_peak_gpu_bytes,
                    variants=results))
 
 

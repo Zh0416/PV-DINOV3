@@ -69,6 +69,18 @@ class DualPriorSegmenter(nn.Module):
                                                       frequency_channels=6,
                                                       hidden=16, max_correction=.3)
         self.decoder = CAMGuidedDecoder(channels)
+        if branch == 'dino':
+            self.geo_projection.requires_grad_(False)
+        elif branch == 'geo':
+            self.dino_projection.requires_grad_(False)
+        if branch != 'both' or fusion == 'fixed':
+            self.feature_gate.requires_grad_(False)
+        if frequency != 'feature':
+            self.feature_modulation.requires_grad_(False)
+        if frequency != 'score':
+            self.score_correction.requires_grad_(False)
+        if not cam_guidance:
+            self.decoder.guidance.requires_grad_(False)
 
     def forward(self, support_dino, support_geo, support_mask,
                 query_dino, query_geo, output_size, query_haar=None):

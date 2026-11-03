@@ -27,9 +27,12 @@ def main(output):
     manifest = REPO.parent / 'PV-896/manifest.csv'
     with manifest.open(encoding='utf-8-sig', newline='') as stream:
         rows = list(csv.DictReader(stream))
+    by_id = {row['sample_id']: row for row in rows}
     support_id = 'pv001183'
     support = next(row for row in rows if row['sample_id'] == support_id)
     queries = []
+    train_queries = []
+    training_scene = '0812_Q_0a5aa4566e4f48'
     for category in ('正样本', '负样本', '困难正样本'):
         pool = sorted((row for row in rows
                        if row['category'] == category and
@@ -38,15 +41,25 @@ def main(output):
                        row.get('image_sha256') != support.get('image_sha256')),
                       key=lambda row: row['sample_id'])
         queries.extend(row['sample_id'] for row in pool[:8])
+        training_pool = sorted((row for row in rows if
+                                row['category'] == category and
+                                row['source_scene'] == training_scene),
+                               key=lambda row: row['sample_id'])
+        train_queries.extend(row['sample_id'] for row in training_pool[:2])
     if len(queries) != 24 or support_id in queries:
         raise ValueError('Insufficient disjoint query candidates')
-    smoke = [queries[index] for index in (0, 8, 16)]
+    if (len(train_queries) != 6 or set(train_queries) & set(queries) or
+            any(by_id[sample_id]['source_scene'] != '0807_Q_934ae716b5714f'
+                for sample_id in queries)):
+        raise ValueError('Training and evaluation scenes must be disjoint')
+    smoke = [train_queries[index] for index in (0, 2, 4)]
     protocol = dict(dataset='zh0416/pv-896', manifest_sha256=digest(manifest),
-                    support_id=support_id, query_ids=queries,
-                    smoke_query_ids=smoke, channels=128, smoke_steps=20,
-                    ablation_steps=80, learning_rate=.001, weight_decay=.0001,
+                    support_id=support_id, train_query_ids=train_queries,
+                    query_ids=queries, smoke_query_ids=smoke, channels=128,
+                    smoke_steps=10, ablation_steps=24,
+                    learning_rate=.001, weight_decay=.0001,
                     seed=20261103, threshold=.5,
-                    query_policy='24 deterministic development queries, 8 per category; no labels used to fit or calibrate',
+                    query_policy='6 labeled train queries from 0812 scene, 24 development queries from 0807 scene; no evaluation labels used to fit or calibrate',
                     interpretation='Exploratory one-support comparison; these PV-896 scenes have prior development exposure')
     paths = [REPO / name for name in (
         'scripts/kaggle_dual_prior_pilot.py', 'pvseg/dual_prior.py',
